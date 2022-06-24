@@ -1,0 +1,9 @@
+.navbar-container {
+    max-width: 1300px;
+}
+
+.main-navbar {
+    position: absolute;
+    top:0;
+    z-index: 1;
+}
