@@ -4,4 +4,8 @@ const Col = styled.div`
     margin: 1rem 0;
 `;
 
-export {Col};
+const Row = styled.div`
+    display: flex;
+`
+
+export {Col, Row};
