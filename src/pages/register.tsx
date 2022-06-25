@@ -4,26 +4,35 @@ import { COLORS } from '../utils/config';
 import { Col } from '../components/UI';
 import usePageTitle from '../hooks/usePageTitle';
 import { useForm } from 'react-hook-form';
-import { VALIDATION } from '../utils/validationRegex';
+import { VALIDATION } from '../utils/validation';
 import React from 'react';
-
-interface DataType {
-    name: string;
-    email: string;
-    password: string;
-    confirm_password: string;
-}
+import { UserType } from '../Types/user';
+import { Register } from '../services/users';
+import { toast } from 'react-toastify';
 
 export default function Page() {
 
     usePageTitle('Cadastro');
 
-    const { register, handleSubmit, formState: { errors } } = useForm<DataType>();
+    const { register, handleSubmit, formState: { errors } } = useForm<UserType>();
 
-    const onSubmit = (data: DataType) => {
+    const onSubmit = async (data: UserType) => {
         const { name, email, password, confirm_password } = data;
-        console.log(data);
-        console.log(errors.email)
+        try {
+            if (password !== confirm_password) throw Error('Senhas não conferem');
+            delete data.confirm_password;
+
+            const response = await Register(data);
+
+            if(response.status == 201)
+                return toast.success('Usuário cadastrado com sucesso!');
+
+            throw new Error('Ocorre um erro');
+
+        } catch(err : any) {
+           if(err.response) return toast.error(err.response.data.response.message, {toastId: 'server-error'});
+            return toast.error(err.message, {toastId: 'error'});
+        }
     }
 
     return (
@@ -40,52 +49,38 @@ export default function Page() {
                 <div style={{ marginTop: '2rem' }}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Col>
-                            <label className="input-group">
-                                <span>Email</span>
-                                <input type="text" {
-                                    ...register('email',
-                                        {
-                                            required: true,
-                                            pattern: {
-                                                value: VALIDATION.EMAIL,
-                                                message: 'Preencha um e-mail válido'
-                                            }
-                                        }
-                                    )
-                                } placeholder="example@email.com" className="input input-bordered w-full" />
-                            </label>
-                        </Col>
-                        <Col>
-                            <div className="alert alert-warning shadow-lg">
-                                <div>
-                                    {/* {errors.email && errors.email.message} */}
-                                    {errors.email && (
-                                        <ErrorAlert>{errors.email.message}</ErrorAlert>
-                                    )}
-                                </div>
-                            </div>
+                            <FormGroup icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
 
+                            } error={errors.email}>
+                                <input type="text" { ...register('email', { required: { value: true, message: VALIDATION.FIELDS_NULL }, pattern: { value: VALIDATION.EMAIL, message: 'Preencha um e-mail válido' } } ) } placeholder="example@email.com" className="input input-bordered border-gray-800 w-full" autoFocus />
+                            </FormGroup>
                         </Col>
                         <Col>
-                            <label className="input-group">
-                                <span>Nome</span>
-                                <input type="text" {...register('name')} placeholder="Como deseja ser chamado?" className="input input-bordered w-full" />
-                            </label>
+                            <FormGroup icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            } error={errors.name}>
+                                <input type="text" {...register('name', {required: {value: true, message: VALIDATION.FIELDS_NULL} }) } placeholder="Como deseja ser chamado?" className="input input-bordered border-gray-800 w-full" />
+                            </FormGroup>
                         </Col>
                         <Col>
-                            <label className="input-group">
-                                <span>Senha</span>
-                                <input type="password" {...register('password')} placeholder="*****" className="input input-bordered w-full" />
-                            </label>
+                            <FormGroup icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+
+                            } error={errors.password}>
+                                <input type="password" {...register('password', {required: {value: true, message: VALIDATION.FIELDS_NULL}} )} placeholder="*****" className="input input-bordered border-gray-800 w-full" />
+                            </FormGroup>
                         </Col>
                         <Col>
-                            <label className="input-group">
-                                <span>Senha</span>
-                                <input type="password" {...register('confirm_password')} placeholder="Confirme sua senha" className="input input-bordered w-full" />
-                            </label>
+                            <FormGroup icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            } error={errors.confirm_password}>
+                                <input type="password" {...register('confirm_password', {required: {value: true, message: VALIDATION.FIELDS_NULL}})} placeholder="Confirme sua senha" className="input input-bordered border-gray-800 w-full" />
+                            </FormGroup>
                         </Col>
+                        <br />
                         <Col>
-                            <button type='submit' className="btn btn-primary text-white btn-block button-opacity">Cadastrar</button>
+                            <button type='submit' className="btn bg-indigo-700 hover:bg-indigo-600 transition-colors text-white btn-block">Cadastrar</button>
                         </Col>
                     </form>
                 </div>
@@ -94,11 +89,17 @@ export default function Page() {
     );
 }
 
-function ErrorAlert({children} : {children: React.ReactNode}) {
+function FormGroup({ children, error, icon }: { children: React.ReactNode, error: any, icon: React.ReactNode }) {
     return (
         <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-            <span>{children}</span>
+            <div>
+                <label className="input-group" style={{ outline: '1px solid', outlineOffset: '3px', outlineColor: (error) ? '#ad3b2f' : 'transparent' }}>
+                    <span>{icon}</span>
+                    
+                    {children}
+                </label>
+            </div>
+            {error ? (<Col className="text-xs"> {error.message} </Col>) : null} 
         </>
     );
 }

@@ -16,7 +16,7 @@ export default function Page() {
                         <Col>
                             <label className="input-group">
                                 <span>Email</span>
-                                <input type="email" placeholder="example@email.com" className="input input-bordered w-full" />
+                                <input type="email" placeholder="example@email.com" className="input input-bordered w-full" autoFocus/>
                             </label>
                         </Col>
                         <Col>
