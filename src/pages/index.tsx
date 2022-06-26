@@ -4,50 +4,78 @@ import { COLORS } from '../utils/config';
 import { Col, Row } from '../components/UI';
 import InputGroup from '../components/UI/inputGroup';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { UserType } from '../Types/user';
+import { VALIDATION } from '../utils/validation';
+import { Login } from '../services/users';
+import { toast } from 'react-toastify';
 
 export default function Page() {
+
+    const {register, handleSubmit, formState: { errors }} = useForm<UserType>();
+
+    const onSubmit = async(data : UserType) => {
+        try {
+            const response = await Login(data);
+
+            console.log(response.data)
+        } catch(err) {
+            console.log(err);
+            if(err.response) return toast.error(err.response.data.response.message, {toastId: 'server-error'});
+        }
+        
+    }
+    
     return (
         <Template>
             <Form>
-                <div className="presentation text-justify">
-                    <h4 className='text-3xl font-medium'>A plataforma do conhecimento</h4>
-                    <br />
-                    <p>
-                        Somos uma comunidade grande de estudantes que desejam compartilhar conhecimento e aprimorar a vida de outros no meio remoto, além de ser uma plataforma open-source para contribuir com o crescimento.
+                <div className="presentation">
+                    <div className="text-center">
+                        <span className='text-3xl font-medium'>A plataforma do </span>
+                        <span className='text-3xl font-medium text-green-500'>conhecimento</span>
+                    </div>
+                    <div className='mb-5'></div>
+                    <img src='/assets/img1.png' width={200} className='mx-auto my-10' />
+                    <p className='text-lg text-center'>
+                        Somos uma comunidade que compartilha conhecimento.
+                        <br />
+                        Acesse grupos de estudo, compartilhe artigos e aulas.
+                        <br />
+                        Não fique de fora
                         <br /><br />
-                        Acesse/crie grupos de estudo, compartilhe artigos e aulas.
-                        <br /><br />
-                        <Link href='/register'><a className='btn btn-primary'>Comece agora</a></Link>
+                        <div className="text-center">
+                            <Link href='/register'><a className='btn px-10 font-bold text-green-600 bg-slate-300 hover:bg-slate-300 hover:text-black'>Comece agora</a></Link>
+                        </div>
                     </p>
                 </div>
                 <div className='login-form'>
-                    <h3 className='text-3xl font-medium'>Fazer login</h3>
-                    <form action="">
+                    <h3 className='text-3xl font-medium mb-8'>Fazer login</h3>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <Col>
-                            <InputGroup icon={
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <InputGroup error={errors.email} icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                             }>
-                                <input type="email" placeholder="example@email.com" className="input input-bordered focus:outline-none w-full" autoFocus />
+                                <input {...register('email', {required: true, pattern: VALIDATION.EMAIL })} type="email" placeholder="example@email.com" className="input bg-zinc-800 focus:outline-none w-full" autoFocus />
                             </InputGroup>
                         </Col>
                         <Col>
-                            <InputGroup icon={
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <InputGroup error={errors.password} icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             }>
-                                <input type="password" placeholder="*****" className="input input-bordered focus:outline-none w-full" />
+                                <input {...register('password', {required: true})} type="password" placeholder="*****" className="input bg-zinc-800 focus:outline-none w-full" />
                             </InputGroup>
                         </Col>
                         <Col>
-                            <Row className='justify-between my-6'>
-                                <div><Link href='#'><a className='link text-indigo-500 hover:text-indigo-700 no-underline transition-color duration-150'>Esqueci minha senha</a></Link></div>
+                            <Row className='justify-between my-4'>
+                                <div><Link href='#'><a className='link text-secondary-focus hover:text-secondary no-underline transition-color duration-150'>Esqueci minha senha</a></Link></div>
                                 {/* <div>Continuar conectado</div> */}
                             </Row>
                         </Col>
                         <Col>
-                            <button type='submit' className="btn bg-indigo-700 hover:bg-indigo-600 transition-colors text-white btn-block">Entrar</button>
+                            <button type='submit' className="my-3 btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Entrar</button>
                         </Col>
                         <Col>
-                            Não tem uma conta? <Link href='/register'><a className='link text-indigo-500 hover:text-indigo-700 no-underline transition-color duration-150'>Cadastre-se</a></Link>
+                            Não tem uma conta? <Link href='/register'><a className='link text-secondary-focus hover:text-secondary no-underline transition-color duration-150'>Cadastre-se</a></Link>
                         </Col>
                     </form>
                 </div>
@@ -61,7 +89,7 @@ const Form = styled.div`
     flex-direction: row;
     margin: 0 auto;
     width: 80%;
-    align-items: baseline;
+    align-items: start;
     justify-content: space-evenly;
     border-radius:5px;
     margin-top: 15vh;

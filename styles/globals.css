@@ -7,6 +7,19 @@
     background: #121214;
 }
 
+.bg-blue {
+    background: #3b82f6;
+}
+
+.bg-blue:hover {
+    background: #286bd6;
+
+}
+
+.text-blue {
+    color: #3b82f6;
+}
+
 .button-rounded {
     border-radius: .25rem!important;
 }

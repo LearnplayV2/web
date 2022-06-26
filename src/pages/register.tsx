@@ -51,37 +51,37 @@ export default function Page() {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Col>
                             <InputGroup icon={
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
 
                             } error={errors.email}>
-                                <input type="text" { ...register('email', { required: { value: true, message: VALIDATION.FIELDS_NULL }, pattern: { value: VALIDATION.EMAIL, message: 'Preencha um e-mail válido' } } ) } placeholder="example@email.com" className="input input-bordered focus:outline-none border-gray-800 w-full" autoFocus />
+                                <input type="text" { ...register('email', { required: { value: true, message: VALIDATION.FIELDS_NULL }, pattern: { value: VALIDATION.EMAIL, message: 'Preencha um e-mail válido' } } ) } placeholder="example@email.com" className="input focus:outline-none bg-zinc-800 w-full" autoFocus />
                             </InputGroup>
                         </Col>
                         <Col>
                             <InputGroup icon={
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             } error={errors.name}>
-                                <input type="text" {...register('name', {required: {value: true, message: VALIDATION.FIELDS_NULL} }) } placeholder="Como deseja ser chamado?" className="input input-bordered focus:outline-none border-gray-800 w-full" />
+                                <input type="text" {...register('name', {required: {value: true, message: VALIDATION.FIELDS_NULL} }) } placeholder="Como deseja ser chamado?" className="input focus:outline-none bg-zinc-800 w-full" />
                             </InputGroup>
                         </Col>
                         <Col>
                             <InputGroup icon={
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
 
                             } error={errors.password}>
-                                <input type="password" {...register('password', {required: {value: true, message: VALIDATION.FIELDS_NULL}} )} placeholder="*****" className="input input-bordered focus:outline-none border-gray-800 w-full" />
+                                <input type="password" {...register('password', {required: {value: true, message: VALIDATION.FIELDS_NULL}} )} placeholder="*****" className="input focus:outline-none bg-zinc-800 w-full" />
                             </InputGroup>
                         </Col>
                         <Col>
                             <InputGroup icon={
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             } error={errors.confirm_password}>
-                                <input type="password" {...register('confirm_password', {required: {value: true, message: VALIDATION.FIELDS_NULL}})} placeholder="Confirme sua senha" className="input input-bordered focus:outline-none border-gray-800 w-full" />
+                                <input type="password" {...register('confirm_password', {required: {value: true, message: VALIDATION.FIELDS_NULL}})} placeholder="Confirme sua senha" className="input focus:outline-none bg-zinc-800 w-full" />
                             </InputGroup>
                         </Col>
                         <br />
                         <Col>
-                            <button type='submit' className="btn bg-indigo-700 hover:bg-indigo-600 transition-colors text-white btn-block">Cadastrar</button>
+                            <button type='submit' className="btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Cadastrar</button>
                         </Col>
                     </form>
                 </div>
@@ -96,8 +96,6 @@ const Form = styled.div`
     margin: 0 auto;
     width: 600px;
     padding:64px;
-    border-radius:5px;
-    box-shadow: 1px 4px 5px #000;
     margin-top: 15vh;
     background-color: ${COLORS.secondary};
     
