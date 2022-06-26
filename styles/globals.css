@@ -7,17 +7,13 @@
     background: #121214;
 }
 
-.bg-blue {
-    background: #3b82f6;
+a {
+    color: hsl(var(--sf));
+    transition: color .2s;
 }
 
-.bg-blue:hover {
-    background: #286bd6;
-
-}
-
-.text-blue {
-    color: #3b82f6;
+a:hover {
+    color: hsl(var(--s));
 }
 
 .button-rounded {

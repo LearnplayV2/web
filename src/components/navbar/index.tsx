@@ -28,7 +28,7 @@ export default function Navbar() {
         <>
             {/* @ts-ignore */}
             <div className="main-navbar navbar bg-white-opacity-7 flex flex-col">
-                    <Link href='/'><a className="btn btn-link link-opacity text-green-400 text-2xl normal-case">{TITLE}</a></Link>
+                    <Link href='/'><a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-2xl normal-case">{TITLE}</a></Link>
             </div>
         </>
     );

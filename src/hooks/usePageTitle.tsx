@@ -1,10 +1,10 @@
 import { TITLE } from "../utils/config";
 import onReady from "./loadOnce";
 
-export default function usePageTitle(title : string) {
+export default function usePageTitle(description? : string) {
 
     onReady(() => {
-        document.title = `${TITLE} - ${title}`;
+        document.title = (description) ? `${TITLE} - ${description}` : TITLE;
     });
 
 }

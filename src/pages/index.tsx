@@ -9,23 +9,36 @@ import { UserType } from '../Types/user';
 import { VALIDATION } from '../utils/validation';
 import { Login } from '../services/users';
 import { toast } from 'react-toastify';
+import usePageTitle from '../hooks/usePageTitle';
+import { GetServerSideProps } from 'next';
+import { COOKIE_DURATION, TOKEN, useCheck } from '../authentication';
+import { setCookie } from 'nookies';
+import { useRouter } from 'next/router';
 
 export default function Page() {
 
-    const {register, handleSubmit, formState: { errors }} = useForm<UserType>();
+    const { register, handleSubmit, formState: { errors } } = useForm<UserType>();
+    const router = useRouter();
 
-    const onSubmit = async(data : UserType) => {
+    usePageTitle();
+
+    const onSubmit = async (data: UserType) => {
         try {
             const response = await Login(data);
 
+            if(response.status == 200) {
+                setCookie(null, TOKEN, response.data.token, { path: '/', maxAge: COOKIE_DURATION });
+                router.reload();
+            }
+
             console.log(response.data)
-        } catch(err) {
+        } catch (err) {
             console.log(err);
-            if(err.response) return toast.error(err.response.data.response.message, {toastId: 'server-error'});
+            if (err.response) return toast.error(err.response.data.response.message, { toastId: 'server-error' });
         }
-        
+
     }
-    
+
     return (
         <Template>
             <Form>
@@ -43,10 +56,10 @@ export default function Page() {
                         <br />
                         Não fique de fora
                         <br /><br />
-                        <div className="text-center">
-                            <Link href='/register'><a className='btn px-10 font-bold text-green-600 bg-slate-300 hover:bg-slate-300 hover:text-black'>Comece agora</a></Link>
-                        </div>
                     </p>
+                    <div className="text-center">
+                        {/* <Link href='/register'><a className='btn px-10 font-bold bg-emerald-600 text-black hover:bg-emerald-700 hover:text-black'>Comece agora</a></Link> */}
+                    </div>
                 </div>
                 <div className='login-form'>
                     <h3 className='text-3xl font-medium mb-8'>Fazer login</h3>
@@ -55,19 +68,19 @@ export default function Page() {
                             <InputGroup error={errors.email} icon={
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                             }>
-                                <input {...register('email', {required: true, pattern: VALIDATION.EMAIL })} type="email" placeholder="example@email.com" className="input bg-zinc-800 focus:outline-none w-full" autoFocus />
+                                <input {...register('email', { required: true, pattern: VALIDATION.EMAIL })} type="email" placeholder="example@email.com" className="input bg-zinc-800 focus:outline-none w-full" autoFocus />
                             </InputGroup>
                         </Col>
                         <Col>
                             <InputGroup error={errors.password} icon={
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f9f9f9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             }>
-                                <input {...register('password', {required: true})} type="password" placeholder="*****" className="input bg-zinc-800 focus:outline-none w-full" />
+                                <input {...register('password', { required: true })} type="password" placeholder="*****" className="input bg-zinc-800 focus:outline-none w-full" />
                             </InputGroup>
                         </Col>
                         <Col>
                             <Row className='justify-between my-4'>
-                                <div><Link href='#'><a className='link text-secondary-focus hover:text-secondary no-underline transition-color duration-150'>Esqueci minha senha</a></Link></div>
+                                <div><Link href='#'><a>Esqueci minha senha</a></Link></div>
                                 {/* <div>Continuar conectado</div> */}
                             </Row>
                         </Col>
@@ -75,7 +88,7 @@ export default function Page() {
                             <button type='submit' className="my-3 btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Entrar</button>
                         </Col>
                         <Col>
-                            Não tem uma conta? <Link href='/register'><a className='link text-secondary-focus hover:text-secondary no-underline transition-color duration-150'>Cadastre-se</a></Link>
+                            Não tem uma conta? <Link href='/register'><a>Cadastre-se</a></Link>
                         </Col>
                     </form>
                 </div>
@@ -84,12 +97,18 @@ export default function Page() {
     );
 }
 
+export const getServerSideProps : GetServerSideProps = useCheck(async (ctx) => {
+    return {
+        props: {}
+    }
+});
+
 const Form = styled.div`
     display: flex;
     flex-direction: row;
     margin: 0 auto;
     width: 80%;
-    align-items: start;
+    align-items: baseline;
     justify-content: space-evenly;
     border-radius:5px;
     margin-top: 15vh;

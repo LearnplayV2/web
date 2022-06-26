@@ -10,12 +10,17 @@ import { UserType } from '../Types/user';
 import { Register } from '../services/users';
 import { toast } from 'react-toastify';
 import InputGroup from '../components/UI/inputGroup';
+import { setCookie } from 'nookies';
+import { COOKIE_DURATION, TOKEN, useCheck } from '../authentication';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 
 export default function Page() {
 
     usePageTitle('Cadastro');
 
     const { register, handleSubmit, formState: { errors } } = useForm<UserType>();
+    const router = useRouter();
 
     const onSubmit = async (data: UserType) => {
         const { name, email, password, confirm_password } = data;
@@ -25,8 +30,13 @@ export default function Page() {
 
             const response = await Register(data);
 
-            if(response.status == 201)
-                return toast.success('Usuário cadastrado com sucesso!');
+            if(response.status == 201) {
+                
+                setCookie(null, TOKEN, response.data.token, { path: '/', maxAge: COOKIE_DURATION });
+                router.reload();
+
+                return toast.success('Usuário cadastrado com sucesso!', { toastId: 'server-success' });
+            }
 
             throw new Error('Ocorreu um erro');
 
@@ -89,6 +99,12 @@ export default function Page() {
         </Template>
     );
 }
+
+export const getServerSideProps : GetServerSideProps = useCheck(async (ctx) => {
+    return {
+        props: {}
+    }
+});
 
 const Form = styled.div`
     display: flex;
