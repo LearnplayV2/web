@@ -112,6 +112,7 @@ const Form = styled.div`
     justify-content: space-evenly;
     border-radius:5px;
     margin-top: 15vh;
+    margin-bottom: 15vh;
 
     .presentation {
         width: 40%;

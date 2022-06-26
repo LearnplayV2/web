@@ -22,7 +22,7 @@ export function useCheck(fn: GetServerSideProps) {
     }
 }
 
-export function useAuth(fn: GetServerSideProps) {
+export function usePrivateRoute(fn: GetServerSideProps) {
     return async (ctx : GetServerSidePropsContext) => {
         const cookies = parseCookies(ctx);
         
@@ -30,15 +30,14 @@ export function useAuth(fn: GetServerSideProps) {
             if(!cookies[TOKEN]) throw new Error();
 
             const revalidate = await Refresh(cookies[TOKEN]); // your API Fetch
-
-            const newToken = revalidate.data.user.token;
+            const newToken = revalidate.data.token;
 
             setCookie(null, TOKEN, newToken, { path: '/', maxAge: COOKIE_DURATION });
 
             const userData = revalidate.data;
             // receive props from file then merge with props from here
             const propsReceived = await fn(ctx).then(c => { return c; });
-            
+
             const props = {
                 ...propsReceived,
                 props: {

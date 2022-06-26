@@ -1,15 +1,23 @@
 import { GetServerSideProps } from "next";
-import { useAuth } from "../../authentication";
+import { usePrivateRoute } from "../../authentication";
+import PrivateTemplate from "../../components/template/private";
+import usePageTitle from "../../hooks/usePageTitle";
+import { UserType } from "../../Types/user";
 
-export default function Page() {
+export default function Page(props : any) {
+
+    usePageTitle('Dashboard');
+
+    const user = props.user as UserType;
+    
     return(
-        <>
-            dashboard
-        </>
+        <PrivateTemplate>
+            dashboardd
+        </PrivateTemplate>
     );
 }
 
-export const getServerSideProps : GetServerSideProps = useAuth(async (ctx) => {
+export const getServerSideProps : GetServerSideProps = usePrivateRoute(async (ctx) => {
     return {
         props: {}
     }
