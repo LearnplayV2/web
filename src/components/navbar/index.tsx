@@ -73,7 +73,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                         </label>
                         <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
                             <li>
-                                <a>Meu perfil</a>
+                                <Link href='/dashboard/profile'><a>Meu perfil</a></Link>
                             </li>
                             <li><Link href="/dashboard/logout">Sair</Link></li>
                         </ul>
