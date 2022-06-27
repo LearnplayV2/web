@@ -10,7 +10,7 @@ export default function Logout() {
     onReady(() => ClearLoginAndRedirect() );
 
     function ClearLoginAndRedirect() {
-        destroyCookie(null, TOKEN);
+        destroyCookie(null, TOKEN, { path: '/' });
 
         route.push('/');
     }

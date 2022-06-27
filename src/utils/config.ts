@@ -1,9 +1,11 @@
-const TITLE = 'LearnPlay';
-const THEME = 'business';
+export const TITLE = 'LearnPlay';
+export const THEME = 'business';
 
-const COLORS = {
+export const COLORS = {
     primary: '#121214',
     secondary: '#201f24'
 };  
 
-export {TITLE, THEME, COLORS};
+export const MEDIA_QUERY = {
+    MEDIUM: 1024,
+}

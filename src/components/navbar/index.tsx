@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import onReady from "../../hooks/loadOnce";
 import { UserState } from "../../store/user/userReducer";
 import { TITLE } from "../../utils/config";
+import { UserImage } from "../userImage";
 import ArrowDown from "./arrow_down";
 import HamburguerIcon from "./hamburguer";
 
@@ -29,6 +30,8 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
     }
 
     if (isPrivate) {
+        const { photo } = useSelector((state: any) => state.user) as UserState;
+
         return (
             <>
                 <div className="navbar main-navbar bg-white-opacity-7">
@@ -66,12 +69,12 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                             </li>
                             <li><a>Item 3</a></li>
                         </ul>
-                    </div>
+                    </div> 
                     <div className="navbar-end">
                         <div className="dropdown dropdown-end">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <UserImage />
+                                    <img src={UserImage(photo)} />
                                 </div>
                             </label>
                             <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
@@ -94,12 +97,4 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
             </div>
         </>
     );
-}
-
-function UserImage() {
-
-    const { photo } = useSelector((state: any) => state.user) as UserState;
-    let userPhoto = (photo == undefined) ?  "/assets/default-avatar.jpg" : `${process.env.API_URL}/user/get-profile-picture/${photo}`;
-
-    return <img src={ userPhoto } />;
 }
