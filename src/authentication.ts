@@ -1,6 +1,6 @@
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-import { Refresh } from "./services/users";
+import UserService from './services/users';
 import { UserType } from "./Types/user";
 
 const TOKEN = 'LEARNPLAY_TOKEN';
@@ -31,7 +31,7 @@ export function usePrivateRoute(fn: GetServerSideProps) {
         try {
             if(!cookies[TOKEN]) throw new Error();
 
-            const revalidate = await Refresh(cookies[TOKEN]); // your API Fetch
+            const revalidate = await UserService.Refresh(cookies[TOKEN]); // your API Fetch
             const newToken = revalidate.data.token;
 
             setCookie(null, TOKEN, newToken, { path: '/', maxAge: COOKIE_DURATION });

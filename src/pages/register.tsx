@@ -7,13 +7,13 @@ import { useForm } from 'react-hook-form';
 import { VALIDATION } from '../utils/validation';
 import React from 'react';
 import { UserType } from '../Types/user';
-import { Register } from '../services/users';
 import { toast } from 'react-toastify';
 import InputGroup from '../components/UI/inputGroup';
 import { setCookie } from 'nookies';
 import { COOKIE_DURATION, TOKEN, useCheck } from '../authentication';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
+import UserService from '../services/users';
 
 export default function Page() {
 
@@ -28,7 +28,7 @@ export default function Page() {
             if (password !== confirm_password) throw Error('Senhas não conferem');
             delete data.confirm_password;
 
-            const response = await Register(data);
+            const response = await UserService.Register(data);
 
             if(response.status == 201) {
                 

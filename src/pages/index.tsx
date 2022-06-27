@@ -7,13 +7,13 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { UserType } from '../Types/user';
 import { VALIDATION } from '../utils/validation';
-import { Login } from '../services/users';
 import { toast } from 'react-toastify';
 import usePageTitle from '../hooks/usePageTitle';
 import { GetServerSideProps } from 'next';
 import { COOKIE_DURATION, TOKEN, useCheck } from '../authentication';
 import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
+import UserService from '../services/users';
 
 export default function Page() {
 
@@ -24,7 +24,7 @@ export default function Page() {
 
     const onSubmit = async (data: UserType) => {
         try {
-            const response = await Login(data);
+            const response = await UserService.Login(data);
 
             if(response.status == 200) {
                 setCookie(null, TOKEN, response.data.token, { path: '/', maxAge: COOKIE_DURATION });

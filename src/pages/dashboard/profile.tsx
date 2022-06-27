@@ -6,12 +6,12 @@ import { usePrivateRoute } from "../../authentication";
 import PrivateTemplate from "../../components/template/private";
 import { Container } from "../../components/UI";
 import { UserImage } from "../../components/userImage";
-import { ChangeProfilePhoto } from "../../services/users";
 import { changePhoto, UserState } from "../../store/user/userReducer";
 import { UserType } from "../../Types/user";
 import moment from 'moment';
 import Link from "next/link";
 import {MdCameraAlt, MdLogout} from 'react-icons/md';
+import UserService from '../../services/users';
 
 export default function Profile(props: any) {
 
@@ -27,7 +27,7 @@ export default function Profile(props: any) {
         imgInput.onchange = async (ev: ChangeEvent<HTMLInputElement>) => {
             try {
                 const { files } = ev.target;
-                const response = await ChangeProfilePhoto(files);
+                const response = await UserService.ChangeProfilePhoto(files);
                 dispatch(changePhoto(`${user.uuid!}?_=${new Date().getTime()}`));
                 toast.success(response.data.message ?? 'A foto de perfil foi alterada', { toastId: 'photo_changed', position: 'bottom-right' });
 
