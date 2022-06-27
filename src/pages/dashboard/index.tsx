@@ -1,4 +1,3 @@
-import { GetServerSideProps } from "next";
 import { usePrivateRoute } from "../../authentication";
 import PrivateTemplate from "../../components/template/private";
 import usePageTitle from "../../hooks/usePageTitle";
@@ -17,8 +16,8 @@ export default function Page(props : any) {
     );
 }
 
-export const getServerSideProps : GetServerSideProps = usePrivateRoute(async (ctx) => {
+export const getServerSideProps = usePrivateRoute(async (ctx) => {
     return {
         props: {}
     }
-});
+});  

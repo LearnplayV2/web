@@ -1,6 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { Refresh } from "./services/users";
+import { UserType } from "./Types/user";
 
 const TOKEN = 'LEARNPLAY_TOKEN';
 const COOKIE_DURATION = 30 * 24 * 60 * 60;
@@ -24,6 +25,7 @@ export function useCheck(fn: GetServerSideProps) {
 
 export function usePrivateRoute(fn: GetServerSideProps) {
     return async (ctx : GetServerSidePropsContext) => {
+
         const cookies = parseCookies(ctx);
         
         try {
@@ -34,7 +36,7 @@ export function usePrivateRoute(fn: GetServerSideProps) {
 
             setCookie(null, TOKEN, newToken, { path: '/', maxAge: COOKIE_DURATION });
 
-            const userData = revalidate.data;
+            const userData : UserType = revalidate.data;
             // receive props from file then merge with props from here
             const propsReceived = await fn(ctx).then(c => { return c; });
 

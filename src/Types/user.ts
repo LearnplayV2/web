@@ -4,4 +4,8 @@ export interface UserType {
     email?: string;
     password?: string;
     confirm_password?: string;
+    status?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    token?: string;
 }
