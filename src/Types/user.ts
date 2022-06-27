@@ -1,4 +1,5 @@
 export interface UserType {
+    uuid?: string;
     name?: string;
     email?: string;
     password?: string;

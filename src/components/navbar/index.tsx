@@ -4,7 +4,7 @@ import { TITLE } from "../../utils/config";
 import ArrowDown from "./arrow_down";
 import HamburguerIcon from "./hamburguer";
 
-export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
+export default function Navbar({ isPrivate = false, userUuid }: { isPrivate?: boolean, userUuid?: string }) {
 
     onReady(() => {
         shrinkNavbar();
@@ -49,7 +49,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                             <li><a>Item 3</a></li>
                         </ul>
                     </div>
-                    <a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-2xl normal-case">{TITLE}</a>
+                    <Link href='/dashboard'><a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-2xl normal-case">{TITLE}</a></Link>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal p-0">
@@ -68,7 +68,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full">
-                                <img src="/assets/default-avatar.jpg" />
+                                <UserImage userUuid={userUuid!}  />
                             </div>
                         </label>
                         <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
@@ -88,4 +88,11 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
             </div>
         </>
     );
+}
+
+function UserImage({userUuid}: {userUuid: string}) {
+
+    const defaultProfile = "/assets/default-avatar.jpg";
+
+    return <img src={userUuid ? `${process.env.API_URL}/user/get-profile-picture/${userUuid}`  : defaultProfile} />;
 }

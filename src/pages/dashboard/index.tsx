@@ -9,9 +9,9 @@ export default function Page(props : any) {
     usePageTitle('Dashboard');
 
     const user = props.user as UserType;
-    
+
     return(
-        <PrivateTemplate>
+        <PrivateTemplate userUuid={user.uuid!}>
             dashboardd
         </PrivateTemplate>
     );

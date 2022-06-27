@@ -19,10 +19,12 @@ export function Refresh(token: string) {
     });
 }
 
-export function ChangeProfilePhoto(data: FormData) {
+export function ChangeProfilePhoto(data: any) {
     const cookies = parseCookies();
-    
-    return api.post('/user/set-profile-picture', data, {
+    const formData = new FormData();
+    formData.append('file', data[0]);
+
+    return api.post('/user/set-profile-picture', formData, {
         headers: {
             Authorization: `Bearer ${cookies[TOKEN]}`,
             'content-type': 'multipart/form-data'
