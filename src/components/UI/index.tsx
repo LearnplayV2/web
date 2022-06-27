@@ -11,11 +11,14 @@ export const Row = styled.div`
 
 interface ContainerProps {
     widthPercent?: number;
+    marginBottom?: string;
+    marginTop?: string;
 }
 
 export const Container = styled.div<ContainerProps>`
     margin:0 auto;
-    margin-top: 15vh;
+    margin-top: ${props => props.marginTop ?? '0'};
+    margin-bottom: ${props => props.marginBottom ?? '0'};
     background: ${COLORS.secondary};
     width: ${props => props.widthPercent ? `${props.widthPercent}%` : '80%'};
     box-sizing:border-box;
