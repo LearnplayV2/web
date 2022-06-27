@@ -5,6 +5,9 @@
 
 :root {
     background: #121214;
+    --primary-color: #121214;
+    --secondary-color: '#201f24';
+    --toastify-color-dark: #36353b;
 }
 
 a {
