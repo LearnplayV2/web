@@ -85,7 +85,7 @@ export default function Page() {
                             </Row>
                         </Col>
                         <Col>
-                            <button type='submit' className="my-3 btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Entrar</button>
+                            <button type='submit' className="no-animation my-3 btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Entrar</button>
                         </Col>
                         <Col>
                             Não tem uma conta? <Link href='/register'><a>Cadastre-se</a></Link>

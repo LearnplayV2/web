@@ -91,7 +91,7 @@ export default function Page() {
                         </Col>
                         <br />
                         <Col>
-                            <button type='submit' className="btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Cadastrar</button>
+                            <button type='submit' className="no-animation btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Cadastrar</button>
                         </Col>
                     </form>
                 </div>

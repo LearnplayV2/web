@@ -41,7 +41,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                                 <HamburguerIcon />
                             </label>
                             <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                                <li><a>Home</a></li>
+                                <li><Link href='/dashboard'><a>Home</a></Link></li>
                                 <li tabIndex={0}>
                                     <a className="justify-between">
                                         Parent
@@ -59,7 +59,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                     </div>
                     <div className="navbar-center hidden lg:flex">
                         <ul className="menu menu-horizontal p-0">
-                            <li><a>Home</a></li>
+                            <li><Link href='/dashboard'><a>Home</a></Link></li>
                             <li tabIndex={0}>
                                 <a> Parent <ArrowDown /> </a>
                                 <ul className="p-2 bg-white-opacity-7">
@@ -72,7 +72,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                     </div> 
                     <div className="navbar-end">
                         <div className="dropdown dropdown-end">
-                            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                            <label tabIndex={0} className="no-animation btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
                                     <img src={UserImage(photo)} />
                                 </div>

@@ -58,7 +58,7 @@ export default function Profile(props: any) {
                         Ativo desde {moment(user.createdAt).format('D/MM/YYYY, H:mm')}
                     </div>
                     <div className="mt-10">
-                        <Link href='./logout'><a className="btn bg-red-800 hover:bg-red-900 text-white hover:text-white">
+                        <Link href='./logout'><a className="no-animation btn bg-red-800 hover:bg-red-900 text-white hover:text-white">
                             <MdLogout />&nbsp;&nbsp;Sair
                         </a></Link>
                     </div>
