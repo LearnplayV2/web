@@ -1,0 +1,68 @@
+import moment from "moment";
+import { GetServerSideProps } from "next";
+import { TOKEN, usePrivateRoute } from "../../../authentication";
+import PrivateTemplate from "../../../components/template/private";
+import { Container } from "../../../components/UI";
+import { UserImage } from "../../../components/userImage";
+import { UserType } from "../../../Types/user";
+import UserService from '../../../services/users';
+import { parseCookies } from "nookies";
+
+export default function Page(props: any) {
+
+    const profile = props.profile as UserType;
+    const user = props.user as UserType;
+
+    return (profile) ? (
+        <PrivateTemplate userUuid={user.uuid!}>
+            <Container marginTop="15vh" marginBottom="50px" widthPercent={50}>
+                <div className="flex flex-col items-center">
+                    <div className="avatar w-24 relative bg-gray-800 rounded-full">
+                        <div className="w-24 rounded-full ring ring-green-600 ring-offset-base-100 ring-offset-2">
+                            <img src={UserImage(profile.uuid)} title='Mudar foto' className="transition-opacity duration-150 z-10 relative" />
+                        </div>
+                    </div>
+                    <div className="mt-5 mb-5">
+                        <span className='text-2xl'>{profile.name}</span>
+                    </div>
+                    <div className="px-8 py-2 bg-zinc-700 rounded-md text-white">
+                        Ativo desde {moment(profile.createdAt).format('D/MM/YYYY, H:mm')}
+                    </div>
+                </div>
+            </Container>
+        </PrivateTemplate>
+    ) : (
+        <PrivateTemplate userUuid={user.uuid!}>
+            <Container marginTop="15vh" marginBottom="50px" widthPercent={50}>
+                <div className="text-center">
+                    Perfil não encontrado.
+                </div>
+            </Container>
+        </PrivateTemplate>
+    );
+}
+
+export const getServerSideProps: GetServerSideProps = usePrivateRoute(async (ctx) => {
+
+    const cookies = parseCookies(ctx);
+    const { uuid } = ctx.query as { uuid: string };
+
+    try {
+
+        const response = await UserService.GetProfileInfo(uuid, cookies[TOKEN]);
+
+        return {
+            props: {
+                profile: response.data
+            }
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+
+    return {
+        props: {
+        }
+    }
+});

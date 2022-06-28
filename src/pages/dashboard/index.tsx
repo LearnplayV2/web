@@ -11,7 +11,7 @@ export default function Page(props : any) {
 
     return(
         <PrivateTemplate userUuid={user.uuid!}>
-            dashboardd
+            Em construção.
         </PrivateTemplate>
     );
 }

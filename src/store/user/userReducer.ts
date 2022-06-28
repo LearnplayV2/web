@@ -1,18 +1,18 @@
 import { createAction, createReducer } from "@reduxjs/toolkit"
 
 export type UserState = {
-    photo: string | undefined;
+    uuid: string | undefined;
 }
 
 const INITIAL_STATE : UserState = {
-    photo: undefined
+    uuid: undefined
 }
 
-export const changePhoto = createAction<string>('PHOTO_CHANGED');
+export const changeUuid = createAction<string>('USER_UUID_CHANGED');
 
 export const userReducer = createReducer(INITIAL_STATE, (builder) => {
     builder
-        .addCase(changePhoto, (state, action) => {
-            state.photo = action.payload
+        .addCase(changeUuid, (state, action) => {
+            state.uuid = action.payload
         })
 });

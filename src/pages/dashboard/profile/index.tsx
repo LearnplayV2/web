@@ -2,21 +2,21 @@ import { GetServerSideProps } from "next";
 import { ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { usePrivateRoute } from "../../authentication";
-import PrivateTemplate from "../../components/template/private";
-import { Container } from "../../components/UI";
-import { UserImage } from "../../components/userImage";
-import { changePhoto, UserState } from "../../store/user/userReducer";
-import { UserType } from "../../Types/user";
+import { usePrivateRoute } from "../../../authentication";
+import PrivateTemplate from "../../../components/template/private";
+import { Container } from "../../../components/UI";
+import { UserImage } from "../../../components/userImage";
+import { changeUuid, UserState } from "../../../store/user/userReducer";
+import { UserType } from "../../../Types/user";
 import moment from 'moment';
 import Link from "next/link";
 import {MdCameraAlt, MdLogout} from 'react-icons/md';
-import UserService from '../../services/users';
+import UserService from '../../../services/users';
 
 export default function Profile(props: any) {
 
     const user = props.user as UserType;
-    const { photo } = useSelector((state: any) => state.user) as UserState;
+    const { uuid } = useSelector((state: any) => state.user) as UserState;
 
     const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ export default function Profile(props: any) {
             try {
                 const { files } = ev.target;
                 const response = await UserService.ChangeProfilePhoto(files);
-                dispatch(changePhoto(`${user.uuid!}?_=${new Date().getTime()}`));
+                dispatch(changeUuid(`${user.uuid!}?_=${new Date().getTime()}`));
                 toast.success(response.data.message ?? 'A foto de perfil foi alterada', { toastId: 'photo_changed', position: 'bottom-right' });
 
             } catch (err) {
@@ -48,7 +48,7 @@ export default function Profile(props: any) {
                             <MdCameraAlt size={30} color='#fff' />
                         </div>
                         <div className="w-24 rounded-full ring ring-green-600 ring-offset-base-100 ring-offset-2">
-                            <img onClick={onSubmitPhoto} src={UserImage(photo)} title='Mudar foto' className="cursor-pointer transition-opacity duration-150 hover:opacity-20 z-10 relative" />
+                            <img onClick={onSubmitPhoto} src={UserImage(uuid)} title='Mudar foto' className="cursor-pointer transition-opacity duration-150 hover:opacity-20 z-10 relative" />
                         </div>
                     </div>
                     <div className="mt-5 mb-5">

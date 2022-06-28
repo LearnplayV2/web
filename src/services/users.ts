@@ -1,4 +1,5 @@
 import { parseCookies } from "nookies";
+import { parse } from "path";
 import { TOKEN } from "../authentication";
 import { UserType } from "../Types/user";
 import { api } from "./instance";
@@ -30,6 +31,15 @@ class Service {
             headers: {
                 Authorization: `Bearer ${cookies[TOKEN]}`,
                 'content-type': 'multipart/form-data'
+            }
+        });
+    }
+
+    public GetProfileInfo(uuid: string, token : string) {
+        const cookies = parseCookies();
+        return api.get(`/user/profile/${uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
     }
