@@ -9,7 +9,7 @@ import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
 import { wrapper } from "../../../store/store";
 
-const Page : NextPage = ({props}: any) => {
+export default function Page(props: any) {
 
     const profile = props.profile as UserType;
     const user = props.user as UserType;
@@ -43,10 +43,8 @@ const Page : NextPage = ({props}: any) => {
     );
 }
 
-export default Page;
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(({ dispatch }) => usePrivateRoute(async (ctx) => {
 
-//@ts-ignore
-Page.getInitialProps = wrapper.getInitialPageProps(({dispatch}) => usePrivateRoute(async(ctx) => {
     const cookies = parseCookies(ctx);
     const { uuid } = ctx.query as { uuid: string };
 
@@ -68,4 +66,4 @@ Page.getInitialProps = wrapper.getInitialPageProps(({dispatch}) => usePrivateRou
         props: {
         }
     }
-}, dispatch));
+}));

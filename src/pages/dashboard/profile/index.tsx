@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import { ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ import {MdCameraAlt, MdLogout} from 'react-icons/md';
 import UserService from '../../../services/users';
 import { wrapper } from "../../../store/store";
 
-const Page : NextPage = ({props}: any) => {
+export default function Page(props: any) {
     
     const user = props.user as UserType;
     const { uuid } = useSelector((state: any) => state.user) as UserState;
@@ -72,12 +72,9 @@ const Page : NextPage = ({props}: any) => {
     );
 }
 
-export default Page;
-
-//@ts-ignore
-Page.getInitialProps = wrapper.getInitialPageProps(({dispatch}) => usePrivateRoute(async(ctx) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(({ dispatch }) => usePrivateRoute(async (ctx) => {
 
     return {
         props: {}
     }
-}, dispatch));
+}));

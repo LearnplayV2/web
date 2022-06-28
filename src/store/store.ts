@@ -19,11 +19,12 @@ const reducer = (state: ReturnType<typeof combinedReducer>, action: AnyAction) =
     }
 };
 
-export const makeStore = () =>
-    configureStore({
-        //@ts-ignore
-        reducer,
+export const store = configureStore({
+    //@ts-ignore
+    reducer,
 });
+
+export const makeStore = () => store;
 
 type Store = ReturnType<typeof makeStore>;
 
