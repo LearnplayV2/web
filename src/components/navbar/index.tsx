@@ -54,7 +54,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                         <li><a>Submenu 1</a></li>
                         <li><a>Submenu 2</a></li>
                     </MenuDropDown>
-                    <li><a>Item 3</a></li>
+                    <li><Link href='/dashboard/members'><a>Membros</a></Link></li>
                 </>
             )
         }
@@ -91,7 +91,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                                     <img src={UserImage(imageUuid)} />
                                 </div>
                             </label>
-                            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-md w-52">
+                            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-white-opacity-7 rounded-md w-52">
                                 <li> <Link href='/dashboard/profile'><a>Meu perfil</a></Link> </li>
                                 <li><Link href="/dashboard/logout">Sair</Link></li>
                             </ul>
