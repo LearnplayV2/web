@@ -7,7 +7,7 @@ import { TITLE } from "../../utils/config";
 import { UserImage } from "../userImage";
 import ArrowDown from "./arrow_down";
 import HamburguerIcon from "./hamburguer";
-import { MdNotificationsNone, MdNotifications } from 'react-icons/md';
+import Notifications from "./notification";
 
 export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
 
@@ -45,8 +45,6 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                 </ul>
             </li>
         );
-
-        const Notification = ({children} : {children: React.ReactNode}) => <li><span className="bg-transparent px-0">{children}</span></li>;
 
         const MiddleMenu = () => {
             return (
@@ -86,17 +84,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                         </ul>
                     </div>
                     <div className="navbar-end">
-                        <div className="dropdown dropdown-end">
-                            <button className="btn btn-ghost btn-circle">
-                                <div className="indicator">
-                                    <MdNotificationsNone size={24} />
-                                </div>
-                            </button>
-                            <ul tabIndex={0} className="mt-3 p-2 px-5 shadow menu menu-compact dropdown-content bg-white-opacity-7 rounded-md w-52 md:w-96">
-                                <b>Notificações</b>
-                                <Notification>Em construção.</Notification>
-                            </ul>
-                        </div>
+                        <Notifications />
                         <div className="ml-3 dropdown dropdown-end">
                             <label tabIndex={0} className="no-animation btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
