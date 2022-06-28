@@ -1,5 +1,5 @@
 import moment from "moment";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { TOKEN, usePrivateRoute } from "../../../authentication";
 import PrivateTemplate from "../../../components/template/private";
 import { Container } from "../../../components/UI";
@@ -7,14 +7,15 @@ import { UserImage } from "../../../components/userImage";
 import { UserType } from "../../../Types/user";
 import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
+import { wrapper } from "../../../store/store";
 
-export default function Page(props: any) {
+const Page : NextPage = ({props}: any) => {
 
     const profile = props.profile as UserType;
     const user = props.user as UserType;
 
     return (profile) ? (
-        <PrivateTemplate userUuid={user.uuid!}>
+        <PrivateTemplate>
             <Container marginTop="15vh" marginBottom="50px" widthPercent={50}>
                 <div className="flex flex-col items-center">
                     <div className="avatar w-24 relative bg-gray-800 rounded-full">
@@ -32,7 +33,7 @@ export default function Page(props: any) {
             </Container>
         </PrivateTemplate>
     ) : (
-        <PrivateTemplate userUuid={user.uuid!}>
+        <PrivateTemplate>
             <Container marginTop="15vh" marginBottom="50px" widthPercent={50}>
                 <div className="text-center">
                     Perfil não encontrado.
@@ -42,8 +43,10 @@ export default function Page(props: any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = usePrivateRoute(async (ctx) => {
+export default Page;
 
+//@ts-ignore
+Page.getInitialProps = wrapper.getInitialPageProps(({dispatch}) => usePrivateRoute(async(ctx) => {
     const cookies = parseCookies(ctx);
     const { uuid } = ctx.query as { uuid: string };
 
@@ -65,4 +68,4 @@ export const getServerSideProps: GetServerSideProps = usePrivateRoute(async (ctx
         props: {
         }
     }
-});
+}, dispatch));

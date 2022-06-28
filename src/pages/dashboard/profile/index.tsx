@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -12,9 +12,10 @@ import moment from 'moment';
 import Link from "next/link";
 import {MdCameraAlt, MdLogout} from 'react-icons/md';
 import UserService from '../../../services/users';
+import { wrapper } from "../../../store/store";
 
-export default function Profile(props: any) {
-
+const Page : NextPage = ({props}: any) => {
+    
     const user = props.user as UserType;
     const { uuid } = useSelector((state: any) => state.user) as UserState;
 
@@ -39,7 +40,7 @@ export default function Profile(props: any) {
     }
 
     return (
-        <PrivateTemplate userUuid={user.uuid!}>
+        <PrivateTemplate>
             <Container marginTop="15vh" marginBottom='50px' widthPercent={50}>
                 <h3 className="text-3xl">Meu perfil</h3>
                 <div className="flex flex-col items-center">
@@ -71,8 +72,12 @@ export default function Profile(props: any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = usePrivateRoute(async (ctx) => {
+export default Page;
+
+//@ts-ignore
+Page.getInitialProps = wrapper.getInitialPageProps(({dispatch}) => usePrivateRoute(async(ctx) => {
+
     return {
         props: {}
     }
-});
+}, dispatch));

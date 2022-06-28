@@ -1,6 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import UserService from './services/users';
+import { changeUuid } from "./store/user/userReducer";
 import { UserType } from "./Types/user";
 
 const TOKEN = 'LEARNPLAY_TOKEN';
@@ -23,7 +24,7 @@ export function useCheck(fn: GetServerSideProps) {
     }
 }
 
-export function usePrivateRoute(fn: GetServerSideProps) {
+export function usePrivateRoute(fn: GetServerSideProps, dispatch: any) {
     return async (ctx : GetServerSidePropsContext) => {
 
         const cookies = parseCookies(ctx);
@@ -39,7 +40,10 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             const userData : UserType = revalidate.data;
             // receive props from file then merge with props from here
             const propsReceived = await fn(ctx).then(c => { return c; });
+            
+            dispatch(changeUuid(userData.uuid!));
 
+            
             const props = {
                 ...propsReceived,
                 props: {

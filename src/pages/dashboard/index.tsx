@@ -1,23 +1,26 @@
+import { NextPage } from "next/types";
 import { usePrivateRoute } from "../../authentication";
 import PrivateTemplate from "../../components/template/private";
 import usePageTitle from "../../hooks/usePageTitle";
-import { UserType } from "../../Types/user";
+import { wrapper } from "../../store/store";
 
-export default function Page(props : any) {
+const Page : NextPage = () => {
 
     usePageTitle('Dashboard');
 
-    const user = props.user as UserType;
-
     return(
-        <PrivateTemplate userUuid={user.uuid!}>
+        <PrivateTemplate>
             Em construção.
         </PrivateTemplate>
     );
 }
 
-export const getServerSideProps = usePrivateRoute(async (ctx) => {
+export default Page;
+
+//@ts-ignore
+Page.getInitialProps = wrapper.getInitialPageProps(({dispatch}) => usePrivateRoute(async(ctx) => {
+
     return {
         props: {}
     }
-});  
+}, dispatch));
