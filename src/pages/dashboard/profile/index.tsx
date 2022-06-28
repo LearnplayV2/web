@@ -6,7 +6,7 @@ import { usePrivateRoute } from "../../../authentication";
 import PrivateTemplate from "../../../components/template/private";
 import { Container } from "../../../components/UI";
 import { UserImage } from "../../../components/userImage";
-import { changeUuid, UserState } from "../../../store/user/userReducer";
+import { setImageUuid, UserState } from "../../../store/user/userReducer";
 import { UserType } from "../../../Types/user";
 import moment from 'moment';
 import Link from "next/link";
@@ -17,7 +17,7 @@ import { wrapper } from "../../../store/store";
 export default function Page(props: any) {
     
     const user = props.user as UserType;
-    const { uuid } = useSelector((state: any) => state.user) as UserState;
+    const { imageUuid } = useSelector((state: any) => state.user) as UserState;
 
     const dispatch = useDispatch();
 
@@ -29,7 +29,7 @@ export default function Page(props: any) {
             try {
                 const { files } = ev.target;
                 const response = await UserService.ChangeProfilePhoto(files);
-                dispatch(changeUuid(`${user.uuid!}?_=${new Date().getTime()}`));
+                dispatch(setImageUuid(`${user.uuid!}?_=${new Date().getTime()}`));
                 toast.success(response.data.message ?? 'A foto de perfil foi alterada', { toastId: 'photo_changed', position: 'bottom-right' });
 
             } catch (err) {
@@ -49,7 +49,7 @@ export default function Page(props: any) {
                             <MdCameraAlt size={30} color='#fff' />
                         </div>
                         <div className="w-24 rounded-full ring ring-green-600 ring-offset-base-100 ring-offset-2">
-                            <img onClick={onSubmitPhoto} src={UserImage(uuid)} title='Mudar foto' className="cursor-pointer transition-opacity duration-150 hover:opacity-20 z-10 relative" />
+                            <img onClick={onSubmitPhoto} src={UserImage(imageUuid)} title='Mudar foto' className="cursor-pointer transition-opacity duration-150 hover:opacity-20 z-10 relative" />
                         </div>
                     </div>
                     <div className="mt-5 mb-5">

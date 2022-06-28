@@ -32,7 +32,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
     }
 
     if (isPrivate) {
-        const { uuid } = useSelector((state: any) => state.user) as UserState;
+        const { imageUuid } = useSelector((state: any) => state.user) as UserState;
 
         const MenuDropDown = ({ title, children }: { title: string, children: React.ReactNode }) => (
             <li tabIndex={0}>
@@ -88,7 +88,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                         <div className="ml-3 dropdown dropdown-end">
                             <label tabIndex={0} className="no-animation btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img src={UserImage(uuid)} />
+                                    <img src={UserImage(imageUuid)} />
                                 </div>
                             </label>
                             <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-md w-52">
