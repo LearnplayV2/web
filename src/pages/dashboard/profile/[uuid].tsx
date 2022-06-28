@@ -43,10 +43,20 @@ export default function Page(props: any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(({ dispatch }) => usePrivateRoute(async (ctx) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => usePrivateRoute(async (ctx) => {
 
+    
     const cookies = parseCookies(ctx);
     const { uuid } = ctx.query as { uuid: string };
+
+    // redirect to your profile
+    if(store.getState().user.uuid === uuid) {
+        return {
+            redirect: {
+                destination: '/dashboard/profile',
+            }
+        }
+    }
 
     try {
 
