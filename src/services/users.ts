@@ -36,8 +36,16 @@ class Service {
     }
 
     public GetProfileInfo(uuid: string, token : string) {
-        const cookies = parseCookies();
         return api.get(`/user/profile/${uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
+
+    public GetMembers(token : string) {
+        const cookies = parseCookies();
+        return api.get('/user/members', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
