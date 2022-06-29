@@ -8,8 +8,8 @@ class WebSocket {
         this.socket = socket;
     }
 
-    public addNewUser = (email: string, socketId: string) => {
-        this.socket.emit('newUser', {email, socketId});
+    public addNewUser = (email: string) => {
+        this.socket.emit('newUser', email);
     }
     
 }
