@@ -17,7 +17,7 @@ export default function Page(props: any) {
     return (
         <PrivateTemplate>
             <Container widthPercent={50} marginTop='15vh' marginBottom="50px">
-                <h5 className="text-3xl">Novos membros</h5>
+                <h5 className="text-3xl text-green-500">Novos membros</h5>
                 <div className="overflow-x-auto mt-5">
                     <table className="table w-full">
                         <thead>

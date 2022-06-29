@@ -42,7 +42,7 @@ export default function Page(props: any) {
     return (
         <PrivateTemplate>
             <Container marginTop="15vh" marginBottom='50px' widthPercent={50}>
-                <h3 className="text-3xl">Meu perfil</h3>
+                <h3 className="text-3xl text-green-500">Meu perfil</h3>
                 <div className="flex flex-col items-center">
                     <div className="avatar w-24 relative bg-gray-800 rounded-full">
                         <div className="absolute" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
