@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 import onReady from "../../hooks/loadOnce";
-import { UserState } from "../../store/user/userReducer";
+import { UserState } from "../../store/reducers/user";
 import { TITLE } from "../../utils/config";
 import { UserImage } from "../userImage";
 import ArrowDown from "./arrow_down";

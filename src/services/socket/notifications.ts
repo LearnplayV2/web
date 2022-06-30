@@ -11,6 +11,10 @@ class WebSocket {
     public addNewUser = (email: string) => {
         this.socket.emit('newUser', email);
     }
+
+    public sendNotification = ({email, message} : {email: string, message: string}) => {
+        this.socket.emit('sendNotification', {email, message});
+    }
     
 }
 

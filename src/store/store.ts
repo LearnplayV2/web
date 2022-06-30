@@ -1,10 +1,10 @@
-import {userReducer} from "./user/userReducer";
+import {userReducer} from "./reducers/user";
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { Action, AnyAction, combineReducers } from "redux";
 import { configureStore, ThunkAction } from "@reduxjs/toolkit";
 
 const combinedReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
 });
 
 const reducer = (state: ReturnType<typeof combinedReducer>, action: AnyAction) => {

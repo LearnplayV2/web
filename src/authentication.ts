@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import UserService from './services/users';
 import { store } from "./store/store";
-import { setImageUuid, setUserEmail, setUserUuid } from "./store/user/userReducer";
+import { setImageUuid, setUserEmail, setUserUuid } from "./store/reducers/user";
 import { UserType } from "./Types/user";
 
 const TOKEN = 'LEARNPLAY_TOKEN';
@@ -45,7 +45,7 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             store.dispatch(setUserUuid(userData.uuid!));
             store.dispatch(setImageUuid(userData.uuid!));
             store.dispatch(setUserEmail(userData.email!));
-            
+
             const props = {
                 ...propsReceived,
                 props: {

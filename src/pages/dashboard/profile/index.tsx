@@ -6,13 +6,15 @@ import { usePrivateRoute } from "../../../authentication";
 import PrivateTemplate from "../../../components/template/private";
 import { Container } from "../../../components/UI";
 import { UserImage } from "../../../components/userImage";
-import { setImageUuid, UserState } from "../../../store/user/userReducer";
+import { setImageUuid, UserState } from "../../../store/reducers/user";
 import { UserType } from "../../../Types/user";
 import moment from 'moment';
 import Link from "next/link";
 import {MdCameraAlt, MdLogout} from 'react-icons/md';
 import UserService from '../../../services/users';
 import { wrapper } from "../../../store/store";
+import { io } from "socket.io-client";
+import Socket from '../../../services/socket/notifications';
 
 export default function Page(props: any) {
     
@@ -30,6 +32,12 @@ export default function Page(props: any) {
                 const { files } = ev.target;
                 const response = await UserService.ChangeProfilePhoto(files);
                 dispatch(setImageUuid(`${user.uuid!}?_=${new Date().getTime()}`));
+
+                //@ts-ignore
+                const server = io(process.env.SOCKET_URL);
+                const socket = Socket(server);
+                socket.sendNotification({email: user.email!, message: 'Você alterou sua foto!'});
+                
                 toast.success(response.data.message ?? 'A foto de perfil foi alterada', { toastId: 'photo_changed', position: 'bottom-right' });
 
             } catch (err) {
