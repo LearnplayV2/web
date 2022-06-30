@@ -8,11 +8,18 @@ import { UserType } from "../../../Types/user";
 import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
 import { wrapper } from "../../../store/store";
+import { useEffect } from "react";
+import NotificationsSocket from "../../../services/socket/notifications";
 
 export default function Page(props: any) {
 
     const profile = props.profile as UserType;
     const user = props.user as UserType;
+
+    useEffect(() => {
+        //todo: implementar o socket
+        NotificationsSocket.sendNotification({uuid: profile.uuid!, message: `${user.name} visitou seu perfil perfil`});
+    }, [])
 
     return (profile) ? (
         <PrivateTemplate>

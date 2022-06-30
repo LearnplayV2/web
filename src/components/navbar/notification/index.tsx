@@ -8,10 +8,10 @@ export default function Notifications() {
 
     const [notifications, setNotifications] = useState([]);
     
-    const {email} = useSelector((state : any) => state.user) as UserState;  
+    const {uuid} = useSelector((state : any) => state.user) as UserState;  
     
     useEffect(() => { 
-        Websocket.addNewUser(email!);
+        Websocket.addNewUser(uuid!);
         //@ts-ignore
         socket.on('getNotification', (data) => setNotifications((state) => [...state, data]));
     }, [])
