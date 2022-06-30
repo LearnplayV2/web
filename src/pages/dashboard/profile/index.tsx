@@ -10,14 +10,13 @@ import { setImageUuid, UserState } from "../../../store/reducers/user";
 import { UserType } from "../../../Types/user";
 import moment from 'moment';
 import Link from "next/link";
-import {MdCameraAlt, MdLogout} from 'react-icons/md';
+import { MdCameraAlt, MdLogout } from 'react-icons/md';
 import UserService from '../../../services/users';
 import { wrapper } from "../../../store/store";
-import { io } from "socket.io-client";
-import Socket from '../../../services/socket/notifications';
+import NotificationsService from "../../../services/socket/notifications";
 
 export default function Page(props: any) {
-    
+
     const user = props.user as UserType;
     const { imageUuid } = useSelector((state: any) => state.user) as UserState;
 
@@ -33,10 +32,7 @@ export default function Page(props: any) {
                 const response = await UserService.ChangeProfilePhoto(files);
                 dispatch(setImageUuid(`${user.uuid!}?_=${new Date().getTime()}`));
 
-                //@ts-ignore
-                const server = io(process.env.SOCKET_URL);
-                const socket = Socket(server);
-                socket.sendNotification({email: user.email!, message: 'Você alterou sua foto!'});
+                NotificationsService.sendNotification({email: user.email!, message:'Você mudou a foto de perfil'});
                 
                 toast.success(response.data.message ?? 'A foto de perfil foi alterada', { toastId: 'photo_changed', position: 'bottom-right' });
 
@@ -50,7 +46,13 @@ export default function Page(props: any) {
     return (
         <PrivateTemplate>
             <Container marginTop="15vh" marginBottom='50px' widthPercent={50}>
-                <h3 className="text-3xl text-green-500">Meu perfil</h3>
+                <h3 className="float-left text-3xl text-green-500">Meu perfil</h3>
+                <div className="float-right">
+                <Link href='./logout'><a className="no-animation btn bg-red-800 hover:bg-red-900 text-white hover:text-white">
+                    <MdLogout />&nbsp;&nbsp;Sair
+                </a></Link>
+                </div>
+                <div style={{clear: 'both'}} className="mb-10"></div>
                 <div className="flex flex-col items-center">
                     <div className="avatar w-24 relative bg-gray-800 rounded-full">
                         <div className="absolute" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -65,11 +67,6 @@ export default function Page(props: any) {
                     </div>
                     <div className="px-8 py-2 bg-zinc-700 rounded-md text-white">
                         Ativo desde {moment(user.createdAt).format('D/MM/YYYY, H:mm')}
-                    </div>
-                    <div className="mt-10">
-                        <Link href='./logout'><a className="no-animation btn bg-red-800 hover:bg-red-900 text-white hover:text-white">
-                            <MdLogout />&nbsp;&nbsp;Sair
-                        </a></Link>
                     </div>
                 </div>
                 <form style={{ display: 'none' }}>

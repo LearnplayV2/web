@@ -85,17 +85,13 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                     </div>
                     <div className="navbar-end">
                         <Notifications />
-                        <div className="ml-3 dropdown dropdown-end">
-                            <label tabIndex={0} className="no-animation btn btn-ghost btn-circle avatar">
+                        <Link href='/dashboard/profile'>
+                            <a tabIndex={0} className="ml-3 no-animation btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
                                     <img src={UserImage(imageUuid)} />
                                 </div>
-                            </label>
-                            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-white-opacity-7 rounded-md w-52">
-                                <li> <Link href='/dashboard/profile'><a>Meu perfil</a></Link> </li>
-                                <li><Link href="/dashboard/logout">Sair</Link></li>
-                            </ul>
-                        </div>
+                            </a>
+                        </Link>
                     </div>
                 </div>
             </>
