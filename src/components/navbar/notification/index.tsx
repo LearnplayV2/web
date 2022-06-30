@@ -23,7 +23,9 @@ export default function Notifications() {
             <button className="btn btn-ghost btn-circle no-animation">
                 <div className="indicator">
                     <MdNotificationsNone size={24} />
-                    <span className="indicator-item badge">{notifications.length}</span>
+                    {(notifications.length > 0) ? (
+                        <span className="indicator-item badge">{notifications.length}</span>
+                    ) : null}
                 </div>
             </button>
             <ul tabIndex={0} className="mt-3 p-2 px-5 shadow menu menu-compact dropdown-content bg-white-opacity-7 rounded-md w-52 md:w-96">
