@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
 import { MdNotificationsNone } from "react-icons/md";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Websocket, { socket } from '../../../services/socket';
+import { addNotification, NotificationProps, NotificationState } from "../../../store/reducers/notification";
 import { UserState } from "../../../store/reducers/user";
 
 export default function Notifications() {
 
-    const [notifications, setNotifications] = useState([]);
+    const dispatch = useDispatch();
     
     const {uuid} = useSelector((state : any) => state.user) as UserState;  
-    
+    const notifications = useSelector((state: any) => state.notificationsReducer.notifications) as NotificationProps[];
+
     useEffect(() => { 
         Websocket.addNewUser(uuid!);
-        //@ts-ignore
-        socket.on('getNotification', (data) => setNotifications((state) => [...state, data]));
+        socket.on('getNotification', (data) => {
+            dispatch(addNotification(data));
+        });
     }, [])
+
+    const noReadNotifications = notifications.filter(notification => !notification.read);;
     
     const Notification = ({children} : {children: React.ReactNode}) => <li><span className="bg-transparent px-0">{children}</span></li>;
 
@@ -24,7 +30,7 @@ export default function Notifications() {
                 <div className="indicator">
                     <MdNotificationsNone size={24} />
                     {(notifications.length > 0) ? (
-                        <span className="indicator-item badge">{notifications.length}</span>
+                        <span className="indicator-item badge bg-red-500 text-white">{(noReadNotifications.length > 99) ? '+99' : noReadNotifications.length}</span>
                     ) : null}
                 </div>
             </button>
@@ -32,7 +38,7 @@ export default function Notifications() {
                 <b>Notificações</b>
                 {notifications.length == 0 ? <Notification>Nenhuma notificação</Notification> : null}
                 {notifications.map(notification => (
-                    <Notification>{notification}</Notification>
+                    <Notification>{notification.title}</Notification>
                 ))}
             </ul>
         </div>

@@ -18,7 +18,7 @@ export default function Page(props: any) {
 
     useEffect(() => {
         //todo: implementar o socket
-        NotificationsSocket.sendNotification({uuid: profile.uuid!, message: `${user.name} visitou seu perfil perfil`});
+        NotificationsSocket.sendNotification({uuid: profile.uuid!, message: `${user.name} visitou seu perfil`});
     }, [])
 
     return (profile) ? (

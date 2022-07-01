@@ -2,9 +2,11 @@ import {userReducer} from "./reducers/user";
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { Action, AnyAction, combineReducers } from "redux";
 import { configureStore, ThunkAction } from "@reduxjs/toolkit";
+import { notificationsReducer } from "./reducers/notification";
 
 const combinedReducer = combineReducers({
     user: userReducer,
+    notificationsReducer
 });
 
 const reducer = (state: ReturnType<typeof combinedReducer>, action: AnyAction) => {

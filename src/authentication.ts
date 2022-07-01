@@ -4,6 +4,7 @@ import UserService from './services/users';
 import { store } from "./store/store";
 import { setImageUuid, setUserEmail, setUserUuid } from "./store/reducers/user";
 import { UserType } from "./Types/user";
+import { setNotification } from "./store/reducers/notification";
 
 const TOKEN = 'LEARNPLAY_TOKEN';
 const COOKIE_DURATION = 30 * 24 * 60 * 60;
@@ -45,6 +46,10 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             store.dispatch(setUserUuid(userData.uuid!));
             store.dispatch(setImageUuid(userData.uuid!));
             store.dispatch(setUserEmail(userData.email!));
+
+            // get notifications
+            const notifications = await UserService.GetNotifications(cookies[TOKEN]);
+            store.dispatch(setNotification(notifications.data))
 
             const props = {
                 ...propsReceived,
