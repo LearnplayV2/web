@@ -10,6 +10,10 @@
     --toastify-color-dark: #36353b;
 }
 
+.bg-light {
+    background-color: #38373e;
+}
+
 
 a {
     color: hsl(var(--sf));

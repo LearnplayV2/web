@@ -25,6 +25,6 @@ export const notificationsReducer = createReducer(INITIAL_STATE, (builder) => {
             state.notifications = (action.payload);
         })
         .addCase(addNotification, (state, action) => {
-            state.notifications.push(action.payload);
+            state.notifications.unshift(action.payload);
         })
 });

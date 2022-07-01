@@ -40,7 +40,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                     {title}
                     <ArrowDown />
                 </a>
-                <ul className="p-2 bg-white-opacity-7">
+                <ul className="p-2 bg-light">
                     {children}
                 </ul>
             </li>
