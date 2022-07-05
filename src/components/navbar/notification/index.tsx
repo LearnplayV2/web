@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdNotificationsNone } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -28,6 +29,18 @@ export default function Notifications() {
     
     const Notification = ({children} : {children: React.ReactNode}) => <li><span className="py-3.5 px-5 bg-zinc-800 hover:bg-zinc-700">{children}</span></li>;
 
+    const NotificationWrapper = ({notification} : {notification : NotificationProps}) => {
+        return notification.description ? (
+            <Link href={`/dashboard/notification/${notification.id}`}>
+                <a className="text-white">
+                    <Notification>{notification.title}</Notification>
+                </a>
+            </Link>
+        ) :
+            <Notification>{notification.title}</Notification>
+        ;
+    }
+
     return (
         <div className="dropdown dropdown-end">
             <button className="btn btn-ghost btn-circle no-animation">
@@ -52,7 +65,8 @@ export default function Notifications() {
                 </div>
                 {notifications.length == 0 ? <Notification>Nenhuma notificação</Notification> : null}
                 {notifications.map((notification, i) => {
-                    return (i < 5) ? <Notification>{notification.title}</Notification> : null
+                    // return last 5 records
+                    return (i < 5) ? (<NotificationWrapper notification={notification}  />) : null
                 })}
             </ul>
         </div>

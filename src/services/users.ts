@@ -59,6 +59,14 @@ class Service {
             }
         });
     }
+
+    public GetNotification(token: string, id: string) {
+        return api.get(`/user/notification/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
     
 }
 

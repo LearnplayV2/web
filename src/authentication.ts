@@ -62,6 +62,7 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             return props;
 
         } catch(err) {
+            console.log('error:', err);
             destroyCookie(ctx, TOKEN);
             return {
                 redirect: {
