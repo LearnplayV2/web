@@ -6,10 +6,12 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Websocket, { socket } from '../../../services/socket';
 import NotificationsSocket from "../../../services/socket/notifications";
-import { addNotification, NotificationProps, setNotification } from "../../../store/reducers/notification";
+import { NotificationProps, setNotification } from "../../../store/reducers/notification";
 import { UserState } from "../../../store/reducers/user";
 import UserService from '../../../services/users';
 import { useRouter } from "next/router";
+import moment from "moment";
+import { timeAgo } from "../../../utils/timeHandle";
 
 export default function Notifications() {
 
@@ -29,7 +31,7 @@ export default function Notifications() {
         });
     }, [])
 
-    async function toggleNotification(id : number) {
+    async function toggleNotification(id: number) {
         try {
             const response = await UserService.ToggleNotification(id);
 
@@ -38,43 +40,44 @@ export default function Notifications() {
             console.log(err);
         }
     }
-    
+
 
     const noReadNotifications = notifications.filter(notification => !notification.read);;
 
-    const Notification = ({ children, read, id }: { children: React.ReactNode, read: boolean, id: number }) => (
-        <li className="flex flex-row bg-zinc-800">
-            <div style={{ flexBasis: '15%', position: 'relative' }} >
-                <span onClick={async () => toggleNotification(id)}>
-                    {read ? (
-                        <FaCircle size={8} fill="#ccc" className="mr-3 inline cursor-pointer hover:opacity-70" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+    const Notification = ({ children, notification }: { children: React.ReactNode, notification: NotificationProps }) => (
+        <li className="flex flex-row bg-zinc-800 items-center">
+            <div className="cursor-pointer hover:bg-zinc-700" style={{ flexBasis: '12%', position: 'relative' }} onClick={async () => toggleNotification(notification.id)} >
+                <span>
+                    {notification.read ? (
+                        <FaCircle size={8} fill="#ccc" className="mr-3 inline cursor-pointer" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
                     ) : (
-                        <FaCircle size={8} fill="rgb(16 185 129)" className="mr-3 inline cursor-pointer hover:opacity-70" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+                        <FaCircle size={8} fill="rgb(16 185 129)" className="mr-3 inline cursor-pointer" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
                     )}
                 </span>
             </div>
-            <div className="py-3.5 px-1 text-sm" style={{ flexBasis: '100%' }}>
+            <div className="py-3.5 px-5 text-sm" style={{ flexBasis: '100%' }}>
                 {children}
+            </div>
+            <div style={{fontSize: '12px', color:'#7a7a7a', padding: '0 10px'}} title={moment(notification.createdAt).format('DD/MM/YYYY, h:mm:ss a')}>
+                {timeAgo(notification.createdAt)}
             </div>
         </li>
     );
 
     const NotificationWrapper = ({ notification }: { notification: NotificationProps }) => {
         return notification.description ? (
-            <Notification read={notification.read} id={notification.id}>
-                {/* <Link href={`/dashboard/notification/${notification.id}`} > */}
-                    <a className="text-white" href={`/dashboard/notification/${notification.id}`} 
-                    onClick={async(e : any) => {
-                            e.preventDefault()
-                            if(!notification.read) await toggleNotification(notification.id)
-                            router.push(e.target.href)
-                        }}>
-                        {notification.title}
-                    </a>
-                {/* </Link> */}
+            <Notification notification={notification}>
+                <a className="text-white" href={`/dashboard/notification/${notification.id}`}
+                    onClick={async (e: any) => {
+                        e.preventDefault()
+                        if (!notification.read) await toggleNotification(notification.id)
+                        router.push(e.target.href)
+                    }}>
+                    {notification.title}
+                </a>
             </Notification>
         ) :
-            <Notification id={notification.id} read={notification.read}>{notification.title}</Notification>
+            <Notification notification={notification}>{notification.title}</Notification>
             ;
     }
 
