@@ -20,24 +20,25 @@ export default function Notifications() {
     useEffect(() => {
         Websocket.addNewUser(uuid!);
         socket.on('getNotification', (data) => {
-            dispatch(addNotification(data));
+            dispatch(setNotification(data));
         });
         socket.on('allNotificationsRead', (data) => {
             dispatch(setNotification(data));
         });
     }, [])
+    
 
     const noReadNotifications = notifications.filter(notification => !notification.read);;
 
     const Notification = ({ children, read, id }: { children: React.ReactNode, read: boolean, id: number }) => (
         <li className="flex flex-row bg-zinc-800">
             <div style={{ flexBasis: '15%', position: 'relative' }} >
-                <span onClick={async() => {
+                <span onClick={async () => {
                     try {
                         const response = await UserService.ToggleNotification(id);
 
                         dispatch(setNotification(response.data))
-                    } catch(err) {
+                    } catch (err) {
                         console.log(err);
                     }
                 }}>
@@ -81,16 +82,18 @@ export default function Notifications() {
             <ul tabIndex={0} className="bg-light mt-3 z-50 shadow dropdown-content rounded-md w-52 md:w-96">
                 <div className="px-5 mb-3 py-5 pb-2 flex justify-between">
                     <b>Notificações</b>
-                    <span
-                        onClick={() => {
-                            NotificationsSocket.makeAllNotificationsRead({ uuid: uuid! });
-                        }}
-                        className="cursor-pointer select-none text-slate-400 hover:text-slate-300"
-                    >
-                        Marcar todas como lida
-                    </span>
+                    {(noReadNotifications.length > 0) ? (
+                        <span
+                            onClick={() => {
+                                NotificationsSocket.makeAllNotificationsRead({ uuid: uuid! });
+                            }}
+                            className="cursor-pointer select-none text-slate-400 hover:text-slate-300"
+                        >
+                            Marcar todas como lida
+                        </span>
+                    ) : null}
                 </div>
-                {notifications.length == 0 ? <Notification read={false}>Nenhuma notificação</Notification> : null}
+                {notifications.length == 0 ? <div className="p-2 px-5">Nenhuma notificação</div> : null}
                 {notifications.map((notification, i) => {
                     // return last 5 records
                     return (i < 5) ? (<NotificationWrapper notification={notification} />) : null
