@@ -9,6 +9,7 @@ import NotificationsSocket from "../../../services/socket/notifications";
 import { addNotification, NotificationProps, setNotification } from "../../../store/reducers/notification";
 import { UserState } from "../../../store/reducers/user";
 import UserService from '../../../services/users';
+import { useRouter } from "next/router";
 
 export default function Notifications() {
 
@@ -16,6 +17,7 @@ export default function Notifications() {
 
     const { uuid } = useSelector((state: any) => state.user) as UserState;
     const notifications = useSelector((state: any) => state.notificationsReducer.notifications) as NotificationProps[];
+    const router = useRouter();
 
     useEffect(() => {
         Websocket.addNewUser(uuid!);
@@ -26,6 +28,16 @@ export default function Notifications() {
             dispatch(setNotification(data));
         });
     }, [])
+
+    async function toggleNotification(id : number) {
+        try {
+            const response = await UserService.ToggleNotification(id);
+
+            dispatch(setNotification(response.data))
+        } catch (err) {
+            console.log(err);
+        }
+    }
     
 
     const noReadNotifications = notifications.filter(notification => !notification.read);;
@@ -33,15 +45,7 @@ export default function Notifications() {
     const Notification = ({ children, read, id }: { children: React.ReactNode, read: boolean, id: number }) => (
         <li className="flex flex-row bg-zinc-800">
             <div style={{ flexBasis: '15%', position: 'relative' }} >
-                <span onClick={async () => {
-                    try {
-                        const response = await UserService.ToggleNotification(id);
-
-                        dispatch(setNotification(response.data))
-                    } catch (err) {
-                        console.log(err);
-                    }
-                }}>
+                <span onClick={async () => toggleNotification(id)}>
                     {read ? (
                         <FaCircle size={8} fill="#ccc" className="mr-3 inline cursor-pointer hover:opacity-70" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
                     ) : (
@@ -58,11 +62,16 @@ export default function Notifications() {
     const NotificationWrapper = ({ notification }: { notification: NotificationProps }) => {
         return notification.description ? (
             <Notification read={notification.read} id={notification.id}>
-                <Link href={`/dashboard/notification/${notification.id}`}>
-                    <a className="text-white">
+                {/* <Link href={`/dashboard/notification/${notification.id}`} > */}
+                    <a className="text-white" href={`/dashboard/notification/${notification.id}`} 
+                    onClick={async(e : any) => {
+                            e.preventDefault()
+                            if(!notification.read) await toggleNotification(notification.id)
+                            router.push(e.target.href)
+                        }}>
                         {notification.title}
                     </a>
-                </Link>
+                {/* </Link> */}
             </Notification>
         ) :
             <Notification id={notification.id} read={notification.read}>{notification.title}</Notification>
