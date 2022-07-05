@@ -32,7 +32,7 @@ export default function Page(props: any) {
                 const response = await UserService.ChangeProfilePhoto(files);
                 dispatch(setImageUuid(`${user.uuid!}?_=${new Date().getTime()}`));
 
-                NotificationsService.sendNotification({uuid: user.uuid!, message:'Você mudou a foto de perfil'});
+                NotificationsService.sendNotification({uuid: user.uuid!, message:'Você alterou a foto de perfil'});
                 
                 toast.success(response.data.message ?? 'A foto de perfil foi alterada', { toastId: 'photo_changed', position: 'bottom-right' });
 

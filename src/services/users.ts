@@ -67,6 +67,16 @@ class Service {
             }
         });
     }
+
+    public ToggleNotification(id: number) {
+        const cookies = parseCookies();
+
+        return api.put(`/user/notification/toggle/${id}`, null, {
+            headers: {
+                Authorization: `Bearer ${cookies[TOKEN]}`
+            }
+        });
+    }
     
 }
 

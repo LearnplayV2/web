@@ -17,7 +17,7 @@
 
 a {
     color: hsl(var(--sf));
-    transition: color .2s;
+    transition: color 3ms;
 }
 
 a:hover {
