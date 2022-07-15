@@ -10,6 +10,7 @@ export interface NotificationProps {
     title: string,
     description: string;
     read: boolean;
+    createdAt: string;
 }
 
 const INITIAL_STATE : NotificationState = {
