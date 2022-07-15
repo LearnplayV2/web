@@ -20,7 +20,7 @@ export default function Notifications() {
     useEffect(() => {
         Websocket.addNewUser(uuid!);
         socket.on('getNotification', (data) => {
-            dispatch(addNotification(data));
+            dispatch(setNotification(data));
         });
         socket.on('allNotificationsRead', (data) => {
             dispatch(setNotification(data));
@@ -85,12 +85,12 @@ export default function Notifications() {
                         onClick={() => {
                             NotificationsSocket.makeAllNotificationsRead({ uuid: uuid! });
                         }}
-                        className="cursor-pointer select-none text-slate-400 hover:text-slate-300"
+                        className="cursor-pointer text-sm select-none text-slate-400 hover:text-slate-300"
                     >
                         Marcar todas como lida
                     </span>
                 </div>
-                {notifications.length == 0 ? <Notification read={false}>Nenhuma notificação</Notification> : null}
+                {notifications.length == 0 ? <div className="p-2 px-5">Nenhuma notificação</div> : null}
                 {notifications.map((notification, i) => {
                     // return last 5 records
                     return (i < 5) ? (<NotificationWrapper notification={notification} />) : null

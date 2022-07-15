@@ -6,6 +6,7 @@ import { wrapper } from "../../../store/store";
 import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
 import Parse from "../../../utils/stringCleaner";
+import { NotificationProps } from "../../../store/reducers/notification";
 
 export default function Page(props : any) {
 
@@ -33,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
         
         const cookies = parseCookies(ctx);
 
-        const response = await UserService.GetNotification(cookies[TOKEN], id!);
+        const response = await UserService.GetNotification(cookies[TOKEN], id!) as {data: NotificationProps};
 
         return {
             props : {
