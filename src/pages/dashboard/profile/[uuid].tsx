@@ -10,6 +10,7 @@ import { parseCookies } from "nookies";
 import { wrapper } from "../../../store/store";
 import { useEffect } from "react";
 import NotificationsSocket from "../../../services/socket/notifications";
+import { NotificationDescription, NotitificationTypeEnum } from "../../../Types/notification";
 
 export default function Page(props: any) {
 
@@ -20,7 +21,11 @@ export default function Page(props: any) {
         NotificationsSocket.sendNotification({
             uuid: profile.uuid!, 
             message: `${user.name} visitou seu perfil`, 
-            description: `<a href='/dashboard/profile/${user.uuid}'>${user.name}</a> visitou seu perfil!`
+            description: JSON.stringify({
+                type: NotitificationTypeEnum.user_profile_visit,
+                data: [user.name, user.uuid],
+                body: 'visitou seu perfil'
+            } as NotificationDescription) 
         });
     }, [])
 
@@ -53,7 +58,7 @@ export default function Page(props: any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => usePrivateRoute(async (ctx) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => usePrivateRoute(async (ctx) : Promise<any> => {
 
     
     const cookies = parseCookies(ctx);

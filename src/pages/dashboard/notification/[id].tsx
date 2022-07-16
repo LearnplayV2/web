@@ -27,7 +27,7 @@ export default function Page(props : any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(({ dispatch }) => usePrivateRoute(async (ctx) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(({ dispatch }) => usePrivateRoute(async (ctx) : Promise<any> => {
 
     try {
         const {id} = ctx.query as {id: string};
