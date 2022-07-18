@@ -9,6 +9,7 @@ import Parse from "../../../utils/stringCleaner";
 import { NotificationProps } from "../../../store/reducers/notification";
 import { NotificationDescription, NotitificationTypeEnum } from "../../../Types/notification";
 import Link from "next/link";
+import nl2br from "../../../utils/nl2br";
 
 export default function Page(props : any) {
 
@@ -36,10 +37,10 @@ function NotificationWrapper({notification}: {notification: NotificationProps}) 
                 {/* @ts-ignore */}
                     <a className="text-blue-400">{NotificationDescription(notification).data[0]}</a>
                 </Link>
-                <span> {NotificationDescription(notification).body} </span>
+                <span> {nl2br(NotificationDescription(notification).body!)} </span>
             </>;
         case NotitificationTypeEnum.content:
-            return <>{NotificationDescription(notification).body}</>;
+            return <>{nl2br(NotificationDescription(notification).body!)}</>;
     }
 
     return( <>Não foi possível obter os dados da notificação.</> );
