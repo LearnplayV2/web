@@ -7,24 +7,42 @@ import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
 import Parse from "../../../utils/stringCleaner";
 import { NotificationProps } from "../../../store/reducers/notification";
+import { NotificationDescription, NotitificationTypeEnum } from "../../../Types/notification";
+import Link from "next/link";
 
 export default function Page(props : any) {
 
-    const {notification} = props as {
-        notification : {
-            title: string;
-            description: string;
-        }
-    };
+    
+    const {notification} = props as { notification : NotificationProps };
+    console.log(NotificationDescription(notification))
     
     return(
         <PrivateTemplate>
             <Container widthPercent={50} marginTop='15vh' marginBottom="50px">
-                <h3 className="text-3xl">{notification.title}</h3> <br />
-                {Parse(notification.description)}
+                <h3 className="text-3xl text-green-400">Notificação:</h3> <br />
+                <NotificationWrapper notification={notification} />
             </Container>
         </PrivateTemplate>
     );
+}
+
+function NotificationWrapper({notification}: {notification: NotificationProps}) {
+    
+    switch(NotificationDescription(notification).type) {
+        case NotitificationTypeEnum.user_profile_visit:
+            return <>
+                {/* @ts-ignore */}
+                <Link href={`/dashboard/profile/${NotificationDescription(notification)!.data[1]}`}>
+                {/* @ts-ignore */}
+                    <a className="text-blue-400">{NotificationDescription(notification).data[0]}</a>
+                </Link>
+                <span> {NotificationDescription(notification).body} </span>
+            </>;
+        case NotitificationTypeEnum.content:
+            return <>{NotificationDescription(notification).body}</>;
+    }
+
+    return( <>Não foi possível obter os dados da notificação.</> );
 }
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(({ dispatch }) => usePrivateRoute(async (ctx) : Promise<any> => {
@@ -48,9 +66,5 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
                 destination: '/dashboard',
             }
         }
-    }
-
-    return {
-        props: {}
     }
 }));
