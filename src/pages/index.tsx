@@ -14,15 +14,19 @@ import { COOKIE_DURATION, TOKEN, useCheck } from '../authentication';
 import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
 import UserService from '../services/users';
+import { useState } from 'react';
+import { LoadingPulse, LoadingSpinner } from '../components/UI/loading';
 
 export default function Page() {
 
+    const [loginLoad, setLoginLoad] = useState(true);
     const { register, handleSubmit, formState: { errors } } = useForm<UserType>();
     const router = useRouter();
 
     usePageTitle();
 
     const onSubmit = async (data: UserType) => {
+        setLoginLoad(true);
         try {
             const response = await UserService.Login(data);
 
@@ -30,10 +34,9 @@ export default function Page() {
                 setCookie(null, TOKEN, response.data.token, { path: '/', maxAge: COOKIE_DURATION });
                 router.reload();
             }
-
-            console.log(response.data)
         } catch (err) {
             console.log(err);
+            setLoginLoad(false);
             if (err.response) return toast.error(err.response.data.response.message, { toastId: 'server-error' });
         }
 
@@ -81,11 +84,15 @@ export default function Page() {
                         <Col>
                             <Row className='justify-between my-4'>
                                 <div><Link href='#'><a>Esqueci minha senha</a></Link></div>
-                                {/* <div>Continuar conectado</div> */}
                             </Row>
                         </Col>
                         <Col>
-                            <button type='submit' className="no-animation my-3 btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">Entrar</button>
+                            <button type='submit' className="no-animation my-3 btn bg-green-600 hover:bg-green-500 transition-colors text-black btn-block">
+                                {loginLoad 
+                                    ? <LoadingPulse size={25} />
+                                    : 'ENTRAR'
+                                }
+                            </button>
                         </Col>
                         <Col>
                             Não tem uma conta? <Link href='/register'><a>Cadastre-se</a></Link>

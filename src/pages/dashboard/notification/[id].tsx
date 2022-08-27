@@ -5,7 +5,6 @@ import { Container } from "../../../components/UI";
 import { wrapper } from "../../../store/store";
 import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
-import Parse from "../../../utils/stringCleaner";
 import { NotificationProps } from "../../../store/reducers/notification";
 import { NotificationDescription, NotitificationTypeEnum } from "../../../Types/notification";
 import Link from "next/link";
