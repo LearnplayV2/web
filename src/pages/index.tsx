@@ -19,7 +19,7 @@ import { LoadingPulse, LoadingSpinner } from '../components/UI/loading';
 
 export default function Page() {
 
-    const [loginLoad, setLoginLoad] = useState(true);
+    const [loginLoad, setLoginLoad] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<UserType>();
     const router = useRouter();
 
