@@ -10,6 +10,7 @@ import HamburguerIcon from "./hamburguer";
 import Notifications from "./notification";
 
 export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
+    const { imageUuid } = useSelector((state: any) => state.user) as UserState;
 
     onReady(() => {
         shrinkNavbar();
@@ -32,8 +33,6 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
     }
 
     if (isPrivate) {
-        const { imageUuid } = useSelector((state: any) => state.user) as UserState;
-
         const MenuDropDown = ({ title, children }: { title: string, children: React.ReactNode }) => (
             <li tabIndex={0}>
                 <a className="justify-between">
