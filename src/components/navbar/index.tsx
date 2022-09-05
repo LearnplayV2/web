@@ -1,7 +1,6 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import onReady from "../../hooks/loadOnce";
 import { UserState } from "../../store/reducers/user";
 import { TITLE } from "../../utils/config";
 import { UserImage } from "../userImage";
@@ -12,9 +11,9 @@ import Notifications from "./notification";
 export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
     const { imageUuid } = useSelector((state: any) => state.user) as UserState;
 
-    onReady(() => {
+    useEffect(() => {
         shrinkNavbar();
-    })
+    }, []);
 
     function shrinkNavbar() {
         const navbar = document.querySelector('.main-navbar') as HTMLElement;
@@ -72,7 +71,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                             </ul>
                         </div>
                         <Link href='/dashboard'>
-                            <a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-xl md:text-2xl normal-case">
+                            <a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-xl md:text-2xl normal-case no-animation">
                                 {TITLE}
                             </a>
                         </Link>
@@ -100,7 +99,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
     return (
         <>
             <div className="main-navbar navbar bg-white-opacity-7 flex flex-col">
-                <Link href='/'><a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-2xl normal-case">{TITLE}</a></Link>
+                <Link href='/'><a className="btn btn-link link-opacity text-green-400 hover:text-green-300 text-2xl normal-case no-animation">{TITLE}</a></Link>
             </div>
         </>
     );

@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { TITLE } from "../utils/config";
-import onReady from "./loadOnce";
 
 export default function usePageTitle(description? : string) {
 
-    onReady(() => {
+    useEffect(() => {
         document.title = (description) ? `${TITLE} - ${description}` : TITLE;
-    });
+    }, []);
 
 }
