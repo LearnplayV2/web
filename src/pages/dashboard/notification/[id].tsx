@@ -11,10 +11,7 @@ import Link from "next/link";
 import nl2br from "../../../utils/nl2br";
 
 export default function Page(props : any) {
-
-    
     const {notification} = props as { notification : NotificationProps };
-    console.log(NotificationDescription(notification))
     
     return(
         <PrivateTemplate>

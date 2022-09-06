@@ -66,3 +66,7 @@ a:hover {
     text-decoration: none;
     opacity: 1;
 }
+
+.container {
+    width: 80%;
+}

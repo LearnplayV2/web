@@ -51,6 +51,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                     <MenuDropDown title="Parent">
                         <li><a>Submenu 1</a></li>
                         <li><a>Submenu 2</a></li>
+                        <li><a>testando</a></li>
                     </MenuDropDown>
                     <li><Link href='/dashboard/members'><a>Membros</a></Link></li>
                 </>

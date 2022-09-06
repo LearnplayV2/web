@@ -41,11 +41,10 @@ export default function Notifications() {
         }
     }
 
-
-    const noReadNotifications = notifications.filter(notification => !notification.read);;
+    const noReadNotifications = notifications.filter(notification => !notification.read);
 
     const Notification = ({ children, notification }: { children: React.ReactNode, notification: NotificationProps }) => (
-        <li className="flex flex-row bg-zinc-800 hover:bg-zinc-700 items-center cursor-pointer" onClick={() => toggleNotification(notification.id)}>
+        <li className="flex flex-row bg-zinc-800 hover:bg-zinc-700 items-center cursor-pointer select-none" onClick={() => toggleNotification(notification.id)}>
             <div className="cursor-pointer hover:bg-zinc-700" style={{ flexBasis: '12%', position: 'relative' }}>
                 <span>
                     {notification.read ? (
