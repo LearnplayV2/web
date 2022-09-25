@@ -8,6 +8,7 @@ import { parseCookies } from "nookies";
 import { UserType } from '../../Types/user';
 import Link from "next/link";
 import moment from "moment";
+import { defaultUserImage } from "../../utils/defaultImage";
 
 export default function Page(props: any) {
 

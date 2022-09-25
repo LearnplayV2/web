@@ -46,11 +46,12 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
         const MiddleMenu = () => {
             return (
                 <>
-                    <li><Link href='/dashboard'><a>Home</a></Link></li>
-                    <MenuDropDown title="Parent">
-                        <li><a>Submenu 1</a></li>
-                        <li><a>Submenu 2</a></li>
-                        <li><a>testando</a></li>
+                    <li><Link href='/dashboard'><a>Página Inicial</a></Link></li>
+                    <li><Link href='#'><a>Grupos</a></Link></li>
+                    <li><Link href='#'><a>Aulas</a></Link></li>
+                    <MenuDropDown title="Temática">
+                        <li><Link href='#'><a>Artigos</a></Link></li>
+                        <li><Link href='#'><a>Material de estudo</a></Link></li>
                     </MenuDropDown>
                     <li><Link href='/dashboard/members'><a>Membros</a></Link></li>
                 </>
@@ -62,7 +63,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                 <div className="navbar main-navbar bg-white-opacity-7 px-5">
                     <div className="navbar-start">
                         <div className="dropdown">
-                            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                            <label tabIndex={0} className="btn btn-ghost lg:hidden no-animation">
                                 <HamburguerIcon />
                             </label>
                             <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-white-opacity-7 rounded-md w-52">
