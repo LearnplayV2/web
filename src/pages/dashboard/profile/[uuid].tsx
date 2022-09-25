@@ -3,7 +3,6 @@ import { GetServerSideProps, NextPage } from "next";
 import { TOKEN, usePrivateRoute } from "../../../authentication";
 import PrivateTemplate from "../../../components/template/private";
 import { Container } from "../../../components/UI";
-import { UserImage } from "../../../components/userImage";
 import { UserType } from "../../../Types/user";
 import UserService from '../../../services/users';
 import { parseCookies } from "nookies";
@@ -11,6 +10,7 @@ import { wrapper } from "../../../store/store";
 import { useEffect } from "react";
 import NotificationsSocket from "../../../services/socket/notifications";
 import { NotificationDescription, NotitificationTypeEnum } from "../../../Types/notification";
+import { defaultUserImage } from "../../../utils/defaultImage";
 
 export default function Page(props: any) {
 
@@ -35,7 +35,7 @@ export default function Page(props: any) {
                 <div className="flex flex-col items-center">
                     <div className="avatar w-24 relative bg-gray-800 rounded-full">
                         <div className="w-24 rounded-full ring ring-green-600 ring-offset-base-100 ring-offset-2">
-                            <img src={UserImage(profile.uuid)} title='Mudar foto' className="transition-opacity duration-150 z-10 relative" />
+                            <img src={profile.user_items?.photo ?? defaultUserImage()} title='Mudar foto' className="transition-opacity duration-150 z-10 relative" />
                         </div>
                     </div>
                     <div className="mt-5 mb-5">

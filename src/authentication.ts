@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import UserService from './services/users';
 import { store } from "./store/store";
-import { setImageUuid, setUserEmail, setUserUuid } from "./store/reducers/user";
+import { setImage, setUserEmail, setUserUuid } from "./store/reducers/user";
 import { UserType } from "./Types/user";
 import { setNotification } from "./store/reducers/notification";
 
@@ -40,12 +40,14 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             setCookie(null, TOKEN, newToken, { path: '/', maxAge: COOKIE_DURATION });
 
             const userData : UserType = revalidate.data;
+            console.log('userData', userData)
+
             // receive props from file then merge with props from here
             const propsReceived = await fn(ctx).then(c => { return c; });
             
             store.dispatch(setUserUuid(userData.uuid!));
-            store.dispatch(setImageUuid(userData.uuid!));
             store.dispatch(setUserEmail(userData.email!));
+            if(userData.user_items?.photo) store.dispatch(setImage(userData.user_items?.photo));
 
             // get notifications
             const notifications = await UserService.GetNotifications(cookies[TOKEN]);

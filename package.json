@@ -18,6 +18,7 @@
     "daisyui": "^2.17.0",
     "framer-motion": "^6.3.15",
     "html-react-parser": "^2.0.0",
+    "js-media-package": "^1.0.3",
     "moment": "^2.29.3",
     "next": "12.1.6",
     "next-redux-wrapper": "^7.0.5",

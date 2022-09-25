@@ -3,13 +3,12 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/user";
 import { TITLE } from "../../utils/config";
-import { UserImage } from "../userImage";
 import ArrowDown from "./arrow_down";
 import HamburguerIcon from "./hamburguer";
 import Notifications from "./notification";
 
 export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
-    const { imageUuid } = useSelector((state: any) => state.user) as UserState;
+    const { image } = useSelector((state: any) => state.user) as UserState;
 
     useEffect(() => {
         shrinkNavbar();
@@ -87,7 +86,7 @@ export default function Navbar({ isPrivate = false }: { isPrivate?: boolean }) {
                         <Link href='/dashboard/profile'>
                             <a tabIndex={0} className="ml-3 no-animation btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img src={UserImage(imageUuid)} />
+                                    <img src={image} />
                                 </div>
                             </a>
                         </Link>

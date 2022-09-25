@@ -5,7 +5,6 @@ import { Container } from "../../components/UI";
 import { wrapper } from "../../store/store";
 import UserService from '../../services/users';
 import { parseCookies } from "nookies";
-import { UserImage } from "../../components/userImage";
 import { UserType } from '../../Types/user';
 import Link from "next/link";
 import moment from "moment";
@@ -28,12 +27,12 @@ export default function Page(props: any) {
                             </tr>
                         </thead>
                         <tbody>
-                            {members.map((member: UserType) => (
-                                <tr>
+                            {members.map((member: UserType, i : number) => (
+                                <tr key={i}>
                                     <td>
                                         <div className="avatar">
                                             <div className="w-24 rounded">
-                                                <img src={UserImage(member.uuid)} />
+                                                <img src={member.user_items?.photo ?? defaultUserImage()} />
                                             </div>
                                         </div>
                                     </td>

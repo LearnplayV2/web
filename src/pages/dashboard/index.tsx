@@ -6,7 +6,6 @@ import { wrapper } from "../../store/store";
 import { UserType } from "../../Types/user";
 
 export default function Page({user}: {user: UserType}) {
-
     usePageTitle('Dashboard');
 
     return (

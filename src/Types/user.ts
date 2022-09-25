@@ -8,4 +8,8 @@ export interface UserType {
     createdAt?: string;
     updatedAt?: string;
     token?: string;
+    user_items? : {
+        uuid?: string;
+        photo?: string;
+    }
 }

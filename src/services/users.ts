@@ -22,15 +22,11 @@ class Service {
         });
     }
 
-    public ChangeProfilePhoto(data: any) {
+    public ChangeProfilePhoto(base64File: string) {
         const cookies = parseCookies();
-        const formData = new FormData();
-        formData.append('file', data[0]);
-    
-        return api.post('/user/set-profile-picture', formData, {
+        return api.post('/user/set-profile-picture', {base64File}, {
             headers: {
                 Authorization: `Bearer ${cookies[TOKEN]}`,
-                'content-type': 'multipart/form-data'
             }
         });
     }
