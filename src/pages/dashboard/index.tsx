@@ -7,6 +7,9 @@ import { UserType } from "../../Types/user";
 import imageIcons from '../../../styles/imageIcons.module.css';
 
 export default function Page({user}: {user: UserType}) {
+
+    console.log(user)
+    
     usePageTitle('Dashboard');
 
     return (

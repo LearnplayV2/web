@@ -73,6 +73,14 @@ class Service {
             }
         });
     }
+
+    public getUserItems(token: string) {
+        return api.get('/user/user-items', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
     
 }
 

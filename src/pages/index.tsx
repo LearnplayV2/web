@@ -15,7 +15,7 @@ import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
 import UserService from '../services/users';
 import { useState } from 'react';
-import { LoadingPulse, LoadingSpinner } from '../components/UI/loading';
+import { LoadingPulse } from '../components/UI/loading';
 
 export default function Page() {
 

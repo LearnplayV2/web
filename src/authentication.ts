@@ -3,7 +3,7 @@ import { destroyCookie, parseCookies, setCookie } from "nookies";
 import UserService from './services/users';
 import { store } from "./store/store";
 import { setImage, setUserEmail, setUserUuid } from "./store/reducers/user";
-import { UserType } from "./Types/user";
+import { UserItems, UserType } from "./Types/user";
 import { setNotification } from "./store/reducers/notification";
 
 const TOKEN = 'LEARNPLAY_TOKEN';
@@ -40,14 +40,16 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             setCookie(null, TOKEN, newToken, { path: '/', maxAge: COOKIE_DURATION });
 
             const userData : UserType = revalidate.data;
-            console.log('userData', userData)
+
+            const userItems = await UserService.getUserItems(cookies[TOKEN]);
+            const items : UserItems = userItems.data;
 
             // receive props from file then merge with props from here
             const propsReceived = await fn(ctx).then(c => { return c; });
             
             store.dispatch(setUserUuid(userData.uuid!));
             store.dispatch(setUserEmail(userData.email!));
-            if(userData.user_items?.photo) store.dispatch(setImage(userData.user_items?.photo));
+            if(items.photo) store.dispatch(setImage(items.photo));
 
             // get notifications
             const notifications = await UserService.GetNotifications(cookies[TOKEN]);
