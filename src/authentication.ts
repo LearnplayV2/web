@@ -49,7 +49,7 @@ export function usePrivateRoute(fn: GetServerSideProps) {
             
             store.dispatch(setUserUuid(userData.uuid!));
             store.dispatch(setUserEmail(userData.email!));
-            if(items.photo) store.dispatch(setImage(items.photo));
+            if(items?.photo) store.dispatch(setImage(items.photo));
 
             // get notifications
             const notifications = await UserService.GetNotifications(cookies[TOKEN]);
