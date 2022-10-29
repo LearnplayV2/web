@@ -1,9 +1,16 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'styles')],
+  },
+  experimental: {
+    appDir: true,
+  },
+  reactStrictMode: false, 
   env: {
-    API_URL: process.env.API_URL,
-    SOCKET_URL: process.env.SOCKET_URL
+    API_HOST: process.env.API_HOST
   }
 }
 

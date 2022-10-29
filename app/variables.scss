@@ -1,0 +1,22 @@
+$primary-color: #121214;
+$secondary-color: #27272A;
+$third-color: #201F24;
+
+$green-color: #16A34A;
+$green-accent: #22CF62;
+
+$grey-color: #5D6878;
+$grey-accent: #D4D4D4;
+
+$danger-color: #991B1B;
+
+:export {
+  grey-accent: $grey-accent;
+  primary-color: $primary-color;
+  third-color: $third-color;
+  green-color: $green-color;
+  green-accent: $green-accent;
+  grey-color: $grey-color;
+  grey-accent: $grey-accent;
+  danger-color: $danger-color;
+}
