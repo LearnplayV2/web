@@ -7,6 +7,7 @@ import { Input } from '../ui/input';
 import { useContext, useState, createContext, FormEvent } from 'react';
 import { Authentication } from '../../../src/service/authentication';
 import { Alert } from '../../../src/utils/alets';
+import { useRouter } from 'next/navigation';
 
 type AccCtxProps = {
     hasAcc: boolean;
@@ -45,6 +46,7 @@ const Container = () => {
 };
 
 const Login = () => {
+    const router = useRouter();
     const {toggleHasAcc} = useContext(AccountContext) as AccCtxProps;
 
     const login = async(props: {email: string, password: string}) => {
@@ -52,10 +54,11 @@ const Login = () => {
         try {
             const response = await Authentication.login(email, password);
             Authentication.saveToken(response.data.token);
+            router.refresh();
             
         } catch(err : any) {
             console.log(err);
-            if(err.response) return Alert.error({message: err.response.data?.response?.message});
+            Alert.error({message: err?.response?.data?.response?.message});
         }
     };
     
@@ -83,12 +86,14 @@ const Login = () => {
 
 const Register = () => {
     const {toggleHasAcc} = useContext(AccountContext) as AccCtxProps;
+    const router = useRouter();
 
     const register = async (props : {name: string, email: string, password: string}) => {
         const {email, name, password} = props;
         try {
             const response = await Authentication.register(email, name, password);
             Authentication.saveToken(response.data.token);
+            router.refresh();
             
         } catch(err: any) {
             Alert.error({message: err?.response?.data?.response?.message});

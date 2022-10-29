@@ -1,17 +1,12 @@
-import { parseCookies } from 'nookies';
-import { Authentication } from '../src/service/authentication';
 import App from './app';
 import { Container } from './components/container';
 import Header from './components/header';
+import { Session } from './session';
 
 const Home = () => {
 
-    const cookies = parseCookies();
+    Session().redirect({success: '/dashboard'});
 
-    console.log(cookies)
-
-    Authentication.check();
-       
     return (
         <App>
             <Header />

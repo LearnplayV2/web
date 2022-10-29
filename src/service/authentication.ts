@@ -1,5 +1,5 @@
 import axios from "axios";
-import { parseCookies, setCookie } from "nookies";
+import { setCookie } from "nookies";
 
 class Authentication {
 
@@ -18,14 +18,6 @@ class Authentication {
     static saveToken(token: string) {
         setCookie(null, this.TOKEN, token, {path: '/', maxAge: this.COOKIE_DURATION});
     }
-
-    static check() {
-        // check if user is authenticat
-        // const cookies = parseCookies();
-
-        // console.log('cookies:', cookies)
-    }
-
 }
 
 export {Authentication};

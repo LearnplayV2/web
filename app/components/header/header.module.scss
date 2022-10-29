@@ -18,12 +18,22 @@
     height: 71px;
     box-sizing: border-box;
     display: flex;
+    justify-content: space-between;
     padding: 0 1rem;
     align-items: center;
 
     :global span.title {
         color: $green-accent;
         font-size: 24px;
+    }
+
+    :global .profile-picture {
+        img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     }
 }
 
