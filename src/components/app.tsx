@@ -1,4 +1,4 @@
-import './components/header/header.module.scss';
+import './header/header.module.scss';
 
 const App = (props: React.PropsWithChildren) => {
     const {children} = props;

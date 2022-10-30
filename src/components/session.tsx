@@ -1,24 +1,28 @@
 import { cookies } from 'next/headers';
 import { redirect as go } from 'next/navigation';
-import { Authentication } from '../src/service/authentication';
+import { Authentication } from '../service/authentication';
 
 const Session = () => {
     
     const isAuthenticated = cookies().get(Authentication.TOKEN) != undefined;
     const token = isAuthenticated ? cookies().get(Authentication.TOKEN) : null;
 
-    const redirect = (props: {success?: string, denied?: string}) => {
-        const {success, denied} = props;
+    const redirect = (success: string) => {
         if(isAuthenticated) {
-            if(success) return go(success);
-        } else {
-            if(denied) return go(denied);
+            return go(success);
+        }
+    };
+
+    const restrict = () => {
+        if(!isAuthenticated) {
+            return go('/');
         }
     };
 
     return {
         isAuthenticated,
         redirect,
+        restrict,
         token
     }
 };

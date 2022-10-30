@@ -1,5 +1,5 @@
-import './globals.scss'
-import './components/container/container.module.scss';
+import '../components/globals.scss'
+import '../components/container/container.module.scss';
 
 export default function RootLayout({
   children,

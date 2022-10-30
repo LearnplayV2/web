@@ -1,6 +1,7 @@
 import styles from './header.module.scss';
-import { Session } from '../../session';
-import { UserService } from '../../../src/service/user';
+import { Session } from '../session';
+import { UserService } from '../../service/user';
+import { asyncComponent } from '../../utils/asyncComponent';
 
 async function getUserItems() {
     const response = await UserService.items(Session().token!);
@@ -8,28 +9,25 @@ async function getUserItems() {
 }
 
 const Component = () => {
-    Session().redirect({ denied: '/' });
-
     return (
         <div className={styles.header}>
             <span className="title">
                 LearnPlay
                 <span className={`${styles.fadeAnim} traced`}>_</span>
             </span>
-            {/* @ts-ignore */}
             {Session().isAuthenticated && <Profile />}
         </div>
     );
 };
 
-const Profile = async () => {
+const Profile = asyncComponent(async () => {
     const items = await getUserItems();
     
     return(
-        <div className="profile-picture">
+        <div className="profile-picture"                                                            >
             <img src={items?.photo ?? '/assets/default-avatar.jpg'} alt="profile-picture" />
         </div>
     );
-}
+})
 
 export default Component;
