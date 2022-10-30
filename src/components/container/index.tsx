@@ -12,7 +12,7 @@ export type AccCtxProps = {
 
 export const AccountContext = createContext<AccCtxProps | null>({ hasAcc: false });
 
-const Container = () => {
+function Container() {
     const [hasAcc, setHasAcc] = useState(false);
 
     const toggleHasAcc = () => {
@@ -41,4 +41,4 @@ const Container = () => {
     );
 };
 
-export { Container };
+export default Container;

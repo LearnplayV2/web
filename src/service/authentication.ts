@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setCookie } from "nookies";
+import { Cookies } from "../utils/cookies";
 
 class Authentication {
 
@@ -16,8 +16,9 @@ class Authentication {
     }
 
     static saveToken(token: string) {
-        setCookie(null, this.TOKEN, token, {path: '/', maxAge: this.COOKIE_DURATION});
+        Cookies.setCookie(this.TOKEN, token, 100);
     }
+
 }
 
 export {Authentication};

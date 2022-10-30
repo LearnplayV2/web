@@ -3,10 +3,10 @@ import { FormEvent, useContext } from "react";
 import { MdEmail, MdPassword } from "react-icons/md";
 import { AccCtxProps, AccountContext } from ".";
 import { Authentication } from "../../service/authentication";
-import { Alert } from "../../utils/alets";
+import { Alert } from "../../utils/alert";
 import { Input } from "../ui/input";
 
-const Login = () => {
+function Login() {
     const router = useRouter();
     const {toggleHasAcc} = useContext(AccountContext) as AccCtxProps;
 

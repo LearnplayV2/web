@@ -1,16 +1,11 @@
-import App from "../../components/app";
-import Header from "../../components/header";
-import { Session } from "../../components/session";
+import Dashboard from "../../components/dashboard";
 
-const Page = () => {
-
-    Session().restrict();
+function Page() {
 
     return(
-        <App>
-            <Header />
+        <Dashboard>
             Dashboard
-        </App>
+        </Dashboard>
     );
 }
 

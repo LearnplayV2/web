@@ -4,10 +4,10 @@ import { MdEmail, MdPassword } from "react-icons/md";
 import { RiUserHeartLine } from "react-icons/ri";
 import { AccCtxProps, AccountContext } from ".";
 import { Authentication } from "../../service/authentication";
-import { Alert } from "../../utils/alets";
+import { Alert } from "../../utils/alert";
 import { Input } from "../ui/input";
 
-const Register = () => {
+function Register() {
     const {toggleHasAcc} = useContext(AccountContext) as AccCtxProps;
     const router = useRouter();
 

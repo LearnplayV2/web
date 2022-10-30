@@ -1,5 +1,6 @@
 import '../components/globals.scss'
 import '../components/container/container.module.scss';
+import '../components/ui/input.module.scss';
 
 export default function RootLayout({
   children,

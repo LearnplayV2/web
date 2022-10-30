@@ -1,6 +1,6 @@
 import './header/header.module.scss';
 
-const App = (props: React.PropsWithChildren) => {
+function App(props: React.PropsWithChildren) {
     const {children} = props;
 
     return(

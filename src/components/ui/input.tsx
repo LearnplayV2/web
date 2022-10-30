@@ -1,3 +1,5 @@
+'use client'
+
 import styles from './input.module.scss';
 
 interface Props extends React.HTMLProps<HTMLInputElement> {

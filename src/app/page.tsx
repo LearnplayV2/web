@@ -1,11 +1,10 @@
 import App from '../components/app';
-import { Container } from '../components/container';
+import Container from '../components/container';
 import Header from '../components/header';
 import { Session } from '../components/session';
 
-const Home = () => {
-
-    Session().redirect('/dashboard');
+function Home() {
+    Session().restrict.authenticated();
 
     return (
         <App>
