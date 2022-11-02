@@ -1,0 +1,54 @@
+@import 'variables.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+@font-face {
+    font-family: 'Roboto Local';
+    src: url('/assets/fonts/Roboto-Regular.ttf');
+}
+
+* {
+    font-family: 'Open Sans', 'Roboto Local', sans-serif;
+
+    body  {
+        margin:0;
+        padding:0;
+        background: #121214;
+        color: $normal;
+    }
+    
+    input, button {
+        border: 0;
+        outline:none;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin:0;
+        padding:0;
+    }
+}
+
+button {
+    background: #16A34A;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    box-sizing: border-box;
+
+    &:hover {
+        background: $green-accent;
+    }
+}
+
+input {
+    background: $black-primary;
+    color: $normal;
+    padding: 1rem;
+    margin: 1px 0;
+}
+
+.container {
+    width: 80%;
+}

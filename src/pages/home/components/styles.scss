@@ -1,0 +1,125 @@
+@import '../../variables.scss';
+
+.header {
+    margin-top: 12rem;
+    flex:0.4;
+    span {
+        font-size: 28px;
+        color: $main-color;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.2s;
+        font-weight: 500;
+    }
+
+    span:hover {
+        color: $green;
+    }
+
+    @media screen and (max-width: $media-desktop) {
+        margin-top: 2rem;
+    }
+    
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0 auto;
+    height: 100vh;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .presentation {
+        text-align: justify;
+        flex-grow: 1;
+        
+        > div {
+            text-align: center;
+        }
+
+        .title {
+            margin-top: 2rem;
+            letter-spacing: -2px;
+            font-size: fontSize(18);
+
+            h1 {
+                display: inline;
+
+                &:last-child {
+                    color: $main-color;
+                }
+            }
+        }
+
+        p {
+            text-align: center;
+            word-spacing: 0.5rem;
+            letter-spacing: 0.8px;
+        }
+    }
+
+    @media screen and (max-width: $media-desktop) {
+        flex-direction: column;
+        .presentation {
+            p {
+                text-align: center;
+                word-spacing: normal;
+                br {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.login {
+    background-color: $black-secondary;
+    padding: side(3rem, 4rem);
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: 600px;
+
+    h2 {
+        font-size: fontSize(28);
+        font-weight: 600;
+        margin-bottom: 2rem;
+    }
+
+    .input {
+        display: flex;
+        align-items: stretch;
+        flex-direction: row;
+        width: 100%;
+        margin: side(1rem, 0);
+        
+        label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            padding: side(5px, 15px);
+            background-color: $black;
+        }
+
+        input{
+            flex-grow: 1;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+    }
+
+
+    @media screen and (max-width: $media-desktop) {
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 4rem;
+        margin-bottom: 2rem;
+    }
+}

@@ -1,23 +1,20 @@
-'use client'
-
-import styles from './input.module.scss';
+import { Case } from "./conditional";
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
     icon?: React.ReactNode;
-    id: string;
 }
 
-const Input = (props: Props) => {
-    const { icon, id } = props;
+const TextInput = (props: Props) => {
+    const { type, name, autoFocus, icon } = props;
 
-    return (
-        <div className={styles.form_input}>
-            <div className="icon-base">
-                {icon && <label htmlFor={id}>{icon}</label>}
-            </div>
-            <input {...props} />
+    return(
+        <div className={`input ${name}`}>
+            <Case condition={icon != undefined}>
+                <label htmlFor={name}>{icon}</label>
+            </Case>
+            <input type={type} name={name} id={name} autoFocus={autoFocus} {...props} />
         </div>
     );
 };
 
-export { Input };
+export {TextInput};

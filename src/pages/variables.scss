@@ -1,0 +1,35 @@
+$normal: #D4D4D4;
+
+$green: #16A34A;
+$green-accent: #22CF62;
+
+$grey: #5D6878;
+$grey-accent: #5D6878;
+
+$black: #121214;
+$black-primary: #27272A;
+$black-secondary: #201F24;
+
+$danger: #991B1B;
+$warning: #FF9800;
+$info: #00BCD4;
+$success: #8BC34A;
+
+$main-color: $green-accent;
+
+$media-desktop: 1400px;
+$media-desktop-sm: 1200px;
+$media-tablet: 768px;
+$media-mobile: 600px;
+$media-mobile-sm: 480px;
+
+
+@function side($y, $x) {
+    @return $y $x $y $x;
+}
+
+@function fontSize($px) {
+    $calc: calc($px * 6.25%);
+
+    @return $calc;
+}
