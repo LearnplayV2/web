@@ -2,7 +2,7 @@ import { Content } from "./components/content";
 import { Header } from "./components/header";
 import './components/styles.scss';
 
-function Home() {
+function HomePage() {
     return(
         <>
             <div className="container">
@@ -13,4 +13,4 @@ function Home() {
     );
 }
 
-export {Home};
+export {HomePage};

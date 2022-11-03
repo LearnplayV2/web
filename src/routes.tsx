@@ -1,16 +1,16 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
-import { AuthProvider } from "./authentication";
+import { Session } from "./authentication";
 import { All } from "./pages/all";
-import { Home } from "./pages/home";
+import { DashboardPage } from "./pages/dashboard";
+import { HomePage } from "./pages/home";
 
 const Routes = () => {
     
     const routes = (
         <>
-            <Route path='/' element={<AuthProvider children={<Home />} />} />
+            <Route path='/' element={<Session.Provider children={<HomePage />} />} />
             <Route path='*' element={<All />} />
-            <Route path='/dashboard' element={<AuthProvider children={<>to do</>} />} />
-            <Route path='/dashboard/test' element={<AuthProvider children={<>to do</>} />} />
+            <Route path='/dashboard' element={<Session.Provider children={<DashboardPage />} />} />
         </>
     );
 

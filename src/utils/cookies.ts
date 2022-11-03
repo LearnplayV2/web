@@ -12,7 +12,7 @@ class HandleCookie {
     static setAuth(token: string) {
         this.cookies.set(this.cookieName.token, token, {path: '/', maxAge: this.months(3) } );
     }
-    
+
 }
 
 export {HandleCookie};

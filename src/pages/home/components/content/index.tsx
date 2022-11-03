@@ -56,8 +56,6 @@ const Login = () => {
 
             HandleCookie.setAuth(response.data.token);
             navigate('/dashboard');
-            
-            
         } catch(e : any) {
             console.log(e);
             setAttemps(state => (state < 3) ? state + 1: state );
