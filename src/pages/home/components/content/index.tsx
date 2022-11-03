@@ -38,7 +38,7 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    
     useEffect(() => {
         if(attemps == 3) {
             setTimeout(() => {
@@ -55,7 +55,7 @@ const Login = () => {
             const response = await UserService.login({email: form.get('email'), password: form.get('password')});
 
             HandleCookie.setAuth(response.data.token);
-            navigate('/opa');
+            navigate('/dashboard');
             
             
         } catch(e : any) {

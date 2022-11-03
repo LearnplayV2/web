@@ -8,11 +8,11 @@ import store from '../store/storeConfig';
 import './global.scss';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
+    <>
         <Provider store={store}>
             <Alert>
                 <Routes />
             </Alert>
         </Provider>
-    </React.StrictMode>,
+    </>,
 );

@@ -3,12 +3,13 @@ import { Header } from "./components/header";
 import './components/styles.scss';
 
 function Home() {
-    
     return(
-        <div className="container">
-            <Header />
-            <Content />
-        </div>
+        <>
+            <div className="container">
+                <Header />
+                <Content />
+            </div>
+        </>
     );
 }
 
