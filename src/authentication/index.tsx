@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { LoadingPage } from "../components/ui/loading";
 import { HandleCookie } from "../utils/cookies";
 
 interface Props extends React.PropsWithChildren {
@@ -31,6 +32,7 @@ const Session = (props : Props) => {
                 if(!location.pathname.includes(access ?? '/dashboard')) navigate(access ?? '/dashboard');
             }
         }
+
         setMounted(true);
     }, []);
     
@@ -42,7 +44,7 @@ const Session = (props : Props) => {
         );
     }
     
-    return(<></>);
+    return(<LoadingPage />);
 
 }
 

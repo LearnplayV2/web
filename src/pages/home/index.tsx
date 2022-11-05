@@ -1,16 +1,10 @@
-import { Content } from "./components/content";
-import { Header } from "./components/header";
-import './components/styles.scss';
+import { HomeMain } from "../../components/home/page";
 
-function HomePage() {
+const HomePage = () => {
+    
     return(
-        <>
-            <div className="container">
-                <Header />
-                <Content />
-            </div>
-        </>
+        <HomeMain />
     );
-}
+};
 
-export {HomePage};
+export default HomePage;

@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { TextInput } from '../../../../components/ui/input';
+import { TextInput } from '../../../ui/input';
 import { FaUserGraduate } from 'react-icons/fa';
 import { MdOutlinePassword } from 'react-icons/md';
 import { css } from '@emotion/react';

@@ -1,8 +1,8 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import { Session } from "./authentication";
 import { All } from "./pages/all";
-import { DashboardPage } from "./pages/dashboard";
-import { HomePage } from "./pages/home";
+import DashboardPage  from "./pages/dashboard";
+import HomePage from "./pages/home";
 
 const Routes = () => {
     
