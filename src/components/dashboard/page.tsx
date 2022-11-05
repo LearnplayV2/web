@@ -1,14 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { Session } from "../../authentication";
-import { Dashboard } from "./components/dashboard";
+import { Header } from "./components/header/index";
 
 const DashboardMain = () => {
-    const navigate = useNavigate();
     
     return(
-        <Dashboard>
-            <button onClick={() => Session.Logout(() => navigate('/'))}>Sair</button>
-        </Dashboard>
+        <>
+            <Header />
+        </>
     );
 }
 

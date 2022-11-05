@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LoadingPage } from "../components/ui/loading";
+import { User } from "../types/User";
 import { HandleCookie } from "../utils/cookies";
+import jwt_decode from 'jwt-decode';
 
 interface Props extends React.PropsWithChildren {
     isPrivate?: boolean;
@@ -60,8 +62,19 @@ const isAuthenticated = () => {
     return token != undefined;
 }
 
+const user = () => {
+    const user : User = jwt_decode(HandleCookie.cookies.get(HandleCookie.cookieName.token));
+    return user;
+};
+
+const token = () => {
+    return HandleCookie.cookies.get(HandleCookie.cookieName.token);  
+};
+
 Session.Provider = Session;
 Session.isAuthenticated = isAuthenticated;
+Session.user = user;
+Session.token = token;
 Session.Logout = Logout;
 
 export {Session};
