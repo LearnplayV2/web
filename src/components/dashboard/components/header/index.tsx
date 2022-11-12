@@ -1,14 +1,24 @@
 import { css } from "@emotion/react";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfilePicture } from "./profilePicture";
 
 const Header = () => {
+
+    const navigate = useNavigate();
+    
+    const homePage = () => {
+        navigate('/dashboard');
+    };
+    
     return(
         <div css={header}>
-            <span className="title">
+            <span className="title" onClick={homePage}>
                 LearnPlay
             </span>
             <div className="user-items">
-                <ProfilePicture />
+                <Link to={'/dashboard/profile'}>
+                    <ProfilePicture />
+                </Link>
             </div>
         </div>
     );
@@ -38,9 +48,9 @@ const header = css`
 
     .user-items {
         img {
-            width: 32px;
+            width: 42px;
+            height: 42px;
             cursor:pointer;
-            height: 32px;
             object-fit: cover;
             clip-path: circle();
         }

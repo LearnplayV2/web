@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { CSSProperties } from "styled-components";
 import { UserService } from "../../../../service/userService";
 
 interface Data {
@@ -15,12 +16,12 @@ const useProfilePicture = () => {
     });
 };
 
-const ProfilePicture = () => {
+const ProfilePicture = ({props}: any) => {
     const {data, error, status, isLoading} = useProfilePicture();
     
     if(data)
-        return <img src={data.photo} />;
-    return <img src='/assets/default-avatar.jpg' />;
+        return <img  {...props} src={data.photo} />;
+    return <img {...props}  src='/assets/default-avatar.jpg' />;
 }
 
 export {ProfilePicture};

@@ -19,6 +19,15 @@ class UserService {
             }
         );
     }
+
+    static changeProfilePicture(base64File: string) {
+        const token = Session.token();
+        return service.post(this.path('set-profile-picture'), {base64File}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+    }
 }
 
 export {UserService};
