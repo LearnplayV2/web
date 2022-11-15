@@ -5,12 +5,23 @@ const Search = () => {
 
     const location = useLocation();
     const pathname = location.pathname.replace('/', '').split('/');
-    
-    if(pathname.length > 1) {
+
+    class Condition {
+        static isPage(pageName: string) {
+            return pathname.some(name => name == pageName);
+        }
+    };
+
+    if( !Condition.isPage('groups') && 
+        pathname.length > 1
+    ) {
         return null;
     }
 
     const placeholder = () => {
+        if(Condition.isPage('groups')) {
+            return 'Procurar por grupos...';
+        } else
         return 'Procurar por aula...';
     };
         

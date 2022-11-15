@@ -2,15 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { service } from ".";
 import { Session } from "../authentication";
 
-class Groups {
+export interface FetchGroups {
+    page: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    totalItems: number;
+    groups: any[]
+}
 
+class Groups {
     static path = (page: string) => '/group/page/'.concat(page);
 
     static fetch(page?: string) {
-        interface Data {
-            groups: any[];
-        }
-        
         const token = Session.token();
         return useQuery({
             queryKey: ['groups'],
@@ -24,7 +27,7 @@ class Groups {
                     }
                 );
 
-                return data as Data[];
+                return data as FetchGroups;
             }
         });
     }    

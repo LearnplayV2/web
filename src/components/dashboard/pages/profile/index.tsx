@@ -34,7 +34,7 @@ const ProfilePage = () => {
     };
 
     return(
-        <Dashboard> 
+        <Dashboard hasLeftMenu={true}> 
             <Header />
             <Faded>
                 <div css={container}>
