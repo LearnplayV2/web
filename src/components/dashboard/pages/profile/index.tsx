@@ -1,15 +1,16 @@
 import { css } from "@emotion/react";
-import { Header } from "../../../components/dashboard/components/header";
+import { Header } from "../../header";
 import {FiLogOut} from 'react-icons/fi';
-import { Session } from "../../../authentication";
+import { Session } from "../../../../authentication";
 import { useNavigate } from "react-router-dom";
-import { ProfilePicture } from "../../../components/dashboard/components/header/profilePicture";
+import { ProfilePicture } from "../../header/profilePicture";
 import { useEffect } from "react";
 import { useFileUpload } from "js-media-package";
 import { useDispatch } from "react-redux";
-import { setModal } from "../../../store/alert";
-import { UserService } from "../../../service/userService";
-import { Faded } from "../../../components/ui/animated";
+import { setModal } from "../../../../store/alert";
+import { UserService } from "../../../../service/userService";
+import { Faded } from "../../../ui/animated";
+import { Dashboard } from "../../page";
 
 const ProfilePage = () => {
     const { sendFile, base64File } = useFileUpload();
@@ -33,7 +34,7 @@ const ProfilePage = () => {
     };
 
     return(
-        <> 
+        <Dashboard> 
             <Header />
             <Faded>
                 <div css={container}>
@@ -57,7 +58,7 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </Faded>
-        </>
+        </Dashboard>
     );
 }
 

@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Blur, Faded } from "../../../ui/animated";
+import { Blur, Faded } from "../../ui/animated";
 
 const Main = () => {
 
@@ -26,7 +26,7 @@ const Main = () => {
                     <Faded>
                         <div className="list">
                             {Array(300).fill(0).map((_, index) => (
-                                <div className="item">
+                                <div className="item" key={index}>
                                     <img loading="lazy" src='https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=1.00xw:0.669xh;0,0.190xh&resize=640:*' />                                
                                 </div>
                             ))}
@@ -45,6 +45,7 @@ const main = css`
 
     .description {
         margin: 20vh 0;
+        margin-top: calc(20vh + 72px);
         align-items: center;
         display: flex;
         flex-direction: row;

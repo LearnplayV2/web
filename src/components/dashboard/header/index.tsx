@@ -4,14 +4,18 @@ import { ProfilePicture } from "./profilePicture";
 import { RiNotification3Fill } from 'react-icons/ri';
 import { MdOutlineAddCircle } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
-import { DropdownState, toggleDropdown } from "../../../../store/dropdown";
-import { RootState } from "../../../../store/storeConfig";
+import { DropdownState, toggleDropdown } from "../../../store/dropdown";
+import { RootState } from "../../../store/storeConfig";
 import React from "react";
+import { basicDropDownList, header, search } from "./styles.css";
+import {AiTwotoneVideoCamera} from 'react-icons/ai';
+import {RiArticleFill} from 'react-icons/ri';
+import {FaGraduationCap} from 'react-icons/fa';
+import { Search } from "./search";
 
 const Header = () => {
 
     const {dropdowns} = useSelector(state => state) as RootState;
-    
     const navigate = useNavigate();
     
     class Redirect {
@@ -31,15 +35,35 @@ const Header = () => {
             <span className="title" onClick={Redirect.homePage}>
                 LearnPlay
             </span>
+           <Search />
             <div className="user-items">
                 <div className="item">
                     <Dropdown title={<MdOutlineAddCircle />} id="add_item" isActive={Find.dropdownIsActive('add_item')}>
-                        hello
+                        <ul css={basicDropDownList}>
+                            <li>
+                                <span>
+                                    <AiTwotoneVideoCamera className="ico" /> Criar aula
+                                </span>
+                            </li>
+                            <li>
+                                <span>
+                                    <RiArticleFill className="ico" /> Criar artigo
+                                </span>
+                            </li>
+                            <li>
+                                <span>
+                                    <FaGraduationCap className="ico" />
+                                    Criar grupo de estudos
+                                </span>
+                            </li>
+                        </ul>
                     </Dropdown>
                 </div>
                 <div className="item">
                     <Dropdown title={<RiNotification3Fill />} id="notifications" isActive={Find.dropdownIsActive('notifications')}>
-                        to do notifications
+                        <ul css={basicDropDownList}>
+                            <li>to do</li>
+                        </ul>
                     </Dropdown>
                 </div>
                 <div className="item">
@@ -57,32 +81,41 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
     const dispatch = useDispatch();
 
     class Toggle {
-        static handleDropDown(e: React.MouseEvent) {
-            const target = e.currentTarget as HTMLDivElement;
-            dispatch(toggleDropdown(target.id));
+        static handleDropDown(e: React.MouseEvent | string) {
+            if(typeof e === 'string') {
+                const id = e;
+                dispatch(toggleDropdown(id));
+            } else {
+                const target = e.currentTarget as HTMLDivElement;
+                dispatch(toggleDropdown(target.id));
+            }
         }
     }
 
     return(
-        <div css={css`
-            position: relative;
-            cursor:pointer;
-        `}>
-            <div id={id} onClick={Toggle.handleDropDown}>
+        <div 
+            css={css`
+                position: relative;
+                cursor:pointer;
+            `}
+            onBlur={() => Toggle.handleDropDown(id)}
+        >
+            <div id={id} onClick={Toggle.handleDropDown} css={css`&:hover{ filter: brightness(120%); }`}>
                 {title}
             </div>
             <ul 
                 onClick={e => e.stopPropagation()}
                 css={css`
                     display: ${isActive ? 'block': 'none'};
-                    cursor: text;
+                    cursor: auto;
                     position: absolute;
                     user-select: auto;
-                    padding: 1rem;
-                    background: #44424a;
-                    width: 100px;
+                    padding: .8rem 0;
+                    background: #323135;
                     font-size: 14px;
-                    margin-left: -50%;
+                    margin-top: 10px;
+                    margin-left: -230%;
+                    border-radius: 8px;
                     transform: translateX(-50%);
                 `}
             >
@@ -92,60 +125,5 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
     );
 }
 
-const header = css`
-    background: #201F24;
-    box-sizing: border-box;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1;
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding:0 1rem;
-    height: 72px;
-
-    .title {
-        font-size: 24px;
-        color: #16a34a;
-        user-select:none;
-        cursor: pointer;
-        transition: color .5s;
-
-        &:hover {
-            color: #0fcf0f;
-        }
-    }
-
-    .user-items {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        .item {
-            font-size: 22px;
-            user-select: none;
-            
-            svg {
-                cursor: pointer;
-            }
-
-            &:not(:last-child) {
-                margin-right: 1.8rem;
-            }
-
-        }
-        
-        
-        img {
-            width: 42px;
-            height: 42px;
-            cursor:pointer;
-            object-fit: cover;
-            clip-path: circle();
-        }
-    }
-`;
 
 export {Header};

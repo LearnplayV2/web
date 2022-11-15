@@ -1,9 +1,10 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import { Session } from "./authentication";
 import { All } from "./pages/all";
-import DashboardPage  from "./pages/dashboard";
-import { ProfilePage } from "./pages/dashboard/profile";
-import HomePage from "./pages/home";
+import {DashboardPage}  from "./components/dashboard/pages";
+import { Group } from "./components/dashboard/pages/groups";
+import { ProfilePage } from "./components/dashboard/pages/profile";
+import {HomeMain as HomePage} from './components/home/index';
 
 const Routes = () => {
     
@@ -13,6 +14,7 @@ const Routes = () => {
             <Route path='*' element={<All />} />
             <Route path='/dashboard' element={<Session.Provider children={<DashboardPage />} />} />
             <Route path='/dashboard/profile' element={<Session.Provider children={<ProfilePage />} />} />
+            <Route path='/dashboard/groups' element={<Session.Provider children={<Group />} />} />
         </>
     );
 

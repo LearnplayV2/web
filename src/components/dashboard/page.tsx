@@ -1,14 +1,21 @@
-import { Header } from "./components/header/index";
-import { Main } from "./components/main";
+import { PropsWithChildren } from "react";
+import { Header } from "./header/index";
+import { RightMenu } from "./lateralMenu";
 
-const DashboardMain = () => {
+interface Props extends PropsWithChildren {
+    hasLeftMenu?: boolean;
+}
+
+const Dashboard = (props: Props) => {
+    const {children, hasLeftMenu} = props;
     
     return(
         <>
+            {hasLeftMenu && (<RightMenu />)}
             <Header />
-            <Main />
+            {children}
         </>
     );
 }
 
-export {DashboardMain};
+export {Dashboard};
