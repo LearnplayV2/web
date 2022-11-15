@@ -1,5 +1,5 @@
 import { Header } from "./components/header/index";
-import { Main } from "./components/header/main";
+import { Main } from "./components/main";
 
 const DashboardMain = () => {
     

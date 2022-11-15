@@ -1,8 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit";
-import alert from "./alert";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import alert, { AlertState } from "./alert";
+import dropdowns, { DropdownState } from './dropdown';
+
+export interface RootState {
+    alert: AlertState;
+    dropdowns: DropdownState[];
+}
+
+const reducers = combineReducers({
+    alert,
+    dropdowns
+});
 
 const store = configureStore({
-    reducer: alert
+    reducer: reducers
 });
 
 export default store;

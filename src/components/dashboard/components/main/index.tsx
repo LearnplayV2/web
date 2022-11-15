@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Blur, Faded } from "../../../../ui/animated";
+import { Blur, Faded } from "../../../ui/animated";
 
 const Main = () => {
 

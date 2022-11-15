@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import React from "react";
 
-export interface AlertSlice {
+export interface AlertState {
     isActive: boolean;
     element?: React.ReactNode;
 }
 
-const initialState : AlertSlice = {
+const initialState : AlertState = {
     isActive: false,
 };
 

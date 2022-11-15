@@ -3,13 +3,14 @@ import React from 'react';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { AlertSlice, closeModal, setModal } from '../../../store/alert';
+import { RootState } from '../../../store/storeConfig';
 import { Case } from '../conditional';
 import './style.scss';
 
 const Alert = (props: React.PropsWithChildren) => {
     const { children } = props;
 
-    const { isActive, element } = useSelector((state) => state) as AlertSlice;
+    const { isActive, element } = useSelector((state: RootState) => state.alert) as AlertSlice;
 
     const dispatch = useDispatch();
 
