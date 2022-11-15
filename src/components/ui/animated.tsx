@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { PropsWithChildren } from "react";
 
 const animationOptions = `
-    animation-duration: 2s, .8s;
+    animation-duration: .8s, .8s;
     animation-iteration-count: 1;
 `;
 
