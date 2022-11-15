@@ -13,7 +13,9 @@ const Dashboard = (props: Props) => {
         <>
             {hasLeftMenu && (<RightMenu />)}
             <Header />
-            {children}
+            <div style={{marginTop: '75px'}}>
+                {children}
+            </div>
         </>
     );
 }

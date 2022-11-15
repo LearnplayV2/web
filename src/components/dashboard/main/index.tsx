@@ -45,7 +45,6 @@ const main = css`
 
     .description {
         margin: 20vh 0;
-        margin-top: calc(20vh + 72px);
         align-items: center;
         display: flex;
         flex-direction: row;
