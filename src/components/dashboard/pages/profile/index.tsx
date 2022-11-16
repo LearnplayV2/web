@@ -11,6 +11,7 @@ import { setModal } from "../../../../store/alert";
 import { UserService } from "../../../../service/userService";
 import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
+import { updateProfilePicture } from "../../../../store/profilePicture";
 
 const ProfilePage = () => {
     const { sendFile, base64File } = useFileUpload();
@@ -24,11 +25,13 @@ const ProfilePage = () => {
     const handleProfilePicture = async () => {
         try {
             if(base64File) {
+                dispatch(updateProfilePicture('/assets/loading.gif'));
                 await UserService.changeProfilePicture(base64File);
-                navigate(0);
+                dispatch(updateProfilePicture(base64File));
             }
             
         } catch(err) {
+            dispatch(updateProfilePicture('/assets/default-avatar.jpg'));
             dispatch(setModal('Ops... Não foi possível carregar imagem,'));
         }
     };

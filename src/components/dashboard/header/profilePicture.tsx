@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { css, CSSProperties } from "styled-components";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { css } from "styled-components";
 import { UserService } from "../../../service/userService";
+import { updateProfilePicture } from "../../../store/profilePicture";
+import { RootState } from "../../../store/storeConfig";
 
 interface Data {
     photo: string;
@@ -17,11 +21,20 @@ const useProfilePicture = () => {
 };
 
 const ProfilePicture = ({props}: any) => {
-    const {data, error, status, isLoading} = useProfilePicture();
-    
-    if(data)
-        return <img css={css`transition: filter .3s; &:hover{filter: brightness(120%)}`} {...props} src={data.photo} />;
-    return <img {...props} css={css`transition: filter .3s; &:hover{filter: brightness(120%)}`} src='/assets/default-avatar.jpg' />;
+    const {profilePicture} = useSelector(state => state) as RootState;
+    const {data, isLoading, status} = useProfilePicture();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(data) {
+            dispatch(updateProfilePicture(data?.photo));
+        }
+    }, [data]);    
+
+    return <img 
+                css={css`transition: filter .3s; &:hover{filter: brightness(120%)}`} 
+                {...props} 
+                src={isLoading ? '/assets/loading.gif' : profilePicture.url} />;
 }
 
 export {ProfilePicture};

@@ -459,19 +459,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@preact/signals-core@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@preact/signals-core/-/signals-core-1.2.2.tgz#279dcc5ab249de2f2e8f6e6779b1958256ba843e"
-  integrity sha512-z3/bCj7rRA21RJb4FeJ4guCrD1CQbaURHkCTunUWQpxUMAFOPXCD8tSFqERyGrrcSb4T3Hrmdc1OAl0LXBHwiw==
-
-"@preact/signals-react@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@preact/signals-react/-/signals-react-1.2.1.tgz#6d5d305ebdb38c879043acebc65c0d9351e663c1"
-  integrity sha512-73J8sL1Eru7Ot4yBYOCPj1izEZjzCEXlembRgk6C7PkwsqoAVbCxMlDOFfCLoPFuJ6qeGatrJzRkcycXppMqVQ==
-  dependencies:
-    "@preact/signals-core" "^1.2.2"
-    use-sync-external-store "^1.2.0"
-
 "@reduxjs/toolkit@^1.8.6":
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.8.6.tgz#147fb7957befcdb75bc9c1230db63628e30e4332"
@@ -1277,11 +1264,6 @@ react-router@6.4.2:
   integrity sha512-Rb0BAX9KHhVzT1OKhMvCDMw776aTYM0DtkxqUBP8dNBom3mPXlfNs76JNGK8wKJ1IZEY1+WGj+cvZxHVk/GiKw==
   dependencies:
     "@remix-run/router" "1.0.2"
-
-react-signal@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-signal/-/react-signal-0.3.0.tgz#0193633b0a27d7b322152ea09635213787ccea73"
-  integrity sha512-1lMLElczdzSCVXuNvuHl0tosJdQ8yBg3A1TuKjNMR2EVdkFYgjIK060coBafPW4Nv7SlsHARzP43RNUTkRwQjw==
 
 react@^18.2.0:
   version "18.2.0"

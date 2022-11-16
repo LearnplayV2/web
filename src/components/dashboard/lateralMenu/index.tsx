@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { useEffect } from "react";
 import {HiUserGroup} from 'react-icons/hi';
-import {IoChevronBackOutline, IoChevronForwardOutline} from 'react-icons/io5';
+import {IoChevronBackOutline, IoChevronForwardOutline, IoPersonCircleSharp} from 'react-icons/io5';
 import {MdArticle} from 'react-icons/md';
 import {RiVideoFill} from 'react-icons/ri';
 import { useDispatch, useSelector } from "react-redux";
@@ -60,6 +60,12 @@ const RightMenu = () => {
                     <MdArticle />
                     <Span>Artigos</Span>
                 </div>
+                <div className="btn" onClick={() => navigate('/dashboard/profile')}>
+                    <IoPersonCircleSharp />
+                    <Span>
+                        Meu perfil
+                    </Span>
+                </div>
                 <div className="btn disabled">
                     &nbsp;
                 </div>
@@ -88,6 +94,15 @@ const lateralMenu = css`
     top: 25%;
     background: #3d3a469e;
     transition: background 0.5s;
+    
+    @media screen and (min-width: 1000px) {
+        left: -10px;
+        transition: left .3s;
+        
+        &:hover {
+            left: 0;
+        }
+    }
 
     .relative {
         display: flex;
@@ -98,16 +113,16 @@ const lateralMenu = css`
             display: flex;
             align-items: center;
             padding: 1rem;
-            cursor: pointer;
             user-select: none;
             color: #f9f9f9;
-
+            
             svg {
                 height: 24px;
                 width: 24px;
             }
             
             &:not(.disabled):hover {
+                cursor: pointer;
                 background: #3f3e42;
             }
             
