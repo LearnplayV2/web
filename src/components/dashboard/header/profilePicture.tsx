@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { css } from "styled-components";
-import { UserService } from "../../../service/userService";
+import { UserService } from "../../../service/user";
 import { updateProfilePicture } from "../../../store/profilePicture";
 import { RootState } from "../../../store/storeConfig";
 

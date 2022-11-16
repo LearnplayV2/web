@@ -1,4 +1,6 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
+import { Session } from "../../authentication";
+import { WebSocket } from "../../service/socket";
 import { Header } from "./header/index";
 import { RightMenu } from "./lateralMenu";
 
@@ -8,6 +10,10 @@ interface Props extends PropsWithChildren {
 
 const Dashboard = (props: Props) => {
     const {children, hasLeftMenu} = props;
+    
+    useEffect(() => {
+        WebSocket.addNewUser(Session.user().email);
+    }, []);
     
     return(
         <>

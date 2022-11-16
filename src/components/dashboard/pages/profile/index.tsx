@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useFileUpload } from "js-media-package";
 import { useDispatch } from "react-redux";
 import { setModal } from "../../../../store/alert";
-import { UserService } from "../../../../service/userService";
+import { UserService } from "../../../../service/user";
 import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
 import { updateProfilePicture } from "../../../../store/profilePicture";

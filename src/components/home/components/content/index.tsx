@@ -3,7 +3,7 @@ import { TextInput } from '../../../ui/input';
 import { FaUserGraduate } from 'react-icons/fa';
 import { MdOutlinePassword } from 'react-icons/md';
 import { css } from '@emotion/react';
-import { UserService } from '../../../../service/userService';
+import { UserService } from '../../../../service/user';
 import { useDispatch } from 'react-redux';
 import { CustomError } from '../../../../utils/error';
 import { setModal } from '../../../../store/alert';

@@ -11,7 +11,7 @@ import React from 'react';
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
+    <>
         <Provider store={store}>
             <QueryClientProvider client={queryClient}>
                 <Alert>
@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 </Alert>
             </QueryClientProvider>
         </Provider>
-    </React.StrictMode>,
+    </>,
 );

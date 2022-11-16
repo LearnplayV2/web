@@ -16,10 +16,9 @@ const Group = () => {
                         ? (<h1>{errorMsg}</h1>) 
                         : isLoading ? (<h1>Um momento por favor...</h1>)
                         : (
-                            <>
-                                {data ? (<ListGroups data={data} />) : (<h1>{errorMsg}</h1>)}
-                                
-                            </>
+                            data 
+                                ? (<ListGroups data={data} />) 
+                                : (<h1>{errorMsg}</h1>)
                         )
                     }
                 </div>
