@@ -7,14 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { DropdownState, toggleDropdown } from "../../../store/dropdown";
 import { RootState } from "../../../store/storeConfig";
 import React from "react";
-import { basicDropDownList, header, search } from "./styles.css";
+import { basicDropDownList, header } from "./styles.css";
 import {AiTwotoneVideoCamera} from 'react-icons/ai';
 import {RiArticleFill} from 'react-icons/ri';
 import {FaGraduationCap} from 'react-icons/fa';
 import { Search } from "./search";
+import { NotificationsList } from "./notifications";
 
 const Header = () => {
-
     const {dropdowns} = useSelector(state => state) as RootState;
     const navigate = useNavigate();
     
@@ -62,7 +62,7 @@ const Header = () => {
                 <div className="item">
                     <Dropdown title={<RiNotification3Fill />} id="notifications" isActive={Find.dropdownIsActive('notifications')}>
                         <ul css={basicDropDownList}>
-                            <li>to do</li>
+                            <NotificationsList />
                         </ul>
                     </Dropdown>
                 </div>
@@ -114,9 +114,9 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
                     background: #323135;
                     font-size: 14px;
                     margin-top: 10px;
-                    margin-left: -230%;
+                    right: 0;
                     border-radius: 8px;
-                    transform: translateX(-50%);
+                    transform: translateX(30px);
                 `}
             >
                 {children}

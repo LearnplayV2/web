@@ -12,7 +12,7 @@ const Dashboard = (props: Props) => {
     const {children, hasLeftMenu} = props;
     
     useEffect(() => {
-        WebSocket.addNewUser(Session.user().email);
+        WebSocket.addNewUser(Session.user().uuid);
     }, []);
     
     return(

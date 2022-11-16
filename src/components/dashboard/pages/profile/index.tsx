@@ -12,6 +12,7 @@ import { UserService } from "../../../../service/user";
 import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
 import { updateProfilePicture } from "../../../../store/profilePicture";
+import { Notifications } from "../../../../service/socket/notifications";
 
 const ProfilePage = () => {
     const { sendFile, base64File } = useFileUpload();
@@ -28,6 +29,7 @@ const ProfilePage = () => {
                 dispatch(updateProfilePicture('/assets/loading.gif'));
                 await UserService.changeProfilePicture(base64File);
                 dispatch(updateProfilePicture(base64File));
+                Notifications.send({message: 'Você alterou a foto de perfil'});
             }
             
         } catch(err) {

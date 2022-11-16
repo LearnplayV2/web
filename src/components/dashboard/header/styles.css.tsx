@@ -5,6 +5,12 @@ const basicDropDownList = css`
     padding:0;
     width: max-content;
     min-width: 230px;
+    word-break: break-all;
+
+    @media screen and (max-width: 900px) {
+        min-width: 130px;
+        max-width: 230px;
+    }
 
     li {
         display: flex;
