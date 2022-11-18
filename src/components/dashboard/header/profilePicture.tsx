@@ -16,7 +16,9 @@ const useProfilePicture = () => {
         queryFn: async () => {
             const {data} = await UserService.profilePicture();
             return data as Data;
-        }
+        },
+        retry: 0,
+        refetchOnWindowFocus: false,
     });
 };
 
