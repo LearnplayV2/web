@@ -1,8 +1,6 @@
 import { WebSocket } from ".";
 import { Session } from "../../authentication";
 
-interface NotificationProps { message: string, description: string };
-
 interface SendNotification {
     message: string;
     description?: string;

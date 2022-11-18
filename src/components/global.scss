@@ -26,6 +26,18 @@
         margin:0;
         padding:0;
     }
+
+    a {
+        cursor: pointer;
+        color: $grey;
+        text-decoration: none;
+
+        &:hover {
+            color: $grey-accent;
+            text-decoration: underline;
+        }
+    }
+    
 }
 
 button {

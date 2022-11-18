@@ -13,8 +13,8 @@ const NotificationsList = () => {
     
     return(
         <>  
-            {data.map(notification => (
-                <li>
+            {data.map((notification, i) => (
+                <li key={i}>
                     {notification.title}
                 </li>
             ) )}

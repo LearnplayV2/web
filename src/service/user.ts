@@ -8,6 +8,10 @@ class UserService {
         return service.post(this.path('login'), data);
     }
 
+    static register(data: any) {
+        return service.post(this.path('register'), data);
+    }
+
     static profilePicture() {
         const token = Session.token();
         return service.get(

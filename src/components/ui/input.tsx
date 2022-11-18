@@ -5,14 +5,14 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
 }
 
 const TextInput = (props: Props) => {
-    const { type, name, autoFocus, icon } = props;
+    const { type, name, autoFocus, icon, value } = props;
 
     return(
         <div className={`input ${name}`}>
             <Case condition={icon != undefined}>
                 <label htmlFor={name}>{icon}</label>
             </Case>
-            <input type={type} name={name} id={name} autoFocus={autoFocus} {...props} />
+            <input value={value} type={type} name={name} id={name} autoFocus={autoFocus} {...props} />
         </div>
     );
 };
