@@ -13,10 +13,13 @@ import {RiArticleFill} from 'react-icons/ri';
 import {FaGraduationCap} from 'react-icons/fa';
 import { Search } from "./search";
 import { NotificationsList } from "./notifications";
+import { setModal } from "../../../store/alert";
+import { StudyGroupsModal } from "./modal/studyGroupsModal";
 
 const Header = () => {
     const {dropdowns} = useSelector(state => state) as RootState;
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     
     class Redirect {
         static homePage() {
@@ -27,6 +30,16 @@ const Header = () => {
     class Find {
         static dropdownIsActive(id: string) {
             return dropdowns.find((dropdown: DropdownState) => dropdown.id === id)?.isActive ?? false;
+        }
+    }
+
+    class Handle {
+        static modal(type: string) {
+            switch(type) {
+                case 'groups':
+                    dispatch(setModal({element: <StudyGroupsModal />, fx: false}));
+                break;
+            }
         }
     }
 
@@ -50,7 +63,7 @@ const Header = () => {
                                     <RiArticleFill className="ico" /> Criar artigo
                                 </span>
                             </li>
-                            <li>
+                            <li onClick={() => Handle.modal('groups')}>
                                 <span>
                                     <FaGraduationCap className="ico" />
                                     Criar grupo de estudos

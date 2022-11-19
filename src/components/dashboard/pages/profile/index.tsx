@@ -34,7 +34,7 @@ const ProfilePage = () => {
             
         } catch(err) {
             dispatch(updateProfilePicture('/assets/default-avatar.jpg'));
-            dispatch(setModal('Ops... Não foi possível carregar imagem,'));
+            dispatch(setModal({element: 'Ops... Não foi possível carregar imagem,'}));
         }
     };
     

@@ -7,7 +7,7 @@ const Header = () => {
 
     return(
         <div className="header">
-            <span onClick={() => dispatch(setModal('LearnPlay é uma plataforma open-source, onde todos podem contribuir.'))}>
+            <span onClick={() => dispatch(setModal({element:'LearnPlay é uma plataforma open-source, onde todos podem contribuir.'}))}>
                 LearnPlay
             </span>
         </div>

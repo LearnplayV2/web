@@ -9,7 +9,7 @@ const All = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        dispatch(setModal('Erro 404: Página não encontrada'));
+        dispatch(setModal({element: 'Erro 404: Página não encontrada'}));
         navigate('/');
     }, []);
 

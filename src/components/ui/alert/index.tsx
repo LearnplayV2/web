@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { AlertSlice, closeModal, setModal } from '../../../store/alert';
+import { AlertState, closeModal, setModal } from '../../../store/alert';
 import { RootState } from '../../../store/storeConfig';
 import { Case } from '../conditional';
 import './style.scss';
@@ -10,11 +10,11 @@ import './style.scss';
 const Alert = (props: React.PropsWithChildren) => {
     const { children } = props;
 
-    const { isActive, element } = useSelector((state: RootState) => state.alert) as AlertSlice;
+    const { isActive, element, fx } = useSelector((state: RootState) => state.alert) as AlertState;
 
     const dispatch = useDispatch();
 
-    const blurEffect = css`
+    const effects = css`
         ${isActive && 'filter: blur(5px);'}
         ${isActive && 'transform: scale(.9);'}
         transition: filter .7s ease-out .3s, transform .3s ease-in;
@@ -23,6 +23,8 @@ const Alert = (props: React.PropsWithChildren) => {
     const toggleModal = () => {
         dispatch(closeModal());
     };
+
+    console.log('fx', fx);
 
     return (
         <>
@@ -37,7 +39,7 @@ const Alert = (props: React.PropsWithChildren) => {
                     </div>
                 </Case>
             </div>
-            <div className="all" css={blurEffect}>
+            <div className="all" css={fx && effects}>
                 {children}
             </div>
         </>

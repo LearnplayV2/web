@@ -71,7 +71,7 @@ const Register = () => {
                 
             } catch(e: any) {
                 const err = CustomError.message(e?.response?.data?.response?.message ?? e?.message);
-                dispatch(setModal(err));
+                dispatch(setModal({element: err}));
             }
         }
 
@@ -85,7 +85,7 @@ const Register = () => {
                 if(form.get('re-password') != form.get('password')) throw new Error('Senhas não conferem.');
                 Handle.Register(form);
             } catch(err) {
-                if((err as Error)?.message) dispatch(setModal((err as Error)?.message));
+                if((err as Error)?.message) dispatch(setModal({element: (err as Error)?.message}));
             }
         }
 
@@ -123,7 +123,7 @@ const Login = () => {
         if(attemps == 3) {
             setTimeout(() => {
                 setAttemps(0);
-                dispatch(setModal('Agora você pode tentar novamente.'));
+                dispatch(setModal({element: 'Agora você pode tentar novamente.'}));
             }, 10000);
         }
     }, [attemps]);
@@ -140,7 +140,7 @@ const Login = () => {
             } catch(e : any) {
                 setAttemps(state => (state < 3) ? state + 1: state );
                 const err = CustomError.message(e?.response?.data?.response?.message ?? e.message);
-                dispatch(setModal(err));
+                dispatch(setModal({element: err}));
             }
         };
 
