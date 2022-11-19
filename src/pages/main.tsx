@@ -6,7 +6,6 @@ import store from '../store/storeConfig';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import '../components/global.scss';
-import React from 'react';
 
 const queryClient = new QueryClient();
 

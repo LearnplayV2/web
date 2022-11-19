@@ -16,9 +16,12 @@ const profilePictureSlice = createSlice({
             if(action.payload) {
                 state.url = action.payload;
             }
+        },
+        resetProfilePicture(state) {
+            state.url = initialState.url;
         }
     }
 });
 
-export const { updateProfilePicture } = profilePictureSlice.actions;
+export const { updateProfilePicture, resetProfilePicture } = profilePictureSlice.actions;
 export default profilePictureSlice.reducer;

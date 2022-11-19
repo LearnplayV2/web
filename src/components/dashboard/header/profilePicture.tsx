@@ -28,10 +28,8 @@ const ProfilePicture = ({props}: any) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(data) {
-            dispatch(updateProfilePicture(data?.photo));
-        }
-    }, [data]);    
+        dispatch(updateProfilePicture(data?.photo));
+    }, [status]);    
 
     return <img 
                 css={css`transition: filter .3s; &:hover{filter: brightness(120%)}`} 

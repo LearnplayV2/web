@@ -11,7 +11,7 @@ import { setModal } from "../../../../store/alert";
 import { UserService } from "../../../../service/user";
 import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
-import { updateProfilePicture } from "../../../../store/profilePicture";
+import { resetProfilePicture, updateProfilePicture } from "../../../../store/profilePicture";
 import { Notifications } from "../../../../service/socket/notifications";
 
 const ProfilePage = () => {
@@ -37,14 +37,22 @@ const ProfilePage = () => {
             dispatch(setModal('Ops... Não foi possível carregar imagem,'));
         }
     };
+    
+    class Handle {
+        static logout = () => {
+            Session.Logout(() => navigate('/'));
+            dispatch(resetProfilePicture());
+        }
+    }
 
+    
     return(
         <Dashboard hasLeftMenu={true}> 
             <Header />
             <Faded>
                 <div css={container}>
                     <h2>Meu perfil</h2>
-                    <button onClick={() => Session.Logout(() => navigate('/'))} className="logoutBtn" type="button">
+                    <button onClick={Handle.logout} className="logoutBtn" type="button">
                         <div> 
                             <FiLogOut />
                         </div>
