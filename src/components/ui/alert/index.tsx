@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { AlertState, closeModal, setModal } from '../../../store/alert';
@@ -14,17 +14,29 @@ const Alert = (props: React.PropsWithChildren) => {
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        if(isActive) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+        console.log('isActive', isActive);
+    }, [isActive]);
+
     const effects = css`
         ${isActive && 'filter: blur(5px);'}
         ${isActive && 'transform: scale(.9);'}
         transition: filter .7s ease-out .3s, transform .3s ease-in;
     `;
 
+    const blurFx = css`
+        ${isActive && 'filter: blur(5px);'}
+        transition: filter .5s ease-out .3s;
+    `;
+
     const toggleModal = () => {
         dispatch(closeModal());
     };
-
-    console.log('fx', fx);
 
     return (
         <>
@@ -39,7 +51,7 @@ const Alert = (props: React.PropsWithChildren) => {
                     </div>
                 </Case>
             </div>
-            <div className="all" css={fx && effects}>
+            <div className="all" css={fx ? effects : blurFx}>
                 {children}
             </div>
         </>
