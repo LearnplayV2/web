@@ -20,7 +20,9 @@ const RightMenu = () => {
 
     const toggle = () => {
         if(window) {
-            window.innerWidth < 1000 && dispatch(toggleLeftMenu(false));
+            if(window.innerWidth < 1000) {
+                dispatch(toggleLeftMenu(false));
+            }
             
             window.onresize = (e) => {
                 const {innerWidth} = e.currentTarget as Window;

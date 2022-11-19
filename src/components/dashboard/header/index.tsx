@@ -98,7 +98,6 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
                 position: relative;
                 cursor:pointer;
             `}
-            onBlur={() => Toggle.handleDropDown(id)}
         >
             <div id={id} onClick={Toggle.handleDropDown} css={css`&:hover{ filter: brightness(120%); }`}>
                 {title}

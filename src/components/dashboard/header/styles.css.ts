@@ -51,7 +51,7 @@ const header = css`
     justify-content: space-between;
     padding:0 1rem;
     height: 72px;
-
+    
     .title {
         font-size: 24px;
         color: #16a34a;
@@ -90,6 +90,18 @@ const header = css`
             clip-path: circle();
         }
     }
+
+    @media screen and (max-width: 830px) {
+        flex-direction: column;
+        height: auto;
+        background-color: #201f24b5;
+
+        .user-items {
+            margin:.5rem 0;
+        }
+
+    }
+    
 `;
 
 const search = css `
@@ -98,6 +110,14 @@ const search = css `
         border: 1px solid #555;
         border-radius: 30px;
         min-width: 300px;
+    }
+
+    @media screen and (max-width: 830px) {
+        input {
+            padding: 10px;
+            margin-top: 4px;
+            min-width: 200px;
+        }
     }
 
 `;

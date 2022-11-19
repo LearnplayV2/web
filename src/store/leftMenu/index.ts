@@ -13,7 +13,7 @@ const leftMenuSlice = createSlice({
     initialState,
     reducers: {
         toggleLeftMenu(state, action: PayloadAction<boolean | undefined>) {
-            if(action?.payload) {
+            if(action?.payload != undefined) {
                 state.isShowing = action.payload;
             } else {
                 state.isShowing = !state.isShowing;

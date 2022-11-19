@@ -3,9 +3,7 @@ import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
 
 const Group = () => {
-
     const { data, error, isLoading } = Groups.fetch();
-
     const errorMsg = 'Ocorreu um erro inesperado, tente novamente mais tarde';
 
     return(
@@ -34,7 +32,7 @@ const ListGroups = (props : {data: FetchGroups}) => {
     if(data.totalItems == 0) {
         return <h1>Nenhum grupo foi criado ainda.</h1>;
     }
-    
+
     return(
         <> 
             to do

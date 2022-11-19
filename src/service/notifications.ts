@@ -20,7 +20,7 @@ class Notifications {
     static get() {
         const token = Session.token();
         return useQuery({
-            queryKey: ['groups'],
+            queryKey: ['notifications'],
             queryFn: async () => {
                 const {data} = await service.get(
                     this.initialPath,
