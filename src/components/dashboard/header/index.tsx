@@ -37,7 +37,7 @@ const Header = () => {
         static modal(type: string) {
             switch(type) {
                 case 'groups':
-                    dispatch(setModal({element: <StudyGroupsModal />, fx: false}));
+                    dispatch(setModal({element: <StudyGroupsModal />, fx: false, width: '40%'}));
                 break;
             }
         }
@@ -116,7 +116,7 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
                 {title}
             </div>
             <ul 
-                onClick={e => e.stopPropagation()}
+                onClick={Toggle.handleDropDown}
                 css={css`
                     display: ${isActive ? 'block': 'none'};
                     cursor: auto;

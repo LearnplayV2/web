@@ -10,7 +10,7 @@ import './style.scss';
 const Alert = (props: React.PropsWithChildren) => {
     const { children } = props;
 
-    const { isActive, element, fx } = useSelector((state: RootState) => state.alert) as AlertState;
+    const { isActive, element, fx, compact, width } = useSelector((state: RootState) => state.alert) as AlertState;
 
     const dispatch = useDispatch();
 
@@ -20,7 +20,6 @@ const Alert = (props: React.PropsWithChildren) => {
         } else {
             document.body.style.overflow = 'auto';
         }
-        console.log('isActive', isActive);
     }, [isActive]);
 
     const effects = css`
@@ -43,7 +42,7 @@ const Alert = (props: React.PropsWithChildren) => {
             <div className={`alert ${!isActive ? 'clickable' : 'transition'}`}>
                 <div className="transparent-child" onClick={toggleModal}></div>
                 <Case condition={isActive}>
-                    <div className="alert-body">
+                    <div style={{width: compact ? '' : width}} className={`alert-body`}>
                         <div className="close" onClick={toggleModal}>
                             <MdClose size={26} />
                         </div>

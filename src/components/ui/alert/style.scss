@@ -10,7 +10,7 @@
 
     &.transition {
         transition: background .3s linear;
-        background-color: rgba(0, 0, 0, 0.42);
+        background-color: rgba(0, 0, 0, 0.575);
     }
 
     &.clickable {
@@ -30,11 +30,10 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 50%;
-        background:$black-primary;
+        background:#2e2e2e;
         border-radius: 8px;
         padding: 1rem 2rem;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         color: $normal;
         box-shadow: 0px 0px 180px #000;
 

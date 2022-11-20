@@ -48,17 +48,40 @@ button {
     font-weight: bold;
     font-size: 14px;
     box-sizing: border-box;
+    transition: .2s filter;
 
     &:hover {
-        background: $green-accent;
+        filter: brightness(120%);
     }
+
+    &.text-white {
+        color: #fff;
+    }
+
+    &.danger {
+        background: #E53E3E;
+    }
+
+   
 }
 
-input {
+input, textarea, select {
     background: $black-primary;
+    outline: none;
+    border:none;
     color: $normal;
     padding: 1rem;
     margin: 1px 0;
+
+    &:hover {
+        filter: brightness(86%);
+    }
+
+    &:is(input).outlined:focus {
+        outline: 1px solid #565656;
+        outline-offset: -13px;
+    }
+    
 }
 
 .container {
