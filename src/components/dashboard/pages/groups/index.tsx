@@ -86,7 +86,7 @@ const Pagination = (props: {data: FetchGroups}) => {
                 )}
                 {Array(data.totalPages).fill(0).map(
                 (_, i) => (
-                    <div><a href={`/dashboard/groups/${i + 1}`} className={`btn ${active(i+1) && 'active'}`}>{i + 1}</a></div>
+                    <div key={i}><a href={`/dashboard/groups/${i + 1}`} className={`btn ${active(i+1) && 'active'}`}>{i + 1}</a></div>
                 ))}
                 {data.hasNextPage && (
                     <a href={`/dashboard/groups/${params?.page ? parseInt(params.page) + 1 : 1}`} className="btn"><MdKeyboardArrowRight size={18} /></a>
