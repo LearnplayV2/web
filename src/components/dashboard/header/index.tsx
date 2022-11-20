@@ -15,9 +15,11 @@ import { Search } from "./search";
 import { NotificationsList } from "./notifications";
 import { setModal } from "../../../store/alert";
 import { StudyGroupsModal } from "./modal/studyGroupsModal";
+import { INotification } from "../../../store/notifications";
 
 const Header = () => {
     const {dropdowns} = useSelector(state => state) as RootState;
+    const {notifications} = useSelector((state: RootState) => state.notifications) as INotification;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
@@ -73,7 +75,16 @@ const Header = () => {
                     </Dropdown>
                 </div>
                 <div className="item">
-                    <Dropdown title={<RiNotification3Fill />} id="notifications" isActive={Find.dropdownIsActive('notifications')}>
+                    <Dropdown 
+                    title={
+                        <div css={Styles.notification}>
+                            <RiNotification3Fill />
+                            <div className={`badge ${(notifications.length == 0) && 'void'}`}>
+                                {notifications.length}
+                            </div>
+                        </div>
+                    } 
+                    id="notifications" isActive={Find.dropdownIsActive('notifications')}>
                         <ul css={basicDropDownList}>
                             <NotificationsList />
                         </ul>
@@ -137,5 +148,29 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
     );
 }
 
+class Styles {
+    static notification = css`
+        position: relative;
+    
+        .badge {
+            font-size: 12px;
+            position: absolute;
+            top: -9px;
+            right: -5px;
+            font-weight: bold;
+            padding: 5px;
+            clip-path: circle();
+            color: transparent;
+            background-color: transparent;
+            transition: all .3s ease;
+            user-select: none;
+            
+            &:not(.void) {
+                background: #b92c2c;
+                color: #fff;
+            }
+        }
+    `;
+}
 
 export {Header};

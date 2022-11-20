@@ -9,6 +9,10 @@ interface SendNotification {
 
 class Notifications {
 
+    static recover(callback: any) {
+        return WebSocket.on('getNotification', callback);
+    }
+    
     static makeAllRead(data : {uuid: string}) {
         WebSocket.emit('makeAllNotificationsRead', data);
     }

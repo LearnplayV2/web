@@ -8,6 +8,10 @@ class WebSocket {
         socket.emit(event, data);
     }
 
+    static on(key: string, callback: any) {
+        return socket.on(key, callback);
+    }
+
     static addNewUser(email: string) {
         socket.emit('newUser', email);
     }

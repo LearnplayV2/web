@@ -54,7 +54,7 @@ const ListGroups = (props : {data: FetchGroups}) => {
 
     return(
         <> 
-            <p style={{marginTop: '1rem'}}>Listando {data.groups.length} grupos públicos nessa página:</p>
+            <p style={{marginTop: '1rem'}}>Atualmente há {data.totalItems} grupos públicos que você pode ingressar.</p>
 
             <div style={{marginTop: '4rem'}}>
                 {data.groups.map(
@@ -77,8 +77,6 @@ const Pagination = (props: {data: FetchGroups}) => {
 
     const active = (page: any) => params.page == page;
 
-    console.log(data)
-    
     return(
         <div css={Styles.pagination()}>
             <div>
