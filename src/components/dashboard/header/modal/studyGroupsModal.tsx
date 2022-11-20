@@ -1,15 +1,15 @@
 import { css } from "@emotion/react";
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Groups, GroupVisibility } from "../../../../service/groups";
+import { Groups, GroupVisibility, ICreateGroup } from "../../../../service/groups";
 import { closeModal, setModal } from "../../../../store/alert";
 
 interface IStudyGroupsModalProps {
-    error?: string;
+    errMsg?: string;
 }
 
 const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
-    const {error: errorMsg} = props;
+    const {errMsg: errorMsg} = props;
     const dispatch = useDispatch();
 
     const [groupTitle, setGroupTitle] = useState<string>('');
@@ -23,11 +23,16 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
 
         static async createGroup() {
             try {
-                await Groups.add({title: groupTitle, description: groupDescription, visibility: groupVisibility});
+                const data : ICreateGroup = {
+                    title: groupTitle.trim(),
+                    description: groupDescription.trim(),
+                    visibility: groupVisibility
+                }
+                await Groups.add(data);
                 dispatch(closeModal());
             } catch(err : any) {
                 const errMessage = err?.response?.data?.response?.message ?? 'Ocorreu um erro inesperado, tente novamente';
-                dispatch(setModal({element: <StudyGroupsModal error={errMessage} />, fx: false, width: '40%'}));
+                dispatch(setModal({element: <StudyGroupsModal errMsg={errMessage} />, fx: false, width: '40%'}));
             }
         }
     }
@@ -57,6 +62,7 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
                         </select>
                         <button type="submit" onClick={Handle.createGroup} style={{marginLeft: '1rem'}} className="text-white danger">Adicionar grupo</button>
                     </div>
+                    
                 </div>
             </form>
         </>

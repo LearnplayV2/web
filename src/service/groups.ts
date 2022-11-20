@@ -7,7 +7,16 @@ export interface FetchGroups {
     totalPages: number;
     hasNextPage: boolean;
     totalItems: number;
-    groups: any[]
+    groups: Group[];
+}
+
+interface Group {
+    uuid: string;
+    title: string;
+    description?: string;
+    visibility: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ICreateGroup {
@@ -23,33 +32,27 @@ export class GroupVisibility {
 
 class Groups {
     static path = (page: string) => '/group/'.concat(page);
-
+    
     static fetch(page?: string) {
-        return useQuery({
-            queryKey: ['groups'],
-            queryFn: async () => {
-                const {data} = await service.get(
-                    this.path('page/' + (page ?? '1')),
-                    {
-                        headers: {
-                            Authorization: 'Bearer '.concat(Session.token())
-                        }
-                    }
-                );
-
-                return data as FetchGroups;
+        return service.get(
+            this.path('page/' + (page ?? '1')),
+            {
+                headers: {
+                    Authorization: 'Bearer '.concat(Session.token())
+                }
             }
-        });
-    }    
-
-    static add(props: ICreateGroup) {
-        return service.post(this.path('new'), props, {
-            headers: {
-                Authorization: 'Bearer '.concat(Session.token())
-            }
-        });
+            );
+            
+        }    
+        
+        static add(props: ICreateGroup) {
+            return service.post(this.path('new'), props, {
+                headers: {
+                    Authorization: 'Bearer '.concat(Session.token())
+                }
+            });
+        }
+        
     }
-
-}
-
-export {Groups};
+    
+    export {Groups};
