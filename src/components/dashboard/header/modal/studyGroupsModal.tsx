@@ -51,7 +51,7 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
                     </div>
 
                     <div>
-                        <select id="visibility">
+                        <select id="visibility" onChange={e => setGroupVisibility(e.target.value)}>
                             <option value={GroupVisibility.public}>Público</option>
                             <option value={GroupVisibility.private}>Privado</option>
                         </select>
