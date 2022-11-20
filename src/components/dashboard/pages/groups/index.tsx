@@ -35,7 +35,21 @@ const ListGroups = (props : {data: FetchGroups}) => {
 
     return(
         <> 
-            to do
+            <h1>Grupos de estudo</h1>
+            <span>Atualmente há {data.groups.length} grupos públicos que você pode ingressar:</span>
+            <br />
+
+            <div style={{marginTop: '4rem'}}>
+                {data.groups.map(
+                (group, index) => (
+                    <div key={index}>
+                        <h2>{group.title}</h2>
+                        <p>{group.description}</p>
+                    </div>
+                ))}
+
+                to do pagination
+            </div>
         </>
     );
 }

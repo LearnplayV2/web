@@ -59,9 +59,8 @@ button {
     }
 
     &.danger {
-        background: #E53E3E;
+        background: #a02e2e;
     }
-
    
 }
 
@@ -80,6 +79,10 @@ input, textarea, select {
     &:is(input).outlined:focus {
         outline: 1px solid #565656;
         outline-offset: -13px;
+    }
+
+    &:is(select) {
+        cursor: pointer;
     }
     
 }

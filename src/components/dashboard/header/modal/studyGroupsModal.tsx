@@ -1,12 +1,34 @@
 import { css } from "@emotion/react";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Groups, GroupVisibility } from "../../../../service/groups";
+import { closeModal, setModal } from "../../../../store/alert";
 
-const StudyGroupsModal = () => {
+interface IStudyGroupsModalProps {
+    error?: string;
+}
+
+const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
+    const {error: errorMsg} = props;
+    const dispatch = useDispatch();
+
+    const [groupTitle, setGroupTitle] = useState<string>('');
+    const [groupDescription, setGroupDescription] = useState<string>('');
+    const [groupVisibility, setGroupVisibility] = useState<GroupVisibility>(GroupVisibility.public);
 
     class Handle {
-        static submit(e: FormEvent) {
+        static async submit(e: FormEvent) {
             e.preventDefault();
-            
+        }
+
+        static async createGroup() {
+            try {
+                await Groups.add({title: groupTitle, description: groupDescription, visibility: groupVisibility});
+                dispatch(closeModal());
+            } catch(err : any) {
+                const errMessage = err?.response?.data?.response?.message ?? 'Ocorreu um erro inesperado, tente novamente';
+                dispatch(setModal({element: <StudyGroupsModal error={errMessage} />, fx: false, width: '40%'}));
+            }
         }
     }
 
@@ -14,17 +36,28 @@ const StudyGroupsModal = () => {
         <>
             <h2>Criar grupo de estudos</h2>
             <br />
+            
             <form onSubmit={Handle.submit}>
-                <input className="outlined" css={Styles.input()} type="text" placeholder="Nome do grupo" autoFocus/>
-                <textarea className="outlined" css={Styles.input()} style={{resize: 'none'}} placeholder="Descrição do grupo"></textarea>
-                <div style={{float: 'right'}}>
-                    <select id="visibility">
-                        <option value="">Público</option>
-                        <option value="">Privado</option>
-                    </select>
-                    <button style={{marginLeft: '1rem'}} className="text-white danger">Adicionar grupo</button>
+                <input onChange={e => setGroupTitle(e.target.value)} className="outlined" css={Styles.input()} type="text" placeholder="Título do grupo" autoFocus/>
+                <textarea onChange={e => setGroupDescription(e.target.value)} className="outlined" css={Styles.input()} style={{resize: 'none'}} placeholder="Descrição do grupo"></textarea>
+                
+                <div style={{display: 'flex'}}>
+                    <div style={{flexGrow: '1'}}>
+                        {errorMsg && (
+                            <p style={{fontWeight: 'bold'}}>
+                                {errorMsg}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <select id="visibility">
+                            <option value={GroupVisibility.public}>Público</option>
+                            <option value={GroupVisibility.private}>Privado</option>
+                        </select>
+                        <button type="submit" onClick={Handle.createGroup} style={{marginLeft: '1rem'}} className="text-white danger">Adicionar grupo</button>
+                    </div>
                 </div>
-                <div style={{clear: 'both'}}></div>
             </form>
         </>
     );

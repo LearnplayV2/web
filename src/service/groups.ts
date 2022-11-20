@@ -10,19 +10,29 @@ export interface FetchGroups {
     groups: any[]
 }
 
+export interface ICreateGroup {
+    title: string;
+    description: string;
+    visibility: GroupVisibility;
+}
+
+export class GroupVisibility {
+    static private = 'PRIVATE';
+    static public = 'PUBLIC';
+}
+
 class Groups {
-    static path = (page: string) => '/group/page/'.concat(page);
+    static path = (page: string) => '/group/'.concat(page);
 
     static fetch(page?: string) {
-        const token = Session.token();
         return useQuery({
             queryKey: ['groups'],
             queryFn: async () => {
                 const {data} = await service.get(
-                    this.path(page ?? '1'),
+                    this.path('page/' + (page ?? '1')),
                     {
                         headers: {
-                            Authorization: 'Bearer '.concat(token)
+                            Authorization: 'Bearer '.concat(Session.token())
                         }
                     }
                 );
@@ -31,6 +41,14 @@ class Groups {
             }
         });
     }    
+
+    static add(props: ICreateGroup) {
+        return service.post(this.path('new'), props, {
+            headers: {
+                Authorization: 'Bearer '.concat(Session.token())
+            }
+        });
+    }
 
 }
 
