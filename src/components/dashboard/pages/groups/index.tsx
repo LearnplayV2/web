@@ -5,6 +5,7 @@ import { FetchGroups, Groups } from "../../../../service/groups";
 import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
 import {MdKeyboardArrowRight, MdKeyboardArrowLeft} from 'react-icons/md';
+import { isEmpty } from "../../../../utils/isEmpty";
 
 function useGroups(page?: string) {
     return useQuery({
@@ -60,7 +61,7 @@ const ListGroups = (props : {data: FetchGroups}) => {
                 (group, index) => (
                     <div key={index}>
                         <h2>{group.title}</h2>
-                        <p>{(group?.description && group?.description.length) == 0 && ('Sem descrição')}</p>
+                        <p>{(!isEmpty(group?.description)) ? group.description : ('Sem descrição')}</p>
                     </div>
                 ))}
 
