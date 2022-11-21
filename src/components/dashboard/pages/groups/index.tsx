@@ -74,10 +74,7 @@ const ListGroups = (props : {data: FetchGroups}) => {
 const Pagination = (props: {data: FetchGroups}) => {
     const { data } = props; 
     const params = useParams();
-
     const active = (page: any) => params.page == page;
-
-    console.log(data)
 
     class Handle {
         static page(i: any) {
@@ -105,7 +102,7 @@ const Pagination = (props: {data: FetchGroups}) => {
     return(
         <div css={Styles.pagination()}>
             <div>
-                {(typeof params.page != 'undefined' || params.page && parseInt(params.page) > 1) && (
+                {(typeof params.page != 'undefined' && parseInt(params.page) > 1) && (
                     <a href={`/dashboard/groups/${Handle.previous()}`} className="btn"><MdKeyboardArrowLeft size={18} /></a>
                 )}
                 {Array(data.totalPages).fill(0).map(
