@@ -77,18 +77,43 @@ const Pagination = (props: {data: FetchGroups}) => {
 
     const active = (page: any) => params.page == page;
 
+    console.log(data)
+
+    class Handle {
+        static page(i: any) {
+            i = parseInt(i);
+            return (i+1) == 0 ? i+2 : i + 1;
+        }
+
+        static previous() {
+            if(typeof params.page != 'undefined') {
+                const page = parseInt(params.page);
+                return page == 1 ? 1 : page - 1;
+            }
+            return 1;
+        }
+
+        static next() {
+            if(data.hasNextPage && typeof params.page != 'undefined') {
+                const page = parseInt(params.page);
+                return page + 1;
+            }
+            return 2;
+        }
+    }
+
     return(
         <div css={Styles.pagination()}>
             <div>
-                {(params?.page == undefined || parseInt(params.page) > 1) && (
-                    <a href={`/dashboard/groups/${params?.page ? parseInt(params.page) - 1 : 1}`} className="btn"><MdKeyboardArrowLeft size={18} /></a>
+                {(typeof params.page != 'undefined' || params.page && parseInt(params.page) > 1) && (
+                    <a href={`/dashboard/groups/${Handle.previous()}`} className="btn"><MdKeyboardArrowLeft size={18} /></a>
                 )}
                 {Array(data.totalPages).fill(0).map(
                 (_, i) => (
-                    <div key={i}><a href={`/dashboard/groups/${i + 1}`} className={`btn ${active(i+1) && 'active'}`}>{i + 1}</a></div>
+                    <div key={i}><a href={`/dashboard/groups/${Handle.page(i)}`} className={`btn ${active(Handle.page(i)) && 'active'}`}>{i + 1}</a></div>
                 ))}
-                {data.hasNextPage && (
-                    <a href={`/dashboard/groups/${params?.page ? parseInt(params.page) + 1 : 1}`} className="btn"><MdKeyboardArrowRight size={18} /></a>
+                {(data.hasNextPage) && (
+                    <a href={`/dashboard/groups/${Handle.next()}`} className="btn"><MdKeyboardArrowRight size={18} /></a>
                 )}
             </div>
         </div>
@@ -97,7 +122,7 @@ const Pagination = (props: {data: FetchGroups}) => {
 
 class Styles {
     static pagination = () => css`
-        margin-top: 2rem;
+        margin: 2rem 0;
 
         div {
             display: flex;
@@ -106,9 +131,9 @@ class Styles {
         .btn {
             padding: 0 0.5rem;
             padding: 0.5rem 1rem;
-            background: #aa00ff;
+            background: #393b4c;
             color: #fff;
-            box-shadow: 0px 0px 5px #4e4e4e;
+            box-shadow: 0px 0px 5px #121212;
             filter: brightness(90%);
             
             &:hover {
