@@ -23,7 +23,7 @@ const Group = connect(mapStateToProps)((props: IGroup) => {
 	
 	useEffect(() => {
 		if (status == FetchStatus.INITIAL) {
-			Data.loadGroups(params.page);
+			Data.loadGroups({page: params.page});
 		}
 
 		return () => {

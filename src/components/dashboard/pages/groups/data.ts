@@ -2,8 +2,13 @@ import { Groups } from "@/service/groups";
 import store from "@/store/storeConfig";
 import groups from "./store";
 
+interface FetchProps {
+    page?: string;
+}
+
 class Data {
-  static async loadGroups(page?: string) {
+  static async loadGroups(props: FetchProps) {
+    const {page} = props;
     const {dispatch} = store;
     dispatch(groups.actions.setGroups({ isLoading: true }));
     try {
