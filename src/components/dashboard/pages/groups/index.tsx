@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FetchGroups, Groups } from "@service/groups";
 import { Faded } from "@components/ui/animated";
 import { Dashboard } from "@components/dashboard/page";
@@ -18,14 +18,8 @@ interface IGroup extends React.PropsWithChildren, IGroupsState {
 }
 
 const Group = connect(mapStateToProps)((props: IGroup) => {
-	const { status, dispatch, data } = props;
-	const params = useParams<{ page: string }>(); 
-	
-	useEffect(() => {
-		if (status == FetchStatus.INITIAL) {
-			Data.loadGroups({page: params.page});
-		}
 
+	useEffect(() => {
 		return () => {
 			Data.resetGroups();
 		}
@@ -83,10 +77,15 @@ const ListGroups = () => {
 };
 
 const Pagination = () => {
-	const { data } = useSelector((state: RootState) => state.groups);
+	const { data, status } = useSelector((state: RootState) => state.groups);
 	const params = useParams();
+	const navigate = useNavigate();
 	const active = (page: any) => params.page == page;
 
+	useEffect(() => {
+		Data.loadGroups({page: params.page});
+	}, [params]);
+	
 	class Handle {
 		static page(i: any) {
 			i = parseInt(i);
@@ -114,26 +113,26 @@ const Pagination = () => {
 		<div css={Styles.pagination()}>
 			<div>
 				{typeof params.page != "undefined" && parseInt(params.page) > 1 && (
-					<a href={`/dashboard/groups/${Handle.previous()}`} className="btn">
+					<div onClick={() => navigate(`/dashboard/groups/${Handle.previous()}`)} className="btn">
 						<MdKeyboardArrowLeft size={18} />
-					</a>
+					</div>
 				)}
 				{Array(data?.totalPages)
 					.fill(0)
 					.map((_, i) => (
 						<div key={i}>
-							<a
-								href={`/dashboard/groups/${Handle.page(i)}`}
+							<div
+								onClick={() => navigate(`/dashboard/groups/${Handle.page(i)}`)}
 								className={`btn ${active(Handle.page(i)) && "active"}`}
 							>
 								{i + 1}
-							</a>
+							</div>
 						</div>
 					))}
 				{data?.hasNextPage && (
-					<a href={`/dashboard/groups/${Handle.next()}`} className="btn">
+					<div onClick={() => navigate(`/dashboard/groups/${Handle.next()}`)} className="btn">
 						<MdKeyboardArrowRight size={18} />
-					</a>
+					</div>
 				)}
 			</div>
 		</div>
@@ -150,6 +149,8 @@ class Styles {
 
 		.btn {
 			padding: 0 0.5rem;
+			cursor: pointer;
+			user-select: none;
 			padding: 0.5rem 1rem;
 			background: #393b4c;
 			color: #fff;
