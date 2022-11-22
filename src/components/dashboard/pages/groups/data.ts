@@ -2,27 +2,39 @@ import { Groups } from "@/service/groups";
 import store from "@/store/storeConfig";
 import groups from "./store";
 
-interface FetchProps {
+export interface GroupParams {
     page?: string;
 }
 
+export interface GroupQuery {
+  title?: string;
+}
+
 class Data {
-  static async loadGroups(props: FetchProps) {
-    const {page} = props;
+  static async get(params: GroupParams) {
+    const {page} = params;
     const {dispatch} = store;
-    dispatch(groups.actions.setGroups({ isLoading: true }));
+    const {query} = store.getState().groups;
+
+    dispatch(groups.actions.setGroups({ isLoading: true, query }));
+
+    console.log('query', store.getState().groups)
+    
     try {
-      const response = await Groups.fetch(page);
+
+      const response = await Groups.fetch(page, query);
       dispatch(groups.actions.setGroups({ data: response.data }));
     } catch (err) {
+
       console.log("err", err);
       dispatch(groups.actions.setGroups({ error: true }));
     }
+
   }
 
   static resetGroups() {
     const {dispatch} = store;
-    dispatch(groups.actions.setGroups({ data: undefined }));
+    dispatch(groups.actions.reset());
   }
 }
 

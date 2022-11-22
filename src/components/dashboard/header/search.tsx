@@ -1,19 +1,23 @@
-import { FetchGroups } from "@/service/groups";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { search } from "./styles.css";
+import GroupData from '@components/dashboard/pages/groups/data';
+import { useDispatch } from "react-redux";
+import groups from "../pages/groups/store";
 
 const Search = () => {
     const location = useLocation();
     const pathname = location.pathname.replace('/', '').split('/');
     const [searchValue, setSearchValue] = useState<string>('');
+    const dispatch = useDispatch();
 
     class Handle {
         static search(e: React.KeyboardEvent) {
             if(e.key == 'Enter') {
                 if(Handle.isPage('groups')) {
+                    dispatch(groups.actions.setQuery({title: (e.target as HTMLInputElement).value}));
+                    GroupData.get({});
                 }
-                console.log('to do search');
             }
         }
         
@@ -30,7 +34,7 @@ const Search = () => {
 
         static selection(e: React.MouseEvent) {
             (e.target as HTMLInputElement).select();
-        }
+        } 
     };
 
     if( !Handle.isPage('groups') && 

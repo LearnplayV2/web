@@ -1,3 +1,4 @@
+import { GroupQuery } from "@/components/dashboard/pages/groups/data";
 import { useQuery } from "@tanstack/react-query";
 import { service } from ".";
 import { Session } from "../authentication";
@@ -33,10 +34,11 @@ export class GroupVisibility {
 class Groups {
     static path = (page: string) => '/group/'.concat(page);
     
-    static fetch(page?: string) {
+    static fetch(page?: string, query: GroupQuery | null = null) {
         return service.get(
             this.path('page/' + (page ?? '1')),
             {
+                params: query,
                 headers: {
                     Authorization: 'Bearer '.concat(Session.token())
                 }

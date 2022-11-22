@@ -9,8 +9,7 @@ import { Dispatch, useEffect } from "react";
 import { IGroupsState } from "./store";
 import { connect, useSelector } from "react-redux";
 import { RootState } from "@store/storeConfig";
-import groups from "./store";
-import { FetchComponent, FetchStatus } from "@components/ui/fetchComponent";
+import { FetchComponent } from "@components/ui/fetchComponent";
 import Data from "./data";
 
 interface IGroup extends React.PropsWithChildren, IGroupsState {
@@ -18,6 +17,7 @@ interface IGroup extends React.PropsWithChildren, IGroupsState {
 }
 
 const Group = connect(mapStateToProps)((props: IGroup) => {
+	const {status} = props;
 
 	useEffect(() => {
 		return () => {
@@ -83,7 +83,7 @@ const Pagination = () => {
 	const active = (page: any) => params.page == page;
 
 	useEffect(() => {
-		Data.loadGroups({page: params.page});
+		Data.get({page: params.page});
 	}, [params]);
 	
 	class Handle {
