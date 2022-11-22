@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import { Session } from "./authentication";
-import { All } from "./pages/all";
+import { All } from "@/pages/all";
 import {DashboardPage}  from "./components/dashboard/pages";
 import { Group } from "./components/dashboard/pages/groups";
 import { ProfilePage } from "./components/dashboard/pages/profile";

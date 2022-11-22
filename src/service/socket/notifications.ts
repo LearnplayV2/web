@@ -12,6 +12,10 @@ class Notifications {
     static recover(callback: any) {
         return WebSocket.on('getNotification', callback);
     }
+
+    static broadcast(callback: any) {
+        return WebSocket.on('broadcast', callback);
+    }
     
     static makeAllRead(data : {uuid: string}) {
         WebSocket.emit('makeAllNotificationsRead', data);

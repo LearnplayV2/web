@@ -1,3 +1,4 @@
+import groups, { IGroupsState } from "@components/dashboard/pages/groups/store";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import alert, { AlertState } from "./alert";
 import dropdowns, { DropdownState } from './dropdown';
@@ -11,6 +12,7 @@ export interface RootState {
     leftMenu: LeftMenuState;
     profilePicture: ProfilePictureState;
     notifications: INotification;
+    groups: IGroupsState;
 }
 
 const reducers = combineReducers({
@@ -19,6 +21,7 @@ const reducers = combineReducers({
     leftMenu,
     profilePicture,
     notifications,
+    groups: groups.reducer,
 });
 
 const store = configureStore({

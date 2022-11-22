@@ -14,6 +14,9 @@ const NotificationsList = () => {
         NotificationSocket.recover((data: INotificationDetails[]) => {
             dispatch(notificationActions.set(data));
         });
+        NotificationSocket.broadcast((data: any) => {
+            console.log('broadcast', data);
+        });
     }, []);
     
     useEffect(() => {

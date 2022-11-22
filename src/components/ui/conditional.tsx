@@ -1,13 +1,19 @@
 interface Props extends React.PropsWithChildren {
     condition: boolean;
+    elseIf?: React.ReactNode;
 }
 
 const Case = (props: Props) => {
-    const { condition, children } = props;
-    
-    if(condition) return <>{children}</>;
+    const { condition, children, elseIf: elseChildren } = props;
 
-    return <></>;
+    return (
+        <>
+            {condition 
+                ? typeof elseChildren != 'undefined' ? <>{elseChildren}</> : <>{children}</> 
+                : null
+            }
+        </>
+    );
 }
 
 export { Case };

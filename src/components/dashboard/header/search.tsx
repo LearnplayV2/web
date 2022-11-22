@@ -1,14 +1,22 @@
+import { FetchGroups } from "@/service/groups";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { search } from "./styles.css";
 
 const Search = () => {
-
     const location = useLocation();
     const pathname = location.pathname.replace('/', '').split('/');
     const [searchValue, setSearchValue] = useState<string>('');
-    
+
     class Handle {
+        static search(e: React.KeyboardEvent) {
+            if(e.key == 'Enter') {
+                if(Handle.isPage('groups')) {
+                }
+                console.log('to do search');
+            }
+        }
+        
         static isPage(pageName: string) {
             return pathname.some(name => name == pageName);
         }
@@ -33,7 +41,7 @@ const Search = () => {
 
     return(
         <div css={search}>
-            <input onClick={Handle.selection} value={searchValue} onChange={e => setSearchValue(e.target.value)} type="text" placeholder={Handle.placeholder()} />
+            <input onKeyUp={Handle.search} onClick={Handle.selection} value={searchValue} onChange={e => setSearchValue(e.target.value)} type="text" placeholder={Handle.placeholder()} />
         </div>
     );
 }
