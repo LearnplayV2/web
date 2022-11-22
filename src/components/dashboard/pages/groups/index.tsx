@@ -11,6 +11,7 @@ import { connect, useSelector } from "react-redux";
 import { RootState } from "@store/storeConfig";
 import groups from "./store";
 import { FetchComponent, FetchStatus } from "@components/ui/fetchComponent";
+import Data from "./data";
 
 interface IGroup extends React.PropsWithChildren, IGroupsState {
 	dispatch: Dispatch<any>;
@@ -22,30 +23,13 @@ const Group = connect(mapStateToProps)((props: IGroup) => {
 	
 	useEffect(() => {
 		if (status == FetchStatus.INITIAL) {
-			Handle.loadGroups(params.page);
+			Data.loadGroups(params.page);
 		}
 
 		return () => {
-			Handle.resetGroups();
+			Data.resetGroups();
 		}
 	}, []);
-
-	class Handle {
-		static async loadGroups(page?: string) {
-			dispatch(groups.actions.setGroups({ isLoading: true }));
-			try {
-				const response = await Groups.fetch(page);
-				dispatch(groups.actions.setGroups({ data: response.data }));
-			} catch (err) {
-				console.log("err", err);
-				dispatch(groups.actions.setGroups({ error: true }));
-			}
-		}
-
-		static resetGroups() {
-			dispatch(groups.actions.setGroups({ data: undefined }));
-		}
-	}
 
 	return (
 		<>
