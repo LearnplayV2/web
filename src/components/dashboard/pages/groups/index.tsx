@@ -25,6 +25,8 @@ const Group = connect(mapStateToProps)((props: IGroup) => {
 		}
 	}, []);
 
+	console.log('status', status)
+	
 	return (
 		<>
 			<Dashboard hasLeftMenu={true}>

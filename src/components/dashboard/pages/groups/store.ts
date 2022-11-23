@@ -33,10 +33,8 @@ const groups = createSlice({
             }
             if(action.payload.data) {
                 state.data = action.payload.data;
-                state.status = action.payload.isLoading ? FetchStatus.LOADING : action.payload.error ? FetchStatus.ERROR : FetchStatus.SUCCESS;
-            } else {
-                state.status = FetchStatus.INITIAL;
             }
+            state.status = action.payload.isLoading ? FetchStatus.LOADING : action.payload.error ? FetchStatus.ERROR : FetchStatus.SUCCESS;
         },
         setQuery(state, action: PayloadAction<GroupQuery>) {
             state.query = {...state.query, ...action.payload};
