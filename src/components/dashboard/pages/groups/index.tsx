@@ -9,7 +9,7 @@ import { Dispatch, useEffect } from "react";
 import { IGroupsState } from "./store";
 import { connect, useSelector } from "react-redux";
 import { RootState } from "@store/storeConfig";
-import { FetchComponent } from "@components/ui/fetchComponent";
+import { FetchComponent, FetchStatus } from "@components/ui/fetchComponent";
 import Data from "./data";
 
 interface IGroup extends React.PropsWithChildren, IGroupsState {
@@ -111,30 +111,32 @@ const Pagination = () => {
 
 	return (
 		<div css={Styles.pagination()}>
-			<div>
-				{typeof params.page != "undefined" && parseInt(params.page) > 1 && (
-					<div onClick={() => navigate(`/dashboard/groups/${Handle.previous()}`)} className="btn">
-						<MdKeyboardArrowLeft size={18} />
-					</div>
-				)}
-				{Array(data?.totalPages)
-					.fill(0)
-					.map((_, i) => (
-						<div key={i}>
-							<div
-								onClick={() => navigate(`/dashboard/groups/${Handle.page(i)}`)}
-								className={`btn ${active(Handle.page(i)) && "active"}`}
-							>
-								{i + 1}
-							</div>
+			{status == FetchStatus.SUCCESS && (
+				<div>
+					{typeof params.page != "undefined" && parseInt(params.page) > 1 && (
+						<div onClick={() => navigate(`/dashboard/groups/${Handle.previous()}`)} className="btn">
+							<MdKeyboardArrowLeft size={18} />
 						</div>
-					))}
-				{data?.hasNextPage && (
-					<div onClick={() => navigate(`/dashboard/groups/${Handle.next()}`)} className="btn">
-						<MdKeyboardArrowRight size={18} />
-					</div>
-				)}
-			</div>
+					)}
+					{Array(data?.totalPages)
+						.fill(0)
+						.map((_, i) => (
+							<div key={i}>
+								<div
+									onClick={() => navigate(`/dashboard/groups/${Handle.page(i)}`)}
+									className={`btn ${active(Handle.page(i)) && "active"}`}
+								>
+									{i + 1}
+								</div>
+							</div>
+						))}
+					{data?.hasNextPage && (
+						<div onClick={() => navigate(`/dashboard/groups/${Handle.next()}`)} className="btn">
+							<MdKeyboardArrowRight size={18} />
+						</div>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };
