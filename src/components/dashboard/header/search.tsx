@@ -4,19 +4,20 @@ import { search } from "./styles.css";
 import GroupData from '@components/dashboard/pages/groups/data';
 import { useDispatch } from "react-redux";
 import groups from "../pages/groups/store";
+import store from "@/store/storeConfig";
 
 const Search = () => {
     const location = useLocation();
     const pathname = location.pathname.replace('/', '').split('/');
     const [searchValue, setSearchValue] = useState<string>('');
-    const dispatch = useDispatch();
+    const {dispatch} = store;
 
     class Handle {
         static search(e: React.KeyboardEvent) {
             if(e.key == 'Enter') {
                 if(Handle.isPage('groups')) {
                     dispatch(groups.actions.setQuery({title: (e.target as HTMLInputElement).value}));
-                    GroupData.get({});
+                    dispatch(GroupData.get({}));
                 }
             }
         }

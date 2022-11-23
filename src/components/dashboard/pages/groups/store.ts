@@ -28,13 +28,14 @@ const groups = createSlice({
     initialState,
     reducers: {
         setGroups(state, action: PayloadAction<IGroupPayloadAction>) {
-            if(typeof action.payload.query != 'undefined') {
-                state.query = action.payload?.query;
-            }
+            if(typeof action.payload.query != 'undefined') state.query = action.payload?.query;
             if(action.payload.data) {
                 state.data = action.payload.data;
-            }
-            state.status = action.payload.isLoading ? FetchStatus.LOADING : action.payload.error ? FetchStatus.ERROR : FetchStatus.SUCCESS;
+                state.status = FetchStatus.SUCCESS;
+            } 
+        },
+        setStatus(state, action: PayloadAction<FetchStatus>) {
+            state.status = action.payload;
         },
         setQuery(state, action: PayloadAction<GroupQuery>) {
             state.query = {...state.query, ...action.payload};

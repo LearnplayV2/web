@@ -1,5 +1,6 @@
 import groups, { IGroupsState } from "@components/dashboard/pages/groups/store";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
 import alert, { AlertState } from "./alert";
 import dropdowns, { DropdownState } from './dropdown';
 import leftMenu, { LeftMenuState } from "./leftMenu";
@@ -25,7 +26,8 @@ const reducers = combineReducers({
 });
 
 const store = configureStore({
-    reducer: reducers
+    reducer: reducers,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
 });
 
 export default store;

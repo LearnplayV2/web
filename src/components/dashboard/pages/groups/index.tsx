@@ -7,8 +7,8 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { isEmpty } from "@utils/isEmpty";
 import { Dispatch, useEffect } from "react";
 import { IGroupsState } from "./store";
-import { connect, useSelector } from "react-redux";
-import { RootState } from "@store/storeConfig";
+import { connect, useDispatch, useSelector } from "react-redux";
+import store, { RootState } from "@store/storeConfig";
 import { FetchComponent, FetchStatus } from "@components/ui/fetchComponent";
 import Data from "./data";
 
@@ -24,8 +24,6 @@ const Group = connect(mapStateToProps)((props: IGroup) => {
 			Data.resetGroups();
 		}
 	}, []);
-
-	console.log('status', status)
 	
 	return (
 		<>
@@ -80,12 +78,13 @@ const ListGroups = () => {
 
 const Pagination = () => {
 	const { data, status } = useSelector((state: RootState) => state.groups);
+	const {dispatch} = store;
 	const params = useParams();
 	const navigate = useNavigate();
 	const active = (page: any) => params.page == page;
 
 	useEffect(() => {
-		Data.get({page: params.page});
+		dispatch(Data.get({page: params.page}));
 	}, [params]);
 	
 	class Handle {

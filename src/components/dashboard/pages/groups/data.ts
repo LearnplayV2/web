@@ -1,5 +1,7 @@
-import { Groups } from "@/service/groups";
+import { FetchGroups, Groups } from "@/service/groups";
 import store from "@/store/storeConfig";
+import { Dispatch } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import groups from "./store";
 
 export interface GroupParams {
@@ -11,24 +13,31 @@ export interface GroupQuery {
 }
 
 class Data {
-  static async get(params: GroupParams) {
-    const {page} = params;
-    const {dispatch} = store;
-    const {query} = store.getState().groups;
-
-    dispatch(groups.actions.setGroups({ isLoading: true, query }));
-
-    console.log('query', store.getState().groups)
+  static get(params: GroupParams) {
+    return async (dispatch : Dispatch) => {
+      const {page} = params;
+      const {query} = store.getState().groups;
+      
+      function onSuccess(data: FetchGroups) {
+        dispatch(groups.actions.setGroups({ data }));
+      }
+      
+      function onError() {
+        dispatch(groups.actions.setStatus({ error: true }));
+      }
+     
+      dispatch(groups.actions.setStatus({ isLoading: true }));
     
-    try {
+      try {
+        const response = await Groups.fetch(page, query);
+        return onSuccess(response.data);
+        
+      } catch (err) {
+        console.log("err", err);
+        return onError();
+      }
 
-      const response = await Groups.fetch(page, query);
-      dispatch(groups.actions.setGroups({ data: response.data }));
-    } catch (err) {
-
-      console.log("err", err);
-      dispatch(groups.actions.setGroups({ error: true }));
-    }
+    };
 
   }
 
