@@ -37,12 +37,20 @@ const Alert = (props: React.PropsWithChildren) => {
         dispatch(closeModal());
     };
 
+    const handleWidth = () : string => {
+        let innerWidth = window.innerWidth;
+        if(innerWidth < 800) {
+            return '80%';
+        }
+        return compact ? '' : width;
+    };
+
     return (
         <>
             <div className={`alert ${!isActive ? 'clickable' : 'transition'}`}>
                 <div className="transparent-child" onClick={toggleModal}></div>
                 <Case condition={isActive}>
-                    <div style={{width: compact ? '' : width}} className={`alert-body`}>
+                    <div style={{width: handleWidth()}} className={`alert-body`}>
                         <div className="close" onClick={toggleModal}>
                             <MdClose size={26} />
                         </div>

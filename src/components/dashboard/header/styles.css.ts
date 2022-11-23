@@ -110,6 +110,15 @@ const search = css `
         border: 1px solid #555;
         border-radius: 30px;
         min-width: 300px;
+        font-family: sans-serif;
+        transition: background .2s ease-in;
+        font-weight:bold;
+        font-size: 13px;
+
+        &:hover {
+            filter:none;
+            background: #343434;
+        }
     }
 
     @media screen and (max-width: 830px) {
