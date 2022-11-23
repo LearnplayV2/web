@@ -6,7 +6,10 @@ class FetchStatus {
 }
 
 interface Props extends React.PropsWithChildren {
-    status: FetchStatus;
+    status: {
+        error?: boolean;
+        isLoading?: boolean;
+    };
     onError: React.ReactNode;
     onLoading: React.ReactNode;
 }
@@ -14,12 +17,14 @@ interface Props extends React.PropsWithChildren {
 const FetchComponent = (props: Props) => {
     const { status, onError, onLoading, children } = props;
 
+    console.log('FetchComponent status:', status);
+
     return (
         <>
             {
-                status == FetchStatus.LOADING
+                status.isLoading
                 ? (<>{onLoading}</>)
-                : status == FetchStatus.ERROR 
+                : status.error
                     ? (<>{onError}</>) 
                     : (<>{children}</>)
             }
