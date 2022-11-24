@@ -14,6 +14,7 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@components': path.resolve(__dirname, './src/components'),
       '@authentication': path.resolve(__dirname, './src/authentication'),
+      '@class': path.resolve(__dirname, './src/class'),
     }
   },
   server: {

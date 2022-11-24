@@ -41,6 +41,7 @@ const basicDropDownList = css`
 const header = css`
     background: #201F24;
     box-sizing: border-box;
+    box-shadow: 1px 19px 23px #0000005e;
     position: fixed;
     width: 100%;
     top: 0;

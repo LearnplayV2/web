@@ -28,7 +28,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@components/*": ["./src/components/*"],
       "@authentication/*": ["./src/authentication/*"],
-      "@service/*": ["./src/service/*"]
+      "@service/*": ["./src/service/*"],
+      "@class/*": ["./src/class/*"],
     }
   },
   "include": ["src"],

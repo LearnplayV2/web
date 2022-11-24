@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { search } from "./styles.css";
 import GroupData from '@components/dashboard/pages/groups/data';
-import { useDispatch } from "react-redux";
 import groups from "../pages/groups/store";
 import store from "@/store/storeConfig";
 

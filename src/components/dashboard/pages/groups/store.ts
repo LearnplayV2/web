@@ -1,4 +1,4 @@
-import { FetchStatus } from "@components/ui/fetchComponent";
+import { FetchStatus } from "@class/fetchStatus";
 import { FetchGroups } from "@service/groups";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupQuery } from "./data";

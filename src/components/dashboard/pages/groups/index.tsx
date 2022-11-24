@@ -1,29 +1,30 @@
 import { css } from "@emotion/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FetchGroups, Groups } from "@service/groups";
 import { Faded } from "@components/ui/animated";
 import { Dashboard } from "@components/dashboard/page";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { isEmpty } from "@utils/isEmpty";
 import { Dispatch, useEffect } from "react";
 import { IGroupsState } from "./store";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
-import { FetchComponent, FetchStatus } from "@components/ui/fetchComponent";
+import { FetchStatus } from "@class/fetchStatus";
 import Data from "./data";
 
 interface IGroup extends React.PropsWithChildren, IGroupsState {
 	dispatch: Dispatch<any>;
 }
 
-const Group = connect(mapStateToProps)((props: IGroup) => {
-	const {status} = props;
+const Group = () => {
+	const {dispatch} = store;
+	const params = useParams();
 
 	useEffect(() => {
+		dispatch(Data.get({page: params.page}));
 		return () => {
 			Data.resetGroups();
 		}
-	}, []);
+	}, [params]);
 	
 	return (
 		<>
@@ -31,61 +32,62 @@ const Group = connect(mapStateToProps)((props: IGroup) => {
 				<Faded>
 					<div className="main-wrapper">
 						<h1>Grupos de estudo</h1>
-						<FetchComponent
-							status={status}
-							onError={<b>Ocorreu um erro inesperado, tente novamente</b>}
-							onLoading={<b>Aguarde um momento...</b>}
-						>
 							<ListGroups />
-						</FetchComponent>
 					</div>
 				</Faded>
 			</Dashboard>
 		</>
 	);
-});
+};
 
 const ListGroups = () => {
-	const { data } = useSelector((state: RootState) => state.groups);
+	const { data, status } = useSelector((state: RootState) => state.groups);
 
 	if (data?.totalItems == 0) {
 		return <h1>Nenhum grupo foi criado ainda.</h1>;
 	}
 
-	return (
-		<>
-			<p style={{ marginTop: "1rem" }}>
-				Atualmente há {data?.totalItems} grupos públicos que você pode ingressar.
-			</p>
-
-			<div style={{ marginTop: "4rem" }}>
-				{data?.groups.map((group, index) => (
-					<div key={index}>
-						<h2>{group.title}</h2>
-						<p>
-							{!isEmpty(group?.description)
-								? group.description
-								: "Sem descrição"}
-						</p>
+	switch(status) {
+		case FetchStatus.LOADING || FetchStatus.INITIAL:
+			return <h1>Carregando...</h1>;
+		case FetchStatus.ERROR:
+			return <h1>Erro ao carregar grupos.</h1>;
+		case FetchStatus.SUCCESS:
+			return (
+				<>
+					<p style={{ marginTop: "1rem" }}>
+						Atualmente há {data?.totalItems} grupos públicos que você pode ingressar.
+					</p>
+		
+					<div style={{ marginTop: "4rem" }}>
+						{data?.groups.map((group, index) => (
+							<div key={index}>
+								<h2>{group.title}</h2>
+								<p>
+									{!isEmpty(group?.description)
+										? group.description
+										: "Sem descrição"}
+								</p>
+							</div>
+						))}
+		
+						<Pagination />
 					</div>
-				))}
-
-				<Pagination />
-			</div>
-		</>
-	);
+				</>
+			);
+		default:
+			return <>Ocorreu um erro inesperado, tente novamente mais tarde.</>;
+	}
+	
 };
 
 const Pagination = () => {
 	const { data, status } = useSelector((state: RootState) => state.groups);
 	const {dispatch} = store;
-	const params = useParams();
 	const navigate = useNavigate();
 	const active = (page: any) => params.page == page;
+	const params = useParams();
 
-	useEffect(() => {
-		dispatch(Data.get({page: params.page}));
-	}, [params]);
 	
 	class Handle {
 		static page(i: any) {
