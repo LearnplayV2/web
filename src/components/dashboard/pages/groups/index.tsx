@@ -6,37 +6,29 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { isEmpty } from "@utils/isEmpty";
 import { Dispatch, useEffect } from "react";
 import { IGroupsState } from "./store";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
 import { FetchStatus } from "@class/fetchStatus";
 import Data from "./data";
 
-interface IGroup extends React.PropsWithChildren, IGroupsState {
-	dispatch: Dispatch<any>;
-}
-
 const Group = () => {
-	const {dispatch} = store;
+	const { dispatch } = store;
 	const params = useParams();
 
 	useEffect(() => {
-		dispatch(Data.get({page: params.page}));
-		return () => {
-			Data.resetGroups();
-		}
+		dispatch(Data.get({ page: params.page }));
 	}, [params]);
-	
+
 	return (
-		<>
-			<Dashboard hasLeftMenu={true}>
-				<Faded>
-					<div className="main-wrapper">
-						<h1>Grupos de estudo</h1>
-							<ListGroups />
-					</div>
-				</Faded>
-			</Dashboard>
-		</>
+		<Dashboard hasLeftMenu={true}>
+			<Faded>
+				<div className="main-wrapper">
+					<h1>Grupos de estudo</h1>
+					<br />
+					<ListGroups />
+				</div>
+			</Faded>
+		</Dashboard>
 	);
 };
 
@@ -44,22 +36,23 @@ const ListGroups = () => {
 	const { data, status } = useSelector((state: RootState) => state.groups);
 
 	if (data?.totalItems == 0) {
-		return <h1>Nenhum grupo foi criado ainda.</h1>;
+		return <h3>Nenhum grupo foi encontrado.</h3>;
 	}
 
-	switch(status) {
+	switch (status) {
 		case FetchStatus.LOADING || FetchStatus.INITIAL:
-			return <h1>Carregando...</h1>;
+			return <h3>Carregando...</h3>;
 		case FetchStatus.ERROR:
-			return <h1>Erro ao carregar grupos.</h1>;
+			return <h3>Erro ao carregar grupos.</h3>;
 		case FetchStatus.SUCCESS:
 			return (
 				<>
-					<p style={{ marginTop: "1rem" }}>
-						Atualmente há {data?.totalItems} grupos públicos que você pode ingressar.
+					<p>
+						Atualmente há {data?.totalItems} grupos públicos que você pode
+						ingressar.
 					</p>
-		
-					<div style={{ marginTop: "4rem" }}>
+
+					<div style={{ marginTop: "2rem" }}>
 						{data?.groups.map((group, index) => (
 							<div key={index}>
 								<h2>{group.title}</h2>
@@ -70,7 +63,7 @@ const ListGroups = () => {
 								</p>
 							</div>
 						))}
-		
+
 						<Pagination />
 					</div>
 				</>
@@ -78,17 +71,14 @@ const ListGroups = () => {
 		default:
 			return <>Ocorreu um erro inesperado, tente novamente mais tarde.</>;
 	}
-	
 };
 
 const Pagination = () => {
 	const { data, status } = useSelector((state: RootState) => state.groups);
-	const {dispatch} = store;
 	const navigate = useNavigate();
 	const active = (page: any) => params.page == page;
 	const params = useParams();
 
-	
 	class Handle {
 		static page(i: any) {
 			i = parseInt(i);
@@ -117,7 +107,10 @@ const Pagination = () => {
 			{status == FetchStatus.SUCCESS && (
 				<div>
 					{typeof params.page != "undefined" && parseInt(params.page) > 1 && (
-						<div onClick={() => navigate(`/dashboard/groups/${Handle.previous()}`)} className="btn">
+						<div
+							onClick={() => navigate(`/dashboard/groups/${Handle.previous()}`)}
+							className="btn"
+						>
 							<MdKeyboardArrowLeft size={18} />
 						</div>
 					)}
@@ -126,7 +119,9 @@ const Pagination = () => {
 						.map((_, i) => (
 							<div key={i}>
 								<div
-									onClick={() => navigate(`/dashboard/groups/${Handle.page(i)}`)}
+									onClick={() =>
+										navigate(`/dashboard/groups/${Handle.page(i)}`)
+									}
 									className={`btn ${active(Handle.page(i)) && "active"}`}
 								>
 									{i + 1}
@@ -134,7 +129,10 @@ const Pagination = () => {
 							</div>
 						))}
 					{data?.hasNextPage && (
-						<div onClick={() => navigate(`/dashboard/groups/${Handle.next()}`)} className="btn">
+						<div
+							onClick={() => navigate(`/dashboard/groups/${Handle.next()}`)}
+							className="btn"
+						>
 							<MdKeyboardArrowRight size={18} />
 						</div>
 					)}

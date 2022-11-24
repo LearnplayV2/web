@@ -15,20 +15,20 @@ export interface GroupQuery {
 class Data {
   static get(params: GroupParams) {
     return async (dispatch : Dispatch) => {
-      const {page} = params;
-      const {query} = store.getState().groups;
+      let query = {
+        ...params,
+        ...store.getState().groups.query
+      };
 
       dispatch(groups.actions.setStatus(FetchStatus.LOADING));
       try {
-        const response = await Groups.fetch(page, query);
+        const response = await Groups.fetch(query);
         dispatch(groups.actions.setGroups({ data: response.data }));
         
       } catch (err) {
-        console.log("err", err);
         dispatch(groups.actions.setStatus(FetchStatus.ERROR));
       }
     };
-
   }
 
   static resetGroups() {
