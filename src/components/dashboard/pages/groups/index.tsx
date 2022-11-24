@@ -129,8 +129,6 @@ const Pagination = () => {
 		}
 	}
 
-	console.log(params)
-
 	return status == FetchStatus.SUCCESS ? (
 		<Paginate
 			left={{ disabled: Handle.disabled("left"), callback: () => navigate({pathname: '/dashboard/groups', search: createSearchParams({...params, page: Handle.previous()}).toString() }) }}

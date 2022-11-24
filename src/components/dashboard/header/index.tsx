@@ -14,7 +14,7 @@ import {FaGraduationCap} from 'react-icons/fa';
 import { Search } from "./search";
 import { NotificationsList } from "./notifications";
 import { setModal } from "../../../store/alert";
-import { StudyGroupsModal } from "./modal/studyGroupsModal";
+import { StudyGroupsModal } from "../../modal/AddGroupsModal";
 import { INotification } from "../../../store/notifications";
 
 const Header = () => {

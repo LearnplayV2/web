@@ -21,8 +21,6 @@ class Data {
         ...store.getState().groups.query
       };
 
-      console.log("query", query);
-
       dispatch(groups.actions.setStatus(FetchStatus.LOADING));
       try {
         const response = await Groups.fetch(query);

@@ -41,7 +41,7 @@
 }
 
 button {
-    background: #16A34A;
+    background-color: #16A34A;
     cursor: pointer;
     padding: 1rem;
     border-radius: 6px;
@@ -50,7 +50,13 @@ button {
     box-sizing: border-box;
     transition: .2s filter;
 
-    &:hover {
+    &:disabled {
+        background-color: #3f3f3f!important;
+        color: grey!important;
+        cursor: auto;
+    }
+
+    &:not(:disabled):hover {
         filter: brightness(120%);
     }
 
@@ -59,13 +65,13 @@ button {
     }
 
     &.danger {
-        background: #a02e2e;
+        background-color: #a02e2e;
     }
    
 }
 
 input, textarea, select {
-    background: $black-primary;
+    background-color: $black-primary;
     outline: none;
     border:none;
     color: $normal;
