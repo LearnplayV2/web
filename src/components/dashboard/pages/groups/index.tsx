@@ -4,7 +4,7 @@ import { Faded } from "@components/ui/animated";
 import { Dashboard } from "@components/dashboard/page";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { isEmpty } from "@utils/isEmpty";
-import { Dispatch, useEffect } from "react";
+import { CSSProperties, Dispatch, useEffect } from "react";
 import groups, { IGroupsState } from "./store";
 import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
@@ -47,16 +47,12 @@ const ListGroups = () => {
 		case FetchStatus.SUCCESS:
 			return (
 				<>
-					<SmallMessage />					
+					<SmallMessage />
 					<div style={{ marginTop: "2rem" }}>
 						{data?.groups.map((group, index) => (
 							<div key={index}>
 								<h2>{group.title}</h2>
-								<p>
-									{!isEmpty(group?.description)
-										? group.description
-										: "Sem descrição"}
-								</p>
+								<p>{!isEmpty(group?.description) ? group.description : "Sem descrição"}</p>
 							</div>
 						))}
 
@@ -73,12 +69,11 @@ const SmallMessage = () => {
 	let { data, status } = useSelector((state: RootState) => state.groups);
 	data = data!;
 
-	return(
+	return (
 		<>
 			<p>
 				to do: <br />
-				Atualmente há {data.totalItems} grupos públicos que você pode
-				ingressar.
+				Atualmente há {data.totalItems} grupos públicos que você pode ingressar.
 			</p>
 		</>
 	);
@@ -92,10 +87,9 @@ const Pagination = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if(typeof params.page != 'undefined') {
+		if (typeof params.page != "undefined") {
 			// set query page
 			dispatch(groups.actions.setQuery({ page: params.page }));
-			
 		}
 	}, [params]);
 
@@ -120,42 +114,56 @@ const Pagination = () => {
 			}
 			return 2;
 		}
+
+		static disabled(direction: string): boolean {
+			switch (direction) {
+				case "left":
+					return !(typeof params.page != "undefined" && parseInt(params.page) > 1);
+				case "right":
+					return !(data?.hasNextPage ?? false);
+				default:
+					return true;
+			}
+		}
+
+		static navigate(disabled: boolean, callback: any) {
+			if(!disabled) callback();
+		}
 	}
 
 	return (
 		<div css={Styles.pagination()}>
 			{status == FetchStatus.SUCCESS && (
 				<div>
-					{typeof params.page != "undefined" && parseInt(params.page) > 1 && (
-						<div
-							onClick={() => navigate(`/dashboard/groups/${Handle.previous()}`)}
-							className="btn"
-						>
-							<MdKeyboardArrowLeft size={18} />
-						</div>
-					)}
+					<div
+						style={{ 
+							opacity: Handle.disabled('left') ? ".4" : "1", 
+							cursor: Handle.disabled('left') ? "not-allowed" : "pointer" 
+						}}
+						onClick={() => Handle.navigate(Handle.disabled('left'), () => navigate(`/dashboard/groups/${Handle.previous()}`))}
+						className="btn"
+					>
+						<MdKeyboardArrowLeft size={18} />
+					</div>
 					{Array(data?.totalPages)
 						.fill(0)
 						.map((_, i) => (
 							<div key={i}>
-								<div
-									onClick={() =>
-										navigate(`/dashboard/groups/${Handle.page(i)}`)
-									}
-									className={`btn ${active(Handle.page(i)) && "active"}`}
-								>
+								<div onClick={() => navigate(`/dashboard/groups/${Handle.page(i)}`)} className={`btn ${active(Handle.page(i)) && "active"}`}>
 									{i + 1}
 								</div>
 							</div>
 						))}
-					{data?.hasNextPage && (
-						<div
-							onClick={() => navigate(`/dashboard/groups/${Handle.next()}`)}
-							className="btn"
-						>
-							<MdKeyboardArrowRight size={18} />
-						</div>
-					)}
+					<div
+						style={{ 
+							opacity: Handle.disabled("right") ? ".4" : "1",
+							cursor: Handle.disabled('right') ? "not-allowed" : "pointer" 
+						}}
+						onClick={() => Handle.navigate(Handle.disabled('right'), () => navigate(`/dashboard/groups/${Handle.next()}`))}
+						className="btn"
+					>
+						<MdKeyboardArrowRight size={18} />
+					</div>
 				</div>
 			)}
 		</div>

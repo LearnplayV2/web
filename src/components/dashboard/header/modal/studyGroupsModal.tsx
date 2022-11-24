@@ -28,7 +28,6 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
 		GroupVisibility.public
 	);
 
-    console.log('props', location)
 	class Handle {
 		static async submit(e: FormEvent) {
 			e.preventDefault();
@@ -44,7 +43,9 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
 				};
 				await Groups.add(data);
 				dispatch(closeModal());
-				// dispatch(GroupData.get({}));
+                if(location.pathname.includes('groups')) {
+                    dispatch(GroupData.get({}));
+                }
 			} catch (err: any) {
 				const errMessage =
 					err?.response?.data?.response?.message ??
@@ -99,20 +100,15 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
 							<option value={GroupVisibility.public}>Público</option>
 							<option value={GroupVisibility.private}>Privado</option>
 						</select>
-						{btnActive ? (
-							<button
-								type="submit"
-								onClick={Handle.createGroup}
-								style={{ marginLeft: "1rem" }}
-								className="text-white danger"
-							>
-								Adicionar grupo
-							</button>
-						) : (
-                            <div style={{marginLeft: '20px'}}>
-                                <ColorRing colors={['#ffffff38', '#ffffff38', '#ffffff38', '#ffffff38', '#ffffff38']} width={50} height={50} />
-                            </div>
-						)}
+                        <button
+                            type="submit"
+                            onClick={Handle.createGroup}
+                            style={{ marginLeft: "1rem" }}
+                            className="text-white danger"
+                            disabled={!btnActive}
+                        >
+                            Adicionar grupo
+                        </button>
 					</div>
 				</div>
 			</form>
