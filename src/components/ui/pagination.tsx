@@ -31,7 +31,7 @@ const Pagination = (props: IPaginationProps) => {
 		}
 	}
 
-	return (
+	return (typeof totalPages != 'undefined' && totalPages > 1) && (
 		<div css={Styles.pagination()}>
 			<div>
 				<div
