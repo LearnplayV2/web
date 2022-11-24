@@ -30,8 +30,6 @@ const Pagination = (props: IPaginationProps) => {
     
   }
 
-  console.log(active)
-  
 	return (
 		<div>
 			<div
@@ -39,7 +37,7 @@ const Pagination = (props: IPaginationProps) => {
 					opacity: left.disabled ? ".4" : "1",
 					cursor: left.disabled ? "not-allowed" : "pointer",
 				}}
-				onClick={() => Handle.navigate(left.disabled, left.callback() )}
+				onClick={() => Handle.navigate(left.disabled, () => left.callback() )}
 				className="btn"
 			>
 				<MdKeyboardArrowLeft size={18} />
@@ -58,7 +56,7 @@ const Pagination = (props: IPaginationProps) => {
 					opacity: right.disabled ? ".4" : "1",
 					cursor: right.disabled ? "not-allowed" : "pointer",
 				}}
-				onClick={() => Handle.navigate(right.disabled, right.callback())}
+				onClick={() => Handle.navigate(right.disabled, () => right.callback())}
 				className="btn"
 			>
 				<MdKeyboardArrowRight size={18} />
