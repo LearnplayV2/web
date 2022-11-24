@@ -48,7 +48,11 @@ const Pagination = (props: IPaginationProps) => {
 					.fill(0)
 					.map((_, i) => (
 						<div key={i}>
-							<div onClick={() => navigate({pathname, search: createSearchParams({...params, page: Handle.page(i)}).toString() })} className={`btn ${parseInt(active ?? "1") == i + 1 && "active"}`}>
+							<div onClick={() => {
+									if(!(parseInt(active ?? "1") == i + 1)) {
+										navigate({pathname, search: createSearchParams({...params, page: Handle.page(i)}).toString() })
+									}
+								}} className={`btn ${parseInt(active ?? "1") == i + 1 && "active"}`}>
 								{i + 1}
 							</div>
 						</div>
@@ -92,7 +96,8 @@ class Styles {
 			}
 
 			&.active {
-				filter: brightness(80%);
+				cursor: not-allowed;
+				opacity: .4;
 			}
 		}
 	`;
