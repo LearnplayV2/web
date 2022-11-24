@@ -20,6 +20,11 @@ const Alert = (props: React.PropsWithChildren) => {
         } else {
             document.body.style.overflow = 'auto';
         }
+        document.onkeydown = (e: KeyboardEvent) => {
+            if(e.key == 'Escape') {
+                dispatch(closeModal());
+            }
+        }
     }, [isActive]);
 
     const effects = css`

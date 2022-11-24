@@ -56,6 +56,8 @@ const header = css`
     .title {
         font-size: 24px;
         color: #16a34a;
+        font-weight: 600;
+        letter-spacing: -1px;
         user-select:none;
         cursor: pointer;
         transition: color .5s;
