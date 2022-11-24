@@ -73,12 +73,23 @@ const header = css`
         .item {
             font-size: 22px;
             
-            svg {
-                cursor: pointer;
+            .icon-wrapper {
+                padding: 0.5rem 0.8rem;
+                
+                &:hover {
+                    background: #cccccc1c;
+                    border-radius: 8px;
+                    cursor: pointer;
+                }
+
             }
 
             &:not(:last-child) {
-                margin-right: 1.8rem;
+                margin-right: 4px;
+            }
+
+            & > a > img {
+                margin-left: 1rem;
             }
 
         }
@@ -108,17 +119,24 @@ const header = css`
 const search = css `
 
     input {
-        border: 1px solid #555;
-        border-radius: 30px;
-        min-width: 300px;
+        border-radius: 7px;
+        min-width: 200px;
         font-family: sans-serif;
-        transition: background .2s ease-in;
         font-weight:bold;
         font-size: 13px;
+        transition: min-width .2s ease-in, background .2s ease-in-out;
 
         &:hover {
-            filter:none;
             background: #343434;
+            filter:none;
+        }
+
+        &:hover, &:focus {
+            min-width: 300px;
+        }
+
+        &:focus {
+            filter: brightness(110%);
         }
     }
 

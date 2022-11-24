@@ -47,11 +47,7 @@ const ListGroups = () => {
 		case FetchStatus.SUCCESS:
 			return (
 				<>
-					<p>
-						Atualmente há {data?.totalItems} grupos públicos que você pode
-						ingressar.
-					</p>
-
+					<SmallMessage />					
 					<div style={{ marginTop: "2rem" }}>
 						{data?.groups.map((group, index) => (
 							<div key={index}>
@@ -71,6 +67,21 @@ const ListGroups = () => {
 		default:
 			return <>Ocorreu um erro inesperado, tente novamente mais tarde.</>;
 	}
+};
+
+const SmallMessage = () => {
+	let { data, status } = useSelector((state: RootState) => state.groups);
+	data = data!;
+
+	return(
+		<>
+			<p>
+				to do: <br />
+				Atualmente há {data.totalItems} grupos públicos que você pode
+				ingressar.
+			</p>
+		</>
+	);
 };
 
 const Pagination = () => {

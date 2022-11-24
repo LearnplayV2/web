@@ -52,7 +52,7 @@ const Header = () => {
             </span>
            <Search />
             <div className="user-items">
-                <div className="item">
+                <div className="item icons">
                     <Dropdown title={<MdOutlineAddCircle />} id="add_item" isActive={Find.dropdownIsActive('add_item')}>
                         <ul css={basicDropDownList}>
                             <li>
@@ -74,7 +74,7 @@ const Header = () => {
                         </ul>
                     </Dropdown>
                 </div>
-                <div className="item">
+                <div className="item icons">
                     <Dropdown 
                     title={
                         <div css={Styles.notification}>
@@ -123,7 +123,7 @@ const Dropdown = (props: {id: string, isActive: boolean, title: React.ReactNode,
                 cursor:pointer;
             `}
         >
-            <div id={id} onClick={Toggle.handleDropDown} css={css`&:hover{ filter: brightness(120%); }`}>
+            <div id={id} className={"icon-wrapper"} onClick={Toggle.handleDropDown} css={css`&:hover{ filter: brightness(120%); }`}>
                 {title}
             </div>
             <ul 

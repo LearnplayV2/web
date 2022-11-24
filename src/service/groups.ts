@@ -1,4 +1,4 @@
-import { GroupQuery } from "@/components/dashboard/pages/groups/data";
+import { GroupQuery } from "@components/dashboard/pages/groups/data";
 import { service } from ".";
 import { Session } from "../authentication";
 
@@ -8,6 +8,7 @@ export interface FetchGroups {
     hasNextPage: boolean;
     totalItems: number;
     groups: Group[];
+    query: GroupQuery;
 }
 
 interface Group {

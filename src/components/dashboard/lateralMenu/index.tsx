@@ -65,7 +65,7 @@ const RightMenu = () => {
                 <div className="btn" onClick={() => navigate('/dashboard/profile')}>
                     <IoPersonCircleSharp />
                     <Span>
-                        Meu perfil
+                        Perfil
                     </Span>
                 </div>
                 <div className="btn disabled">
@@ -130,6 +130,8 @@ const lateralMenu = css`
             
             span {
                 margin-left: 10px;
+                flex-grow: 1;
+                text-align: center;
             }
         }
     }
