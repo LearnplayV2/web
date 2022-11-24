@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 interface IPaginationProps {
 	left: IDirection;
@@ -8,6 +8,7 @@ interface IPaginationProps {
 	totalPages?: number;
 	active?: string;
 	path: string;
+	params?: object;
 }
 
 interface IDirection {
@@ -16,7 +17,7 @@ interface IDirection {
 }
 
 const Pagination = (props: IPaginationProps) => {
-	const { totalPages, left, right, active, path } = props;
+	const { totalPages, left, right, active, path: pathname, params } = props;
 	const navigate = useNavigate();
 
 	class Handle {
@@ -47,7 +48,7 @@ const Pagination = (props: IPaginationProps) => {
 					.fill(0)
 					.map((_, i) => (
 						<div key={i}>
-							<div onClick={() => navigate(`${path}/${Handle.page(i)}`)} className={`btn ${parseInt(active ?? "1") == i + 1 && "active"}`}>
+							<div onClick={() => navigate({pathname, search: createSearchParams({...params, page: Handle.page(i)}).toString() })} className={`btn ${parseInt(active ?? "1") == i + 1 && "active"}`}>
 								{i + 1}
 							</div>
 						</div>

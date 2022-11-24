@@ -14,15 +14,13 @@ const Router = () => {
 	const Element = () => (
 		<React.Fragment>
 			<BrowserRouter>
-                <Alert />
+				<Alert />
 				<Routes>
 					<Route path="/" element={<Session.Provider children={<HomePage />} />} />
 					<Route path="*" element={<All />} />
 					<Route path="/dashboard" element={<Session.Provider children={<DashboardPage />} />} />
 					<Route path="/dashboard/profile" element={<Session.Provider children={<ProfilePage />} />} />
-					<Route path="/dashboard/groups" element={<Session.Provider children={<Group />} />}>
-						<Route path=":page" element={<Session.Provider children={<Group />} />} />
-					</Route>
+					<Route path="/dashboard/groups" element={<Session.Provider children={<Group />} />}/>
 				</Routes>
 			</BrowserRouter>
 		</React.Fragment>

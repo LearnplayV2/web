@@ -4,18 +4,24 @@ import store from "@store/storeConfig";
 import { Dispatch } from "redux";
 import groups from "./store";
 
-export interface GroupQuery {
+export interface GroupQuery extends GroupParams {
   page?: string;
+}
+
+export interface GroupParams {
   title?: string;
 }
 
 class Data {
   static get(params: GroupQuery) {
     return async (dispatch : Dispatch) => {
+
       let query = {
         ...params,
         ...store.getState().groups.query
       };
+
+      console.log("query", query);
 
       dispatch(groups.actions.setStatus(FetchStatus.LOADING));
       try {

@@ -1,21 +1,28 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { search } from "./styles.css";
 import GroupData from '@components/dashboard/pages/groups/data';
-import groups from "../pages/groups/store";
 import store from "@/store/storeConfig";
+
+export function useGroupsQuery() {
+	const receivedQuery = new URLSearchParams(useLocation().search);
+	const query = Object.fromEntries(receivedQuery);
+	return query;
+}
 
 const Search = () => {
     const location = useLocation();
     const pathname = location.pathname.replace('/', '').split('/');
     const [searchValue, setSearchValue] = useState<string>('');
     const {dispatch} = store;
+    const navigate = useNavigate();
+    const groupParams = useGroupsQuery();
 
     class Handle {
         static search(e: React.KeyboardEvent) {
             if(e.key == 'Enter') {
                 if(Handle.isPage('groups')) {
-                    dispatch(groups.actions.setQuery({title: (e.target as HTMLInputElement).value}));
+                    navigate({pathname: '.', search: createSearchParams({...groupParams, page: '1', title: (e.target as HTMLInputElement).value}).toString() })
                     dispatch(GroupData.get({}));
                 }
             }
