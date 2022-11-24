@@ -31,7 +31,7 @@ const Pagination = (props: IPaginationProps) => {
 		}
 	}
 
-	return (typeof totalPages != 'undefined' && totalPages > 1) && (
+	return (typeof totalPages != 'undefined' && totalPages > 1) ? (
 		<div css={Styles.pagination()}>
 			<div>
 				<div
@@ -69,7 +69,7 @@ const Pagination = (props: IPaginationProps) => {
 				</div>
 			</div>
 		</div>
-	);
+	) : null;
 };
 
 class Styles {
