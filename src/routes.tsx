@@ -1,28 +1,34 @@
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import { Session } from "./authentication";
 import { All } from "@/pages/all";
-import {DashboardPage}  from "./components/dashboard/pages";
+import { DashboardPage } from "./components/dashboard/pages";
 import { Group } from "./components/dashboard/pages/groups";
 import { ProfilePage } from "./components/dashboard/pages/profile";
-import {HomeMain as HomePage} from './components/home/index';
+import { HomeMain as HomePage } from "./components/home/index";
+import { Alert } from "@components/ui/alert";
+import React from "react";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 
-const Routes = () => {
+const Router = () => {
+	const sessionComponent = (el: React.ReactNode) => <Session.Provider children={el} />;
 
-    const routes = (
-        <>
-            <Route path='/' element={<Session.Provider children={<HomePage />} />} />
-            <Route path='*' element={<All />} />
-            <Route path='/dashboard' element={<Session.Provider children={<DashboardPage />} />} />
-            <Route path='/dashboard/profile' element={<Session.Provider children={<ProfilePage />} />} />
-            <Route path='/dashboard/groups' element={<Session.Provider children={<Group />} />}>
-                <Route path=":page" element={<Session.Provider children={<Group />} />}/>
-            </Route>
-        </>
-    );
+	const Element = () => (
+		<React.Fragment>
+			<BrowserRouter>
+                <Alert />
+				<Routes>
+					<Route path="/" element={<Session.Provider children={<HomePage />} />} />
+					<Route path="*" element={<All />} />
+					<Route path="/dashboard" element={<Session.Provider children={<DashboardPage />} />} />
+					<Route path="/dashboard/profile" element={<Session.Provider children={<ProfilePage />} />} />
+					<Route path="/dashboard/groups" element={<Session.Provider children={<Group />} />}>
+						<Route path=":page" element={<Session.Provider children={<Group />} />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</React.Fragment>
+	);
 
-    const router = createBrowserRouter( createRoutesFromElements(routes) );
-    
-    return <RouterProvider router={router} />;
-}
+	return <Element />;
+};
 
-export default Routes;
+export default Router;
