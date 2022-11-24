@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
 import { FetchStatus } from "@class/fetchStatus";
 import Data from "./data";
+import {Pagination as Paginate} from '@components/ui/pagination';
 
 const Group = () => {
 	const { dispatch } = store;
@@ -134,37 +135,13 @@ const Pagination = () => {
 	return (
 		<div css={Styles.pagination()}>
 			{status == FetchStatus.SUCCESS && (
-				<div>
-					<div
-						style={{ 
-							opacity: Handle.disabled('left') ? ".4" : "1", 
-							cursor: Handle.disabled('left') ? "not-allowed" : "pointer" 
-						}}
-						onClick={() => Handle.navigate(Handle.disabled('left'), () => navigate(`/dashboard/groups/${Handle.previous()}`))}
-						className="btn"
-					>
-						<MdKeyboardArrowLeft size={18} />
-					</div>
-					{Array(data?.totalPages)
-						.fill(0)
-						.map((_, i) => (
-							<div key={i}>
-								<div onClick={() => navigate(`/dashboard/groups/${Handle.page(i)}`)} className={`btn ${active(Handle.page(i)) && "active"}`}>
-									{i + 1}
-								</div>
-							</div>
-						))}
-					<div
-						style={{ 
-							opacity: Handle.disabled("right") ? ".4" : "1",
-							cursor: Handle.disabled('right') ? "not-allowed" : "pointer" 
-						}}
-						onClick={() => Handle.navigate(Handle.disabled('right'), () => navigate(`/dashboard/groups/${Handle.next()}`))}
-						className="btn"
-					>
-						<MdKeyboardArrowRight size={18} />
-					</div>
-				</div>
+				<Paginate 
+					left={{disabled: Handle.disabled('left'), callback: () => navigate(`/dashboard/groups/${Handle.previous()}`)}}
+					right={{disabled: Handle.disabled('right'), callback: () => navigate(`/dashboard/groups/${Handle.next()}`)}}
+					path={'/dashboard/groups'}
+					totalPages={data?.totalPages}
+					active={params.page}
+				 />
 			)}
 		</div>
 	);
