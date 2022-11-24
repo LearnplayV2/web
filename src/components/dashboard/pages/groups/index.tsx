@@ -5,8 +5,8 @@ import { Dashboard } from "@components/dashboard/page";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { isEmpty } from "@utils/isEmpty";
 import { Dispatch, useEffect } from "react";
-import { IGroupsState } from "./store";
-import { useSelector } from "react-redux";
+import groups, { IGroupsState } from "./store";
+import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
 import { FetchStatus } from "@class/fetchStatus";
 import Data from "./data";
@@ -78,6 +78,15 @@ const Pagination = () => {
 	const navigate = useNavigate();
 	const active = (page: any) => params.page == page;
 	const params = useParams();
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if(typeof params.page != 'undefined') {
+			// set query page
+			dispatch(groups.actions.setQuery({ page: params.page }));
+			
+		}
+	}, [params]);
 
 	class Handle {
 		static page(i: any) {

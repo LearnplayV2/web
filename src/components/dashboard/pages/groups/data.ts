@@ -4,16 +4,13 @@ import store from "@/store/storeConfig";
 import { Dispatch } from "redux";
 import groups from "./store";
 
-export interface GroupParams {
-    page?: string;
-}
-
 export interface GroupQuery {
+  page?: string;
   title?: string;
 }
 
 class Data {
-  static get(params: GroupParams) {
+  static get(params: GroupQuery) {
     return async (dispatch : Dispatch) => {
       let query = {
         ...params,
