@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { search } from "./styles.css";
 import GroupData from '@components/dashboard/pages/groups/data';
@@ -13,10 +13,15 @@ export function useGroupsQuery() {
 const Search = () => {
     const location = useLocation();
     const pathname = location.pathname.replace('/', '').split('/');
+    const groupParams = useGroupsQuery();
     const [searchValue, setSearchValue] = useState<string>('');
     const {dispatch} = store;
     const navigate = useNavigate();
-    const groupParams = useGroupsQuery();
+
+    useEffect(() => {
+        // set value based on page
+        if(Handle.isPage('groups')) setSearchValue(groupParams.title);
+    }, []);
 
     class Handle {
         static search(e: React.KeyboardEvent) {
@@ -44,6 +49,7 @@ const Search = () => {
         } 
     };
 
+    // select which page is appear search box.
     if( !Handle.isPage('groups') && 
         pathname.length > 1
     ) {

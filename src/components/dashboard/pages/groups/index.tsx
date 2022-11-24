@@ -77,7 +77,7 @@ const SmallMessage = () => {
 		<>
 			<p>
 				{hasQuery(data.query.title)
-					? `Mostrando resultados para "${data.query.title}". ${data.totalItems} grupos encontrados.`
+					? `Mostrando resultados para "${data.query.title}". ${data.totalItems} grupo(s) encontrado(s).`
 					: (<>Atualmente há {data.totalItems} grupos públicos que você pode ingressar</>)
 				}
 			</p>
