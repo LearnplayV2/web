@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
 import { FetchStatus } from "@class/fetchStatus";
 import Data from "./data";
-import {Pagination as Paginate} from '@components/ui/pagination';
+import { Pagination as Paginate } from "@components/ui/pagination";
 
 const Group = () => {
 	const { dispatch } = store;
@@ -128,54 +128,22 @@ const Pagination = () => {
 		}
 
 		static navigate(disabled: boolean, callback: any) {
-			if(!disabled) callback();
+			if (!disabled) callback();
 		}
 	}
 
 	return (
-		<div css={Styles.pagination()}>
-			{status == FetchStatus.SUCCESS && (
-				<Paginate 
-					left={{disabled: Handle.disabled('left'), callback: () => navigate(`/dashboard/groups/${Handle.previous()}`)}}
-					right={{disabled: Handle.disabled('right'), callback: () => navigate(`/dashboard/groups/${Handle.next()}`)}}
-					path={'/dashboard/groups'}
-					totalPages={data?.totalPages}
-					active={params.page}
-				 />
-			)}
-		</div>
+		status == FetchStatus.SUCCESS ? (
+			<Paginate
+				left={{ disabled: Handle.disabled("left"), callback: () => navigate(`/dashboard/groups/${Handle.previous()}`) }}
+				right={{ disabled: Handle.disabled("right"), callback: () => navigate(`/dashboard/groups/${Handle.next()}`) }}
+				path={"/dashboard/groups"}
+				totalPages={data?.totalPages}
+				active={params.page}
+			/>
+		) : null
 	);
 };
-
-class Styles {
-	static pagination = () => css`
-		margin: 2rem 0;
-
-		div {
-			display: flex;
-		}
-
-		.btn {
-			padding: 0 0.5rem;
-			cursor: pointer;
-			user-select: none;
-			padding: 0.5rem 1rem;
-			background: #393b4c;
-			color: #fff;
-			box-shadow: 0px 0px 5px #121212;
-			filter: brightness(90%);
-
-			&:hover {
-				text-decoration: none;
-				filter: brightness(100%);
-			}
-
-			&.active {
-				filter: brightness(80%);
-			}
-		}
-	`;
-}
 
 function mapStateToProps(state: RootState, ownProps: IGroupsState) {
 	return state.groups;
