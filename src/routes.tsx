@@ -7,6 +7,7 @@ import { HomeMain as HomePage } from "./components/home/index";
 import { Alert } from "@components/ui/alert";
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { GroupId } from "./components/dashboard/pages/groups/[id]";
 
 const Router = () => {
 	const sessionComponent = (el: React.ReactNode) => <Session.Provider children={el} />;
@@ -16,11 +17,14 @@ const Router = () => {
 			<BrowserRouter>
 				<Alert />
 				<Routes>
-					<Route path="/" element={<Session.Provider children={<HomePage />} />} />
+					<Route index={true} path="/" element={<Session.Provider children={<HomePage />} />} />
 					<Route path="*" element={<All />} />
-					<Route path="/dashboard" element={<Session.Provider children={<DashboardPage />} />} />
-					<Route path="/dashboard/profile" element={<Session.Provider children={<ProfilePage />} />} />
-					<Route path="/dashboard/groups" element={<Session.Provider children={<Group />} />}/>
+					<Route path="/dashboard">
+						<Route index={true} element={sessionComponent(<DashboardPage />)} />
+						<Route path="profile" element={<Session.Provider children={<ProfilePage />} />} />
+						<Route path="groups" element={<Session.Provider children={<Group />} />} />
+						<Route path="group/:id" element={<Session.Provider children={<GroupId />} />} />
+					</Route>
 				</Routes>
 			</BrowserRouter>
 		</React.Fragment>

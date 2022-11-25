@@ -47,7 +47,7 @@ const ListGroups = () => {
 		case FetchStatus.SUCCESS:
 			return (
 				<>
-					<SmallMessage />
+					<SearchMsg />
 					<div style={{ marginTop: "2rem" }}>
 						{data?.groups.map((group, index) => (
 							<div key={index}>
@@ -65,8 +65,8 @@ const ListGroups = () => {
 	}
 };
 
-const SmallMessage = () => {
-	let { data, status } = useSelector((state: RootState) => state.groups);
+const SearchMsg = () => {
+	let { data } = useSelector((state: RootState) => state.groups);
 	data = data!;
 
 	const hasQuery = (query?: string): boolean => {
