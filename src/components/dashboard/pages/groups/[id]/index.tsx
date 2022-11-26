@@ -58,7 +58,7 @@ const Cover = () => {
   
   class Handle {
     static config = () => {
-      dispatch(setModal({element: <ConfigGroup />}));
+      dispatch(setModal({element: <ConfigGroup />, fx: true}));
     }
   }
 
