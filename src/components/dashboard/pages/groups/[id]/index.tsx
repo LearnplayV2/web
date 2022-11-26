@@ -1,3 +1,4 @@
+import { FetchStatus } from "@/class/fetchStatus";
 import { Dashboard } from "@/components/dashboard/page";
 import store, { RootState } from "@/store/storeConfig";
 import { useEffect } from "react";
@@ -28,9 +29,22 @@ const GroupId = () => {
 
 const ListGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
-	console.log(group);
 
-	return <div>hello</div>;
+  switch(group.status) {
+    case FetchStatus.INITIAL || FetchStatus.LOADING:
+      return <h3>Carregando...</h3>;
+    case FetchStatus.ERROR:
+      return <h3>Ocorreu um erro inesperado, tente novamente.</h3>;
+  }
+
+  const data = group.data!;
+
+	return(
+    <>
+      <h1>{data.title}</h1>
+      <p>{data.description}</p>
+    </>
+  );
 };
 
 export { GroupId };
