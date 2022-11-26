@@ -9,6 +9,7 @@ import { IGroupState } from "./store";
 
 const GroupId = () => {
 	const params = useParams();
+	const group = useSelector((state: RootState) => state.group) as IGroupState;
 	const { id: groupId, title: groupTitle } = params;
 	const { dispatch } = store;
 
@@ -18,25 +19,25 @@ const GroupId = () => {
 		}
 	}, [groupId]);
 
-	return (
-		<Dashboard hasLeftMenu={true}>
-			<div className="container" style={{ marginTop: "10px" }}>
-				<ListGroup />
-			</div>
-		</Dashboard>
-	);
-};
-
-const ListGroup = () => {
-	const group = useSelector((state: RootState) => state.group) as IGroupState;
-
   switch(group.status) {
     case FetchStatus.INITIAL || FetchStatus.LOADING:
       return <h3>Carregando...</h3>;
     case FetchStatus.ERROR:
       return <h3>Ocorreu um erro inesperado, tente novamente.</h3>;
+    case FetchStatus.SUCCESS:
+      return (
+        <Dashboard hasLeftMenu={true}>
+          <div className="container" style={{ marginTop: "10px" }}>
+            <ListGroup />
+          </div>
+        </Dashboard>
+      );
   }
+  
+};
 
+const ListGroup = () => {
+	const group = useSelector((state: RootState) => state.group) as IGroupState;
   const data = group.data!;
 
 	return(
