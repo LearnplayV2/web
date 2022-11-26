@@ -1,4 +1,5 @@
-import groups, { IGroupsState } from "@components/dashboard/pages/groups/store";
+import group, { IGroupState } from "@/components/dashboard/pages/groups/[id]/store";
+import groups, { IGroupsState } from "@/components/dashboard/pages/groups/store";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import alert, { AlertState } from "./alert";
@@ -14,6 +15,7 @@ export interface RootState {
     profilePicture: ProfilePictureState;
     notifications: INotification;
     groups: IGroupsState;
+    group: IGroupState;
 }
 
 const reducers = combineReducers({
@@ -23,6 +25,7 @@ const reducers = combineReducers({
     profilePicture,
     notifications,
     groups: groups.reducer,
+    group: group.reducer
 });
 
 const store = configureStore({

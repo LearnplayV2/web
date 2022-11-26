@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { search } from "./styles.css";
-import GroupData from '@components/dashboard/pages/groups/data';
+import GroupData from '@/components/dashboard/pages/groups/data';
 import store from "@/store/storeConfig";
 
 export function useGroupsQuery() {
