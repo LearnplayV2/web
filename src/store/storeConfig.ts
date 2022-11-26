@@ -7,6 +7,7 @@ import dropdowns, { DropdownState } from './dropdown';
 import leftMenu, { LeftMenuState } from "./leftMenu";
 import notifications, { INotification} from "./notifications";
 import profilePicture, { ProfilePictureState } from "./profilePicture";
+import toggleMenu from "@/components/ui/toggleMenu/store";
 
 export interface RootState {
     alert: AlertState;
@@ -16,6 +17,7 @@ export interface RootState {
     notifications: INotification;
     groups: IGroupsState;
     group: IGroupState;
+    toggleMenu: string[];
 }
 
 const reducers = combineReducers({
@@ -25,7 +27,8 @@ const reducers = combineReducers({
     profilePicture,
     notifications,
     groups: groups.reducer,
-    group: group.reducer
+    group: group.reducer,
+    toggleMenu: toggleMenu.reducer
 });
 
 const store = configureStore({
