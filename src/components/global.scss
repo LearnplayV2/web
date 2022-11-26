@@ -35,10 +35,25 @@
 
         &:hover {
             color: $grey-accent;
-            text-decoration: underline;
+
+            &:not(.nounderline) {
+                text-decoration: underline;
+            }
         }
     }
     
+}
+
+.link {
+    color: $grey;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+        color: $grey-accent;
+        text-decoration: underline;
+    }
 }
 
 button {

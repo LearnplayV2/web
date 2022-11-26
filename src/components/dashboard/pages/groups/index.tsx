@@ -1,15 +1,15 @@
-import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
+import { createSearchParams, Link, useNavigate } from "react-router-dom";
 import { Faded } from "@components/ui/animated";
 import { Dashboard } from "@components/dashboard/page";
 import { isEmpty } from "@utils/isEmpty";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
 import { FetchStatus } from "@class/fetchStatus";
 import Data from "./data";
 import { Pagination as Paginate } from "@components/ui/pagination";
 import { useGroupsQuery } from "../../header/search";
-
+import EncodeURI from "@/utils/encodeURI";
 
 const Group = () => {
 	const { dispatch } = store;
@@ -50,12 +50,15 @@ const ListGroups = () => {
 					<SearchMsg />
 					<div style={{ marginTop: "2rem" }}>
 						{data?.groups.map((group, index) => (
-							<div key={index}>
-								<h2>{group.title}</h2>
+							<div key={index} style={{ marginBottom: "3rem" }}>
+								<h2>
+									<Link to={{pathname: `../group/${group.uuid}/${EncodeURI(group.title)}`}} className="nounderline">
+										{group.title}
+									</Link>
+								</h2>
 								<p>{!isEmpty(group?.description) ? group.description : "Sem descrição"}</p>
 							</div>
 						))}
-
 						<Pagination />
 					</div>
 				</>
@@ -76,10 +79,11 @@ const SearchMsg = () => {
 	return (
 		<>
 			<p>
-				{hasQuery(data.query.title)
-					? `Mostrando resultados para "${data.query.title}". ${data.totalItems} grupo(s) encontrado(s).`
-					: (<>Atualmente há {data.totalItems} grupos públicos que você pode ingressar</>)
-				}
+				{hasQuery(data.query.title) ? (
+					`Mostrando resultados para "${data.query.title}". ${data.totalItems} grupo(s) encontrado(s).`
+				) : (
+					<>Atualmente há {data.totalItems} grupos públicos que você pode ingressar</>
+				)}
 			</p>
 		</>
 	);
@@ -89,7 +93,6 @@ const Pagination = () => {
 	const { data, status } = useSelector((state: RootState) => state.groups);
 	const navigate = useNavigate();
 	const params = useGroupsQuery();
-	const dispatch = useDispatch();
 
 	class Handle {
 		static page(i: any) {
@@ -102,7 +105,7 @@ const Pagination = () => {
 				const page = parseInt(params.page);
 				return `${page == 1 ? 1 : page - 1}`;
 			}
-			return '1';
+			return "1";
 		}
 
 		static next() {
@@ -110,7 +113,7 @@ const Pagination = () => {
 				const page = parseInt(params.page);
 				return `${page + 1}`;
 			}
-			return '2';
+			return "2";
 		}
 
 		static disabled(direction: string): boolean {
@@ -131,8 +134,14 @@ const Pagination = () => {
 
 	return status == FetchStatus.SUCCESS ? (
 		<Paginate
-			left={{ disabled: Handle.disabled("left"), callback: () => navigate({pathname: '/dashboard/groups', search: createSearchParams({...params, page: Handle.previous()}).toString() }) }}
-			right={{ disabled: Handle.disabled("right"), callback: () => navigate({pathname: '/dashboard/groups', search: createSearchParams({...params, page: Handle.next()}).toString() })} }
+			left={{
+				disabled: Handle.disabled("left"),
+				callback: () => navigate({ pathname: "/dashboard/groups", search: createSearchParams({ ...params, page: Handle.previous() }).toString() }),
+			}}
+			right={{
+				disabled: Handle.disabled("right"),
+				callback: () => navigate({ pathname: "/dashboard/groups", search: createSearchParams({ ...params, page: Handle.next() }).toString() }),
+			}}
 			path={"/dashboard/groups"}
 			params={params}
 			totalPages={data?.totalPages}

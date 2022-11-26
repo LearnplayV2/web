@@ -23,7 +23,7 @@ const Router = () => {
 						<Route index={true} element={sessionComponent(<DashboardPage />)} />
 						<Route path="profile" element={<Session.Provider children={<ProfilePage />} />} />
 						<Route path="groups" element={<Session.Provider children={<Group />} />} />
-						<Route path="group/:id" element={<Session.Provider children={<GroupId />} />} />
+						<Route path="group/:id/:any" element={<Session.Provider children={<GroupId />} />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

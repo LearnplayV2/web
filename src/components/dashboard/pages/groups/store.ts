@@ -9,11 +9,9 @@ export interface IGroupsState {
     query: GroupQuery | null;
 }
 
-interface IGroupPayloadAction {
+interface IGroupPayloadAction extends IGroupsState {
     error?: boolean;
     isLoading?: boolean;
-    data?: FetchGroups;
-    query?: GroupQuery | null;
 }
 
 const initialState : IGroupsState = {

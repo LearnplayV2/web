@@ -68,7 +68,15 @@ const main = css`
         img {
             width: 300px;
             height: 300px;
-            clip-path: circle(); 
+            /* clip-path: circle();  */
+            border:6px solid #3F51B5;
+            outline: 8px solid #ffffff94;
+            outline-offset: 28px;
+            transition: .2s rotate;
+
+            &:hover {
+                rotate: 8deg;
+            }
         }
 
     }
