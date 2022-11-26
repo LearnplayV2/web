@@ -13,12 +13,19 @@ export interface IGroup {
     isMember: boolean;
     isStaff: boolean;
   }
+  links: ILinks[],
   members: IMember[],
   staff: IMember[],
   description: string;
   visibility: string;
   createdAt: string;
   updatedAt: string;
+}
+
+interface ILinks {
+  id: string;
+  title: string;
+  url: string;
 }
 
 interface IMember {

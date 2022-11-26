@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { FormEvent, useState } from "react";
-import { Groups, GroupVisibility, ICreateGroup } from "../../service/groups";
-import { closeModal, setModal } from "../../store/alert";
+import { Groups, GroupVisibility, ICreateGroup } from "../../../service/groups";
+import { closeModal, setModal } from "../../../store/alert";
 import GroupData from "@/components/dashboard/pages/groups/data";
 import store from "@/store/storeConfig";
 import { useLocation } from "react-router-dom";

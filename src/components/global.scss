@@ -94,6 +94,10 @@ input, textarea, select {
     padding: 1rem;
     margin: 1px 0;
 
+    &.full {
+        width: -webkit-fill-available;
+    }
+
     &:hover {
         filter: brightness(86%);
     }
@@ -102,6 +106,7 @@ input, textarea, select {
         outline: 1px solid #565656;
         outline-offset: -13px;
     }
+
 
     &:is(select) {
         cursor: pointer;
