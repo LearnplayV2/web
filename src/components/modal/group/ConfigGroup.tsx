@@ -1,4 +1,4 @@
-import { IGroupState } from "@/components/dashboard/pages/groups/[id]/store";
+import { IGroupState } from "@/components/dashboard/pages/groups/group/store";
 import ToggleMenu from "@/components/ui/toggleMenu";
 import { RootState } from "@/store/storeConfig";
 import { useState } from "react";
@@ -15,7 +15,9 @@ const ConfigGroup = () => {
     <div style={{minHeight: '400px'}}>
       <h3>Editar grupo</h3>
       <br />
-      <ToggleMenu header={
+      <ToggleMenu
+      firstActive={true}
+      header={
         <li>Configurações básicas</li>
       } id="config">
         <div className="form">

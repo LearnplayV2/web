@@ -1,15 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState : string[] = [];
+export interface ToggleMenuState {
+  active: boolean;
+  id: string;
+}
+
+const initialState : ToggleMenuState[] = [];
 
 const toggleMenu = createSlice({
   name: 'toggleMenu',
   initialState,
   reducers: {
-    setMenu(state, action: PayloadAction<string>) {
-      const index = state.findIndex(m => m == action.payload);
+    setMenu(state, action: PayloadAction<ToggleMenuState>) {
+      const index = state.findIndex(m => m.id == action.payload.id);
       if (index >= 0) {
-        state = state.splice(index, 1);
+        state[index].active = action.payload.active;
       } else {
         state.splice(0, state.length);
         state.push(action.payload);

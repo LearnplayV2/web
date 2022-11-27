@@ -15,11 +15,13 @@ class Styles {
 
     .title {
       flex-grow: 1;
+      word-wrap: break-word;
       font-size: 28px;
-      padding: 2rem 3rem;
+      font-weight: bold;
+      padding: 2rem 0;
+      color: #000;
 
       span {
-        background: #00000059;
         padding: 8px 2rem;
         line-height: 3rem;
       }
@@ -29,6 +31,7 @@ class Styles {
       }
 
       .config {
+        z-index: 1;
         > svg {
           color: #ccc;
           opacity: .3;

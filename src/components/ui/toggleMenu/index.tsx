@@ -7,41 +7,45 @@ import toggleMenu from "./store";
 interface Props extends PropsWithChildren {
   id: string;
   header: React.ReactNode;
+  firstActive?: boolean;
 }
 
 interface IMenuProps {
-  disabled: boolean;
+  active: boolean;
 }
 
 interface CompleteProps extends Props, IMenuProps{}
 
 const ToggleMenu = (props: Props) => {
   const dispatch = useDispatch();
-  const {id, children, header, disabled} = props as CompleteProps;
-  
+  const {id, children, header, active, firstActive} = props as CompleteProps;
+
   useEffect(() => {
+    // set first active
+    if(firstActive) dispatch(toggleMenu.actions.setMenu({id, active: true}));
+    
     return () => {
       dispatch(toggleMenu.actions.resetMenu());
     }
   }, []);
 
   return(
-    <div css={Style.container} onClick={() => dispatch(toggleMenu.actions.setMenu(id))}>
-      <div style={{display: 'flex', flexDirection: 'row'}} className="titleMenu">
+    <div css={Style.container} onClick={() => dispatch(toggleMenu.actions.setMenu({id, active: !active}))}>
+      <div style={{background: !active ? '#000' : '#3F51B5' }} className="titleMenu">
         {header}
       </div>
-      <div onClick={e => e.stopPropagation()} style={{display: disabled ? 'none' : 'block' }}>
+      <div onClick={e => e.stopPropagation()} style={{display: !active ? 'none' : 'block' }}>
           {children}
       </div>
     </div>
   );
 };
 
-function mapStateToProps(state: RootState, ownProps: Props) {
+const mapStateToProps = (state: RootState, ownProps: Props) => {
   return {
-    disabled: !state.toggleMenu.find(m => m == ownProps.id)
+    active: state.toggleMenu.find((m, i) => m.id == ownProps.id )?.active ?? false,
   }
-}
+};
 
 class Style {
   static container = css`
@@ -50,11 +54,8 @@ class Style {
       user-select: none;
       background-color: #222222;
       padding: 1rem;
-      transition: background-color .3s;
-      
-      &:hover {
-        background-color: #444444;
-      }
+      display: flex;
+      flex-direction: row;
     }
   `;
 }

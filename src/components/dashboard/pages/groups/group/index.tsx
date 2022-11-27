@@ -17,6 +17,7 @@ const GroupId = () => {
 	const { id: groupId } = params;
 	const { dispatch } = store;
 
+
 	useEffect(() => {
 		if (typeof groupId != "undefined") {
 			dispatch(Data.get(groupId));
@@ -24,6 +25,7 @@ const GroupId = () => {
 	}, [groupId]);
 
 	switch (group.status) {
+		default:
 		case FetchStatus.INITIAL || FetchStatus.LOADING:
 			return <h3>Carregando...</h3>;
 		case FetchStatus.ERROR:
@@ -42,11 +44,22 @@ const GroupId = () => {
 const MainGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
 	const data = group.data!;
+	console.log(data)
 
 	return (
 		<>
 			<Cover />
-			to do
+			{data.participation.isMember 
+			?
+			<>
+				to do
+			</>
+			:
+			<>
+				{/* todo */}
+				Você ainda não é um membro do grupo
+			</>
+			}
 		</>
 	);
 };
@@ -67,9 +80,11 @@ const Cover = () => {
 			<div css={Styles.cover}>
 				<div className="title">
 					<span>{data.title}</span>
-					<div className="description">
-						<span>{data.description}</span>
-					</div>
+					{data.description.length > 0 && 
+						<div className="description">
+							<span>{data.description}</span>
+						</div>
+					}
           {data.participation.isStaff && (
             <div className="config" title="configurar" onClick={Handle.config}>
               <BsGear size={24} />

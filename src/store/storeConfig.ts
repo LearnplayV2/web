@@ -1,4 +1,4 @@
-import group, { IGroupState } from "@/components/dashboard/pages/groups/[id]/store";
+import group, { IGroupState } from "@/components/dashboard/pages/groups/group/store";
 import groups, { IGroupsState } from "@/components/dashboard/pages/groups/store";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
@@ -7,7 +7,7 @@ import dropdowns, { DropdownState } from './dropdown';
 import leftMenu, { LeftMenuState } from "./leftMenu";
 import notifications, { INotification} from "./notifications";
 import profilePicture, { ProfilePictureState } from "./profilePicture";
-import toggleMenu from "@/components/ui/toggleMenu/store";
+import toggleMenu, { ToggleMenuState } from "@/components/ui/toggleMenu/store";
 
 export interface RootState {
     alert: AlertState;
@@ -17,7 +17,7 @@ export interface RootState {
     notifications: INotification;
     groups: IGroupsState;
     group: IGroupState;
-    toggleMenu: string[];
+    toggleMenu: ToggleMenuState[];
 }
 
 const reducers = combineReducers({

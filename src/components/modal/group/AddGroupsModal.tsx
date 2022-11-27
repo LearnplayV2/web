@@ -4,7 +4,7 @@ import { Groups, GroupVisibility, ICreateGroup } from "../../../service/groups";
 import { closeModal, setModal } from "../../../store/alert";
 import GroupData from "@/components/dashboard/pages/groups/data";
 import store from "@/store/storeConfig";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ReCAPTCHA from 'react-google-recaptcha';
 
 interface IStudyGroupsModalProps {
@@ -15,6 +15,7 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
 	const { errMsg: errorMsg } = props;
 	const { dispatch } = store;
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	const [captchaPass, setCaptchaPass] = useState<boolean>(false);
 	const [btnActive, setBtnActive] = useState<boolean>(true);
@@ -36,12 +37,13 @@ const StudyGroupsModal = (props: IStudyGroupsModalProps) => {
 					description: groupDescription.trim(),
 					visibility: groupVisibility,
 				};
-				await Groups.add(data);
+				const response = await Groups.add(data);
 				dispatch(closeModal());
 				if (location.pathname.includes("groups")) {
 					dispatch(GroupData.get({}));
 				}
 				setCaptchaPass(false);
+				navigate(`/dashboard/group/${response.data.groupId}`);
 			} catch (err: any) {
 				const errMessage = err?.response?.data?.response?.message ?? "Ocorreu um erro inesperado, tente novamente";
 				dispatch(
