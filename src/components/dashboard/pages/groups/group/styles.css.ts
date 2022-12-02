@@ -4,7 +4,7 @@ class Styles {
 
   static cover = css`
     width: 100%;
-    background: #3F51B5;
+    background-color: #383838;
     overflow: hidden;
     height: 200px;
     display: flex;
@@ -19,7 +19,7 @@ class Styles {
       font-size: 28px;
       font-weight: bold;
       padding: 2rem 0;
-      color: #000;
+      color: #c1c1c1;
 
       span {
         padding: 8px 2rem;

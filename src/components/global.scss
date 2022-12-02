@@ -14,7 +14,7 @@
     body  {
         margin:0;
         padding:0;
-        background: #121214;
+        background: #202024;
         color: $normal;
     }
     
@@ -123,4 +123,40 @@ input, textarea, select {
     margin: 0 auto;
     margin-top: 4rem;
     min-height: 80vh;
+}
+
+.color {
+    &.danger {
+        color: #dc3545;
+    }
+    &.warning {
+        color: #ffc107;
+    }
+    &.info {
+        color: #17a2b8;
+    }
+    &.primary {
+        color: #007bff;
+    }
+    &.success {
+        color: #28a745;
+    }
+}
+
+.bg {
+    &.danger {
+        background-color: #dc3545;
+    }
+    &.warning {
+        background-color: #ffc107;
+    }
+    &.info {
+        background-color: #17a2b8;
+    }
+    &.primary {
+        background-color: #007bff;
+    }
+    &.success {
+        background-color: #28a745;
+    }
 }

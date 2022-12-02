@@ -1,104 +1,152 @@
 import { FetchStatus } from "@/class/fetchStatus";
 import { Dashboard } from "@/components/dashboard/page";
 import store, { RootState } from "@/store/storeConfig";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Data from "./data";
 import { IGroupState } from "./store";
 import { Styles } from "./styles.css";
-import {BsGear} from 'react-icons/bs';
+import { BsGear } from "react-icons/bs";
 import { setModal } from "@/store/alert";
 import { ConfigGroup } from "@/components/modal/group/ConfigGroup";
+import { Skeleton } from "@/components/ui/Loading";
+import { css } from "@emotion/react";
+import { useTimeout } from "@/hooks/useTimeout";
 
 const GroupId = () => {
 	const params = useParams();
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
 	const { id: groupId } = params;
 	const { dispatch } = store;
-
+	const timeout = useTimeout();
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		if (typeof groupId != "undefined") {
+			timeout.start();
 			dispatch(Data.get(groupId));
+			timeout.stop();
 		}
 	}, [groupId]);
 
-	switch (group.status) {
-		default:
-		case FetchStatus.INITIAL || FetchStatus.LOADING:
-			return <h3>Carregando...</h3>;
-		case FetchStatus.ERROR:
-			return <h3>Ocorreu um erro inesperado, tente novamente.</h3>;
-		case FetchStatus.SUCCESS:
-			return (
-				<Dashboard hasLeftMenu={true}>
-					<div className="container" style={{ marginTop: "4rem" }}>
-						<MainGroup />
-					</div>
-				</Dashboard>
-			);
+	useEffect(() => {
+		if(timeout.finished) {
+			setLoading(false);
+		}
+	}, [timeout]);
+
+	return (
+		<Dashboard hasLeftMenu={true}>
+			<div className="container" style={{ marginTop: "4rem" }}>
+				{loading ? (
+					<Loading />
+				) : (
+					(() => {
+						switch (group.status) {
+							case FetchStatus.SUCCESS:
+								return <MainGroup />;
+							case FetchStatus.ERROR:
+								return <h1>Ocorreu um erro inesperado, tente novamente mais tarde.</h1>;
+						}
+					})()
+				)}
+			</div>
+		</Dashboard>
+	);
+};
+
+const Loading = () => {
+	class Styles {
+		static main = css`
+			margin: 2rem 0;
+			display: flex;
+			width: 100%;
+			height: 100vh;
+			flex-direction: row;
+			justify-content: space-between;
+
+			.left {
+				width: 65%;
+			}
+
+			.right {
+				width: 33%;
+			}
+		`;
 	}
+
+	return (
+		<>
+			<Skeleton height="200px" width="100%" darkMode />
+			<div css={Styles.main}>
+				<div className="left">
+					<Skeleton style={{ marginBottom: "10px" }} height="5%" width="100%" darkMode />
+					<Skeleton style={{ marginTop: "20px" }} height="30%" width="100%" darkMode />
+					<Skeleton style={{ marginTop: "20px" }} height="5%" width="100%" darkMode />
+					<Skeleton style={{ marginTop: "20px" }} height="30%" width="100%" darkMode />
+				</div>
+				<div className="right">
+					<Skeleton height="100%" width="100%" darkMode />
+				</div>
+			</div>
+		</>
+	);
 };
 
 const MainGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
 	const data = group.data!;
-	console.log(data)
+	const dispatch = useDispatch();
+
+	const Cover = () => {
+		class Handle {
+			static config = () => {
+				dispatch(setModal({ element: <ConfigGroup />, fx: true }));
+			};
+		}
+
+		return (
+			<>
+				<div css={Styles.cover}>
+					<div className="title">
+						<span>{data.title}</span>
+						{data.description.length > 0 && (
+							<div className="description">
+								<span>{data.description}</span>
+							</div>
+						)}
+						{data.participation.isStaff && (
+							<div className="config" title="configurar" onClick={Handle.config}>
+								<BsGear size={24} />
+							</div>
+						)}
+					</div>
+					<div className="links">
+						{data.links.map((link) => (
+							<li>
+								<a href={link.url} target="_blank">
+									{link.title}
+								</a>
+							</li>
+						))}
+					</div>
+				</div>
+			</>
+		);
+	};
 
 	return (
 		<>
 			<Cover />
-			{data.participation.isMember 
-			?
-			<>
-				to do
-			</>
-			:
-			<>
-				{/* todo */}
-				Você ainda não é um membro do grupo
-			</>
-			}
-		</>
-	);
-};
-
-const Cover = () => {
-	const group = useSelector((state: RootState) => state.group) as IGroupState;
-	const data = group.data!;
-  const dispatch = useDispatch();
-  
-  class Handle {
-    static config = () => {
-      dispatch(setModal({element: <ConfigGroup />, fx: true}));
-    }
-  }
-
-	return (
-		<>
-			<div css={Styles.cover}>
-				<div className="title">
-					<span>{data.title}</span>
-					{data.description.length > 0 && 
-						<div className="description">
-							<span>{data.description}</span>
-						</div>
-					}
-          {data.participation.isStaff && (
-            <div className="config" title="configurar" onClick={Handle.config}>
-              <BsGear size={24} />
-            </div>
-          )}
-				</div>
-				<div className="links">
-					{data.links.map((link) => (
-						<li>
-							<a href={link.url}>{link.title}</a>
-						</li>
-					))}
-				</div>
-			</div>
+			{data.participation.isMember ? (
+				<>to do</>
+			) : (
+				<>
+					{/* todo */}
+					Você ainda não é um membro do grupo
+				</>
+			)}
 		</>
 	);
 };

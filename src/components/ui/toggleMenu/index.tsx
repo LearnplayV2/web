@@ -31,7 +31,7 @@ const ToggleMenu = (props: Props) => {
 
   return(
     <div css={Style.container} onClick={() => dispatch(toggleMenu.actions.setMenu({id, active: !active}))}>
-      <div style={{background: !active ? '#000' : '#3F51B5' }} className="titleMenu">
+      <div style={{background: !active ? '#161616' : '#383838' }} className="titleMenu">
         {header}
       </div>
       <div onClick={e => e.stopPropagation()} style={{display: !active ? 'none' : 'block' }}>
@@ -56,6 +56,10 @@ class Style {
       padding: 1rem;
       display: flex;
       flex-direction: row;
+
+      :hover {
+        opacity: .6;
+      }
     }
   `;
 }
