@@ -31,9 +31,9 @@ const ProfilePicture = ({ props }: any) => {
 	const timeout = useTimeout();
 
 	useEffect(() => {
-		timeout.start();
-		dispatch(updateProfilePicture(data?.photo));
-		timeout.stop();
+			timeout.start();
+			dispatch(updateProfilePicture(data?.photo));
+			timeout.stop();
 	}, [status]);
 
 	useEffect(() => {

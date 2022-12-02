@@ -6,7 +6,7 @@ import { MdOutlineAddCircle } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { DropdownState, toggleDropdown } from "../../../store/dropdown";
 import { RootState } from "../../../store/storeConfig";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { basicDropDownList, header } from "./styles.css";
 import {AiTwotoneVideoCamera} from 'react-icons/ai';
 import {RiArticleFill} from 'react-icons/ri';
@@ -16,13 +16,26 @@ import { NotificationsList } from "./notifications";
 import { setModal } from "../../../store/alert";
 import { StudyGroupsModal } from "../../modal/group/AddGroupsModal";
 import { INotification } from "../../../store/notifications";
+import { useTimeout } from "@/hooks/useTimeout";
 
 const Header = () => {
     const {dropdowns} = useSelector(state => state) as RootState;
     const {notifications} = useSelector((state: RootState) => state.notifications) as INotification;
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const timeout = useTimeout();
+    const [loading, setLoading] = useState(true);
     
+    useEffect(() => {
+        timeout.start();
+        timeout.stop();
+    }, []);
+
+    useEffect(() => {
+        if(timeout.finished) {
+            setLoading(false);
+        }
+    }, [timeout]);
     class Redirect {
         static homePage() {
             navigate('/dashboard');
@@ -79,9 +92,11 @@ const Header = () => {
                     title={
                         <div css={Styles.notification}>
                             <RiNotification3Fill />
-                            <div className={`badge ${(notifications.length == 0) && 'void'}`}>
-                                {notifications.length}
-                            </div>
+                            {!loading && (
+                                <div className={`badge ${(notifications.length == 0) && 'void'}`}>
+                                    {notifications.length}
+                                </div>
+                            )}
                         </div>
                     } 
                     id="notifications" isActive={Find.dropdownIsActive('notifications')}>

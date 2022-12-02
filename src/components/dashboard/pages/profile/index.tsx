@@ -12,11 +12,16 @@ import { Faded } from "../../../ui/animated";
 import { Dashboard } from "../../page";
 import { resetProfilePicture, updateProfilePicture } from "../../../../store/profilePicture";
 import { Notifications } from "../../../../service/socket/notifications";
+import { useEffect } from "react";
 
 const ProfilePage = () => {
 	const { sendFile, base64File } = useFileUpload();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+			handleProfilePicture();
+	}, [base64File])
 
 	const handleProfilePicture = async () => {
 		try {
