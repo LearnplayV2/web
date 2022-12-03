@@ -7,7 +7,7 @@ export interface IGroupState {
 }
 
 export interface IGroup {
-  id: string;
+  uuid: string;
   title: string;
   participation: {
     isMember: boolean;

@@ -3,7 +3,7 @@ import { Dashboard } from "@/components/dashboard/page";
 import store, { RootState } from "@/store/storeConfig";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Data from "./data";
 import { IGroupState } from "./store";
 import { Styles } from "./styles.css";
@@ -13,6 +13,7 @@ import { ConfigGroup } from "@/components/modal/group/ConfigGroup";
 import { Skeleton } from "@/components/ui/Loading";
 import { css } from "@emotion/react";
 import { useTimeout } from "@/hooks/useTimeout";
+import { Groups } from "@/service/groups";
 
 const GroupId = () => {
 	const params = useParams();
@@ -97,6 +98,7 @@ const Loading = () => {
 const MainGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
 	const data = group.data!;
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const Cover = () => {
@@ -136,15 +138,35 @@ const MainGroup = () => {
 		);
 	};
 
+	class Handle {
+		static async joinOrExitGroup() {
+			try {
+				await Groups.joinOrExit(data.uuid);
+				navigate(0);
+			} catch(err) {
+				console.log(err);
+			}
+		}
+	}
+
 	return (
 		<>
 			<Cover />
 			{data.participation.isMember ? (
-				<>to do</>
+				<>
+				<div css={Styles.notMember}>
+						<button className="bg success" type="button" onClick={Handle.joinOrExitGroup}>
+							Sair do grupo
+						</button>
+					</div>
+				</>
 			) : (
 				<>
-					{/* todo */}
-					Você ainda não é um membro do grupo
+					<div css={Styles.notMember}>
+						<button className="bg success" type="button" onClick={Handle.joinOrExitGroup}>
+							Participar do grupo
+						</button>
+					</div>
 				</>
 			)}
 		</>

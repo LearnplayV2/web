@@ -2,6 +2,11 @@ import { css } from "@emotion/react";
 
 class Styles {
 
+  static notMember = css`
+    margin-top: 10px;
+    text-align: right;
+  `;
+
   static cover = css`
     width: 100%;
     background-color: #383838;
