@@ -29,8 +29,8 @@ const groups = createSlice({
             if(typeof action.payload.query != 'undefined') state.query = action.payload?.query;
             if(action.payload.data) {
                 state.data = action.payload.data;
-                state.status = FetchStatus.SUCCESS;
             } 
+            state.status = action.payload.status ?? FetchStatus.SUCCESS;
         },
         setStatus(state, action: PayloadAction<FetchStatus>) {
             state.status = action.payload;

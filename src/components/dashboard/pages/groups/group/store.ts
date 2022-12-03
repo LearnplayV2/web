@@ -9,10 +9,7 @@ export interface IGroupState {
 export interface IGroup {
   uuid: string;
   title: string;
-  participation: {
-    isMember: boolean;
-    isStaff: boolean;
-  }
+  participation?: string;
   links: ILinks[],
   members: IMember[],
   staff: IMember[],
@@ -51,8 +48,8 @@ const group = createSlice({
     setGroup(state, action: PayloadAction<IGroupState>) {
       if(action.payload.data) {
         state.data = action.payload.data;
-        state.status = FetchStatus.SUCCESS;
       } 
+      state.status = action.payload.status ?? FetchStatus.SUCCESS;
     },
     setStatus(state, action: PayloadAction<FetchStatus>) {
       state.status = action.payload;

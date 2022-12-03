@@ -2,7 +2,7 @@ import { createSearchParams, Link, useNavigate } from "react-router-dom";
 import { Faded } from "@components/ui/animated";
 import { Dashboard } from "@components/dashboard/page";
 import { isEmpty } from "@utils/isEmpty";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import store, { RootState } from "@store/storeConfig";
 import { FetchStatus } from "@class/fetchStatus";
@@ -10,6 +10,8 @@ import Data from "./data";
 import { Pagination as Paginate } from "@components/ui/pagination";
 import { useGroupsQuery } from "../../header/search";
 import EncodeURI from "@/utils/encodeURI";
+import { useTimeout } from "@/hooks/useTimeout";
+import { Skeleton } from "@/components/ui/Loading";
 
 const Group = () => {
 	const { dispatch } = store;
@@ -17,7 +19,7 @@ const Group = () => {
 
 	useEffect(() => {
 		dispatch(Data.get({ ...params }));
-	}, [params]);
+	}, []);
 
 	return (
 		<Dashboard hasLeftMenu={true}>
@@ -34,25 +36,42 @@ const Group = () => {
 
 const ListGroups = () => {
 	const { data, status } = useSelector((state: RootState) => state.groups);
+	const timeout = useTimeout();
+	const [loading, setLoading] = useState(true);
+
+	console.log(status)
 
 	if (data?.totalItems == 0) {
 		return <h3>Nenhum grupo foi encontrado.</h3>;
 	}
 
+	useEffect(() => {
+		timeout.start();
+		if (status == FetchStatus.SUCCESS) {
+			timeout.stop();
+		}
+	}, [status]);
+
+	useEffect(() => {
+		if (timeout.finished) {
+			setLoading(false);
+		}
+	}, [timeout]);
+
 	switch (status) {
-		case FetchStatus.LOADING || FetchStatus.INITIAL:
-			return <h3>Carregando...</h3>;
 		case FetchStatus.ERROR:
-			return <h3>Erro ao carregar grupos.</h3>;
-		case FetchStatus.SUCCESS:
-			return (
+			return <h3>{data?.toString() ?? 'Erro ao carregar grupos.'}</h3>;
+		default:
+			return loading ? (
+				<Loading />
+			) : (
 				<>
 					<SearchMsg />
 					<div style={{ marginTop: "2rem" }}>
 						{data?.groups.map((group, index) => (
 							<div key={index} style={{ marginBottom: "3rem" }}>
 								<h2>
-									<Link to={{pathname: `../group/${group.uuid}/${EncodeURI(group.title)}`}} className="nounderline">
+									<Link to={{ pathname: `../group/${group.uuid}/${EncodeURI(group.title)}` }} className="nounderline">
 										{group.title}
 									</Link>
 								</h2>
@@ -63,9 +82,22 @@ const ListGroups = () => {
 					</div>
 				</>
 			);
-		default:
-			return <>Ocorreu um erro inesperado, tente novamente mais tarde.</>;
 	}
+};
+
+const Loading = () => {
+	return (
+		<div style={{ marginTop: "1rem" }}>
+			<Skeleton width="80%" height="2rem" darkMode />
+			{Array.from(Array(8)).map((e, i) =>
+				i % 2 ? (
+					<Skeleton style={{ marginTop: "1rem 0" }} width="50%" height="4rem" darkMode />
+				) : (
+					<Skeleton style={{ margin: "1rem 0" }} width="50%" height="2rem" darkMode />
+				)
+			)}
+		</div>
+	);
 };
 
 const SearchMsg = () => {

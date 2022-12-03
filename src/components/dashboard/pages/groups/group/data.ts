@@ -10,8 +10,8 @@ class Data {
       try {
         const response = await Groups.fetchOne(groupId);
         dispatch(group.actions.setGroup({ data: response.data, status: FetchStatus.SUCCESS }));
-      } catch (err) {
-        dispatch(group.actions.setStatus(FetchStatus.ERROR));
+      } catch (err: any) {
+        dispatch(group.actions.setGroup({ data: err?.response?.data?.message ?? null, status: FetchStatus.ERROR }));
       }
     };
   }

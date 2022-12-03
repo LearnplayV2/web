@@ -27,7 +27,7 @@ class Data {
         dispatch(groups.actions.setGroups({ data: response.data }));
         
       } catch (err) {
-        dispatch(groups.actions.setStatus(FetchStatus.ERROR));
+        dispatch(groups.actions.setGroups({data: err?.response?.data?.message ?? null , status: FetchStatus.ERROR}));
       }
     };
   }

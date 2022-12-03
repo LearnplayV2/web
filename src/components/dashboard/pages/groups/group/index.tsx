@@ -48,7 +48,7 @@ const GroupId = () => {
 							case FetchStatus.SUCCESS:
 								return <MainGroup />;
 							case FetchStatus.ERROR:
-								return <h1>Ocorreu um erro inesperado, tente novamente mais tarde.</h1>;
+								return <h1>{group.data?.toString() ?? 'Ocorreu um erro inesperado, tente novamente mais tarde.'}</h1>;
 						}
 					})()
 				)}
@@ -118,7 +118,7 @@ const MainGroup = () => {
 								<span>{data.description}</span>
 							</div>
 						)}
-						{data.participation.isStaff && (
+						{data.participation == 'staff' && (
 							<div className="config" title="configurar" onClick={Handle.config}>
 								<BsGear size={24} />
 							</div>
@@ -149,10 +149,12 @@ const MainGroup = () => {
 		}
 	}
 
+	console.log('participation', data.participation)
+
 	return (
 		<>
 			<Cover />
-			{data.participation.isMember ? (
+			{typeof data?.participation != 'undefined' ? (
 				<>
 				<div css={Styles.notMember}>
 						<button className="bg success" type="button" onClick={Handle.joinOrExitGroup}>
