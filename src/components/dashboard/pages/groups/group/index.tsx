@@ -8,7 +8,7 @@ import Data from "./data";
 import { IGroupState } from "./store";
 import { Styles } from "./styles.css";
 import { BsGear } from "react-icons/bs";
-import { setModal } from "@/store/alert";
+import { closeModal, setModal } from "@/store/alert";
 import { ConfigGroup } from "@/components/modal/group/ConfigGroup";
 import { Skeleton } from "@/components/ui/Loading";
 import { css } from "@emotion/react";
@@ -32,7 +32,7 @@ const GroupId = () => {
 	}, [groupId]);
 
 	useEffect(() => {
-		if(timeout.finished) {
+		if (timeout.finished) {
 			setLoading(false);
 		}
 	}, [timeout]);
@@ -48,7 +48,7 @@ const GroupId = () => {
 							case FetchStatus.SUCCESS:
 								return <MainGroup />;
 							case FetchStatus.ERROR:
-								return <h1>{group.data?.toString() ?? 'Ocorreu um erro inesperado, tente novamente mais tarde.'}</h1>;
+								return <h1>{group.data?.toString() ?? "Ocorreu um erro inesperado, tente novamente mais tarde."}</h1>;
 						}
 					})()
 				)}
@@ -118,7 +118,7 @@ const MainGroup = () => {
 								<span>{data.description}</span>
 							</div>
 						)}
-						{data.participation == 'staff' && (
+						{data.participation == "staff" && (
 							<div className="config" title="configurar" onClick={Handle.config}>
 								<BsGear size={24} />
 							</div>
@@ -140,25 +140,56 @@ const MainGroup = () => {
 
 	class Handle {
 		static async joinOrExitGroup() {
+			if (data.participation == "staff") {
+				const element = (
+					<>
+						<h1>Tem certeza que deseja apagar o grupo?</h1>
+						Essa ação não poderá ser desfeita mais tarde. <br />
+						<br />
+						Todos os itens serão excluídos, isso <b>inclui</b>:
+						<br />
+						<br />
+						<li>Membros</li>
+						<li>Links</li>
+						<li>Staffs</li>
+						<li>Postagens</li>
+						<div style={{ float: "right", margin: "2rem 0 0 0" }}>
+							<button type="button" onClick={Handle.delete} className="bg warning">
+								Confirmo minha decisão
+							</button>
+							&nbsp;&nbsp;
+							<button type="button" className="bg info" onClick={() => dispatch(closeModal())}>
+								Cancelar
+							</button>
+						</div>
+						<div style={{ clear: "both" }}></div>
+					</>
+				);
+				return dispatch(setModal({ element }));
+			}
+			Handle.delete();
+		}
+
+		static async delete() {
 			try {
 				await Groups.joinOrExit(data.uuid);
 				navigate(0);
-			} catch(err) {
+			} catch (err) {
 				console.log(err);
 			}
 		}
 	}
 
-	console.log('participation', data.participation)
+	console.log("participation", data.participation);
 
 	return (
 		<>
 			<Cover />
-			{typeof data?.participation != 'undefined' ? (
+			{typeof data?.participation != "undefined" ? (
 				<>
-				<div css={Styles.notMember}>
+					<div css={Styles.notMember}>
 						<button className="bg success" type="button" onClick={Handle.joinOrExitGroup}>
-							Sair do grupo
+							{data.participation == "staff" ? "Deletar grupo" : "Sair do grupo"}
 						</button>
 					</div>
 				</>

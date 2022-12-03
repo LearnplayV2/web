@@ -34,7 +34,6 @@ const Session = (props : Props) => {
                 if(!location.pathname.includes(access ?? '/dashboard')) navigate(access ?? '/dashboard');
             }
         }
-
         setMounted(true);
     }, []);
     
