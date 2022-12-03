@@ -13,6 +13,10 @@ class HandleCookie {
         this.cookies.set(this.cookieName.token, token, {path: '/', maxAge: this.months(3) } );
     }
 
+    static removeAuth() {
+        this.cookies.remove(this.cookieName.token, {path: '/'});
+    }
+
 }
 
 export {HandleCookie};

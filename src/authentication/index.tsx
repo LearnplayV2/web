@@ -52,7 +52,7 @@ const Session = (props : Props) => {
 
 const Logout = (callback: Function) => {
     if(isAuthenticated()) {
-        HandleCookie.cookies.remove(HandleCookie.cookieName.token);
+        HandleCookie.removeAuth();
         setTimeout(() => {
             callback();
         }, 200);
