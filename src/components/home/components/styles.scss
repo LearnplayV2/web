@@ -123,4 +123,9 @@
         margin-top: 4rem;
         margin-bottom: 2rem;
     }
+
+    @media screen and (max-width: $media-mobile) {
+        width: 100%;
+        padding:0;
+    }
 }
