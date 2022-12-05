@@ -188,7 +188,7 @@ const MainGroup = () => {
 			{typeof data?.participation != "undefined" ? (
 				<>
 					<div css={Styles.notMember}>
-						<button className="bg success" type="button" onClick={Handle.joinOrExitGroup}>
+						<button className={`bg ${data.participation == 'staff' && 'danger text-white'}`} type="button" onClick={Handle.joinOrExitGroup}>
 							{data.participation == "staff" ? "Deletar grupo" : "Sair do grupo"}
 						</button>
 					</div>
