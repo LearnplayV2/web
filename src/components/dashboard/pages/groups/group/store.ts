@@ -19,8 +19,8 @@ export interface IGroup {
   updatedAt: string;
 }
 
-interface ILinks {
-  id: string;
+export interface ILinks {
+  id?: string;
   title: string;
   url: string;
 }

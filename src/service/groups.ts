@@ -31,6 +31,11 @@ export class GroupVisibility {
 	static public = "PUBLIC";
 }
 
+export interface IGroupLinks {
+	title: string;
+	url: string;
+}
+
 class Groups {
 	static path = (page?: string) => "/group".concat(page ?? "");
 
@@ -40,6 +45,10 @@ class Groups {
 
 	static add(props: ICreateGroup) {
 		return service.post(this.path("/new"), props, { headers });
+	}
+
+	static addOrUpdateLinks(groupId: string, links: IGroupLinks[]) {
+		return service.post(this.path("/set/links"), links, { params: {id: groupId}, headers });
 	}
 
 	static fetchOne(uuid: string) {

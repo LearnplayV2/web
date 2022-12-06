@@ -1,12 +1,15 @@
-import { IGroupState } from "@/components/dashboard/pages/groups/group/store";
+import group, { IGroupState, ILinks } from "@/components/dashboard/pages/groups/group/store";
 import ToggleMenu from "@/components/ui/toggleMenu";
 import { ToggleMenuState } from "@/components/ui/toggleMenu/store";
+import { useTimeout } from "@/hooks/useTimeout";
+import { Groups, IGroupLinks } from "@/service/groups";
 import { RootState } from "@/store/storeConfig";
 import { css } from "@emotion/react";
-import { useEffect, useRef, useState } from "react";
+import { createRef, FormEvent, useEffect, useRef, useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { MdAdd } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const ConfigGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
@@ -45,9 +48,16 @@ const ConfigGroup = () => {
 
 const SetLinks = () => {
 	const ref = useRef<HTMLDivElement>(null);
-	const [count, setCount] = useState<number>(1);
+	const groupData = useSelector((state: RootState) => state.group) as IGroupState;
+	const [count, setCount] = useState<number>(groupData.data?.links?.length && groupData.data.links.length > 0 ? groupData.data.links.length : 1);
 	const toggleMenu = useSelector((state: RootState) => state.toggleMenu) as ToggleMenuState[];
 	const isActive = toggleMenu.find((menu) => menu.id === "links")?.active;
+	const timeout = useTimeout();
+
+	const [loading, setLoading] = useState(false);
+	const [btnText, setBtnText] = useState("Salvar");
+	const [error, setError] = useState("");
+	const dispatch = useDispatch();
 
 	// ----------------------------- autoscroll
 	useEffect(() => {
@@ -57,6 +67,13 @@ const SetLinks = () => {
 	}, [count, isActive]);
 	// ----------------------------- autoscroll
 
+	useEffect(() => {
+		if (timeout.finished) {
+			setLoading(false);
+			setBtnText("Salvar");
+		}
+	}, [timeout]);
+
 	class Handle {
 		static incrementLink() {
 			setCount((state) => state + 1);
@@ -65,41 +82,80 @@ const SetLinks = () => {
 		static decrementLink() {
 			setCount((state) => state - 1);
 		}
+
+		static async saveLinks(e: FormEvent) {
+			e.preventDefault();
+			const form = new FormData(e.target as HTMLFormElement);
+			const urls = form.getAll("url");
+			const titles = form.getAll("title");
+			let data: IGroupLinks[] = [];
+			urls.forEach((item, i) => data.push({ title: titles[i] as string, url: item as string }));
+			console.log(data);
+			setLoading(true);
+			setBtnText("Salvando...");
+			if (typeof groupData.data?.uuid != "undefined")
+				try {
+					timeout.start();
+					const response = await Groups.addOrUpdateLinks(groupData.data.uuid, data);
+					console.log('todo reload response')
+					timeout.stop();
+				} catch (err) {
+					setError("Ocorreu um erro inesperado, tente novamente mais tarde");
+					console.log(err);
+				}
+		}
 	}
 
 	return (
 		<div css={Styles.form} ref={ref}>
-			{Array.from({ length: count }).map((e, i) => (
-				<div className="row">
-					{i == count - 1 && i != 0 && (
+			<form onSubmit={Handle.saveLinks} style={{ display: "contents" }}>
+				{Array.from({ length: count }).map((e, i) => (
+					<div className="row">
+						{i == count - 1 && (
+							<div className="btn bg danger" onClick={Handle.decrementLink}>
+								<FiTrash title="Deletar linha" />
+							</div>
+						)}
+						<div>
+							<input type="text" name={"title"} placeholder="Título do link" value={groupData.data?.links[i]?.title} />
+						</div>
+						<div style={{ flexBasis: "100%" }}>
+							<input type="url" name={"url"} placeholder="URL do link" value={groupData.data?.links[i]?.url} />
+						</div>
+						{i == count - 1 && (
+							<div className="btn bg success" onClick={Handle.incrementLink}>
+								<MdAdd title="Adicionar linha" />
+							</div>
+						)}
+					</div>
+				))}
+				<div className="mobile-controls">
+					<div className="btn bg success" onClick={Handle.incrementLink}>
+						<MdAdd title="Adicionar links" />
+					</div>
+					{count >= 1 && (
 						<div className="btn bg danger" onClick={Handle.decrementLink}>
 							<FiTrash title="Deletar linha" />
 						</div>
 					)}
-					<div>
-						<input type="text" placeholder="Título do link" />
-					</div>
-					<div style={{ flexBasis: "100%" }}>
-						<input type="url" placeholder="URL do link" />
-					</div>
-					{i == count - 1 && (
-						<div className="btn bg success" onClick={Handle.incrementLink}>
-							<MdAdd title="Adicionar linha" />
-						</div>
-					)}
 				</div>
-			))}
-			<div className="mobile-controls">
-				<div className="btn bg success" onClick={Handle.incrementLink}>
-					<MdAdd title="Adicionar links" />
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "space-between",
+						width: "-webkit-fill-available",
+						marginTop: "1rem",
+						paddingRight: "1rem",
+						alignItems: "center",
+					}}
+				>
+					<b>{error}</b>
+					<button type="submit" className="text-white" disabled={loading}>
+						{btnText}
+					</button>
 				</div>
-				{count >= 2 && (
-					<div className="btn bg danger" onClick={Handle.decrementLink}>
-						<FiTrash title="Deletar linha" />
-					</div>
-				)}
-			</div>
-			<div style={{ clear: "both" }}></div>
+				<div style={{ clear: "both" }}></div>
+			</form>
 		</div>
 	);
 };
