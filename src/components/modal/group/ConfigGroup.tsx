@@ -5,11 +5,10 @@ import { useTimeout } from "@/hooks/useTimeout";
 import { Groups, IGroupLinks } from "@/service/groups";
 import { RootState } from "@/store/storeConfig";
 import { css } from "@emotion/react";
-import { createRef, FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { MdAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 
 const ConfigGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
@@ -90,15 +89,17 @@ const SetLinks = () => {
 			const titles = form.getAll("title");
 			let data: IGroupLinks[] = [];
 			urls.forEach((item, i) => data.push({ title: titles[i] as string, url: item as string }));
-			console.log(data);
 			setLoading(true);
 			setBtnText("Salvando...");
 			if (typeof groupData.data?.uuid != "undefined")
 				try {
 					timeout.start();
 					const response = await Groups.addOrUpdateLinks(groupData.data.uuid, data);
-					console.log('todo reload response')
 					timeout.stop();
+					dispatch(group.actions.setGroupLinks({groupId: groupData.data.uuid, links: response.data}));
+					// prevent count 0
+					if(count == 0) setCount(1);
+					setError('');
 				} catch (err) {
 					setError("Ocorreu um erro inesperado, tente novamente mais tarde");
 					console.log(err);

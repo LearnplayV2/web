@@ -53,6 +53,13 @@ const group = createSlice({
     },
     setStatus(state, action: PayloadAction<FetchStatus>) {
       state.status = action.payload;
+    },
+    setGroupLinks(state, action: PayloadAction<{groupId: string, links: ILinks[]}>) {
+      if(state.data == null) return;
+      const index = state.data?.uuid === action.payload.groupId ? 0 : -1;
+      if(index >= 0) {
+        state.data.links = action.payload.links;
+      }
     }
   }
 });
