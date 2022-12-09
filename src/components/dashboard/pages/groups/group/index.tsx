@@ -125,8 +125,8 @@ const MainGroup = () => {
 						)}
 					</div>
 					<div className="links">
-						{data.links.map((link) => (
-							<li>
+						{data.links.map((link, i) => (
+							<li key={i}>
 								<a href={link.url} target="_blank">
 									{link.title}
 								</a>

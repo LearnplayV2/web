@@ -10,7 +10,8 @@ const useTimeout = (min: number | undefined = import.meta.env.DEV ? import.meta.
 	};
 
 	const stop = () => {
-		setHasData(true);
+		setHasData(undefined);
+		setFinished(true);
 	};
 
 	useEffect(() => {
@@ -23,8 +24,7 @@ const useTimeout = (min: number | undefined = import.meta.env.DEV ? import.meta.
 				return () => clearInterval(counter);
 			} else if (hasData) {
 				console.log('Timeout finished.');
-				setHasData(undefined);
-				setFinished(true);
+				stop();
 				return () => clearInterval(counter);
 			}
 		}

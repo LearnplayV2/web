@@ -85,21 +85,18 @@ const SetLinks = () => {
 		static async saveLinks(e: FormEvent) {
 			e.preventDefault();
 			const form = new FormData(e.target as HTMLFormElement);
-			const urls = form.getAll("url");
-			const titles = form.getAll("title");
 			let data: IGroupLinks[] = [];
-			urls.forEach((item, i) => data.push({ title: titles[i] as string, url: item as string }));
-			setLoading(true);
-			setBtnText("Salvando...");
+			form.getAll("url").forEach((item, i) => data.push({ title: form.getAll("title")[i] as string, url: item as string }));
+			setLoading(true); setBtnText("Salvando...");
 			if (typeof groupData.data?.uuid != "undefined")
 				try {
 					timeout.start();
 					const response = await Groups.addOrUpdateLinks(groupData.data.uuid, data);
 					timeout.stop();
-					dispatch(group.actions.setGroupLinks({groupId: groupData.data.uuid, links: response.data}));
+					dispatch(group.actions.setGroupLinks({ groupId: groupData.data.uuid, links: response.data }));
 					// prevent count 0
-					if(count == 0) setCount(1);
-					setError('');
+					if (count == 0) setCount(1);
+					setError("");
 				} catch (err) {
 					setError("Ocorreu um erro inesperado, tente novamente mais tarde");
 					console.log(err);
@@ -108,45 +105,46 @@ const SetLinks = () => {
 	}
 
 	return (
-		<div css={Styles.form} ref={ref}>
+		<div>
 			<form onSubmit={Handle.saveLinks} style={{ display: "contents" }}>
-				{Array.from({ length: count }).map((e, i) => (
-					<div className="row">
-						{i == count - 1 && (
+				<div css={Styles.form} ref={ref}>
+					{Array.from({ length: count }).map((e, i) => (
+						<div className="row" key={i}>
+							{i == count - 1 && (
+								<div className="btn bg danger" onClick={Handle.decrementLink}>
+									<FiTrash title="Deletar linha" />
+								</div>
+							)}
+							<div>
+								<input type="text" name={"title"} placeholder="Título do link" value={groupData.data?.links[i]?.title} />
+							</div>
+							<div style={{ flexBasis: "100%" }}>
+								<input type="url" name={"url"} placeholder="URL do link" value={groupData.data?.links[i]?.url} />
+							</div>
+							{i == count - 1 && (
+								<div className="btn bg success" onClick={Handle.incrementLink}>
+									<MdAdd title="Adicionar linha" />
+								</div>
+							)}
+						</div>
+					))}
+					<div className="mobile-controls">
+						<div className="btn bg success" onClick={Handle.incrementLink}>
+							<MdAdd title="Adicionar links" />
+						</div>
+						{count >= 1 && (
 							<div className="btn bg danger" onClick={Handle.decrementLink}>
 								<FiTrash title="Deletar linha" />
 							</div>
 						)}
-						<div>
-							<input type="text" name={"title"} placeholder="Título do link" value={groupData.data?.links[i]?.title} />
-						</div>
-						<div style={{ flexBasis: "100%" }}>
-							<input type="url" name={"url"} placeholder="URL do link" value={groupData.data?.links[i]?.url} />
-						</div>
-						{i == count - 1 && (
-							<div className="btn bg success" onClick={Handle.incrementLink}>
-								<MdAdd title="Adicionar linha" />
-							</div>
-						)}
 					</div>
-				))}
-				<div className="mobile-controls">
-					<div className="btn bg success" onClick={Handle.incrementLink}>
-						<MdAdd title="Adicionar links" />
-					</div>
-					{count >= 1 && (
-						<div className="btn bg danger" onClick={Handle.decrementLink}>
-							<FiTrash title="Deletar linha" />
-						</div>
-					)}
+					<div style={{ clear: "both" }}></div>
 				</div>
 				<div
 					style={{
 						display: "flex",
 						justifyContent: "space-between",
 						width: "-webkit-fill-available",
-						marginTop: "1rem",
-						paddingRight: "1rem",
 						alignItems: "center",
 					}}
 				>
@@ -155,7 +153,6 @@ const SetLinks = () => {
 						{btnText}
 					</button>
 				</div>
-				<div style={{ clear: "both" }}></div>
 			</form>
 		</div>
 	);
@@ -169,6 +166,7 @@ class Styles {
 		align-items: flex-start;
 		height: 300px;
 		overflow-y: auto;
+		margin-bottom: 10px;
 
 		.row {
 			display: flex;
