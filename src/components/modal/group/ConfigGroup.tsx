@@ -1,21 +1,39 @@
-import group, { IGroupState, ILinks } from "@/components/dashboard/pages/groups/group/store";
+import groupReducer, { IGroupState, ILinks } from "@/components/dashboard/pages/groups/group/store";
 import ToggleMenu from "@/components/ui/toggleMenu";
 import { ToggleMenuState } from "@/components/ui/toggleMenu/store";
 import { useTimeout } from "@/hooks/useTimeout";
 import { Groups, IGroupLinks } from "@/service/groups";
 import { RootState } from "@/store/storeConfig";
 import { css } from "@emotion/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { MdAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 
 const ConfigGroup = () => {
-	const group = useSelector((state: RootState) => state.group) as IGroupState;
-	const data = group.data!;
+	const groupState = useSelector((state: RootState) => state.group) as IGroupState;
+	const data = groupState.data!;
+	const dispatch = useDispatch();
 
 	const [groupTitle, setGroupTitle] = useState(data.title);
 	const [groupDescription, setGroupDescription] = useState(data.description);
+
+	class Handle {
+		static async basicConfig(e: FormEvent) {
+			e.preventDefault();
+			try {
+				const form = new FormData(e.target as HTMLFormElement);
+				const payloadConfig = {
+					title: form.get("title") as string,
+					description: form.get("description") as string,
+				};
+				await Groups.config(data.uuid, payloadConfig);
+				dispatch(groupReducer.actions.setGroupConfig(payloadConfig));
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
 
 	return (
 		<div style={{ minHeight: "400px" }}>
@@ -23,7 +41,7 @@ const ConfigGroup = () => {
 			<br />
 			<ToggleMenu firstActive={true} header={<li>Configurações básicas</li>} id="config">
 				<div className="form">
-					<form>
+					<form onSubmit={Handle.basicConfig}>
 						<input
 							name="title"
 							className="outlined full"
@@ -35,6 +53,12 @@ const ConfigGroup = () => {
 						<textarea style={{ resize: "none" }} name="description" className="full" onChange={(e) => setGroupDescription(e.target.value)}>
 							{groupDescription}
 						</textarea>
+						<div style={{ float: "right", marginBottom: "1rem" }}>
+							<button className="text-white" type="submit">
+								Salvar
+							</button>
+						</div>
+						<div style={{ clear: "both" }}></div>
 					</form>
 				</div>
 			</ToggleMenu>
@@ -46,6 +70,7 @@ const ConfigGroup = () => {
 };
 
 const SetLinks = () => {
+	const dispatch = useDispatch();
 	const ref = useRef<HTMLDivElement>(null);
 	const groupData = useSelector((state: RootState) => state.group) as IGroupState;
 	const [count, setCount] = useState<number>(groupData.data?.links?.length && groupData.data.links.length > 0 ? groupData.data.links.length : 1);
@@ -56,7 +81,11 @@ const SetLinks = () => {
 	const [loading, setLoading] = useState(false);
 	const [btnText, setBtnText] = useState("Salvar");
 	const [error, setError] = useState("");
-	const dispatch = useDispatch();
+	interface IInputRef {
+		title?: string;
+		url?: string;
+	}
+	const [inputController, setInputController] = useState<IInputRef[]>([]);
 
 	// ----------------------------- autoscroll
 	useEffect(() => {
@@ -85,15 +114,21 @@ const SetLinks = () => {
 		static async saveLinks(e: FormEvent) {
 			e.preventDefault();
 			const form = new FormData(e.target as HTMLFormElement);
-			let data: IGroupLinks[] = [];
-			form.getAll("url").forEach((item, i) => data.push({ title: form.getAll("title")[i] as string, url: item as string }));
-			setLoading(true); setBtnText("Salvando...");
+			let payloadLinks: IGroupLinks[] = [];
+			form.getAll("url").forEach((item, i) => {
+				if (form.getAll("title")[i] && form.getAll("url")[i]) {
+					payloadLinks.push({ title: form.getAll("title")[i] as string, url: item as string });
+				}
+			});
+			setLoading(true);
+			setBtnText("Salvando...");
+			timeout.start();
 			if (typeof groupData.data?.uuid != "undefined")
 				try {
-					timeout.start();
-					const response = await Groups.addOrUpdateLinks(groupData.data.uuid, data);
+					console.log(payloadLinks);
+					const response = await Groups.addOrUpdateLinks(groupData.data.uuid, payloadLinks);
 					timeout.stop();
-					dispatch(group.actions.setGroupLinks({ groupId: groupData.data.uuid, links: response.data }));
+					dispatch(groupReducer.actions.setGroupLinks({ links: response.data }));
 					// prevent count 0
 					if (count == 0) setCount(1);
 					setError("");
@@ -101,6 +136,16 @@ const SetLinks = () => {
 					setError("Ocorreu um erro inesperado, tente novamente mais tarde");
 					console.log(err);
 				}
+		}
+
+		static onChange(ev: ChangeEvent) {
+			const target = (ev.target as HTMLInputElement);
+			const id = parseInt(target.id);
+			console.log(target.name, target.value)
+			setInputController(prevState => ({
+				...prevState,
+				[id]: { ...prevState[id], [target.name]: target.value }
+			}));
 		}
 	}
 
@@ -110,16 +155,30 @@ const SetLinks = () => {
 				<div css={Styles.form} ref={ref}>
 					{Array.from({ length: count }).map((e, i) => (
 						<div className="row" key={i}>
-							{i == count - 1 && (
+							{i == count - 1 && i >= 1 && (
 								<div className="btn bg danger" onClick={Handle.decrementLink}>
 									<FiTrash title="Deletar linha" />
 								</div>
 							)}
 							<div>
-								<input type="text" name={"title"} placeholder="Título do link" value={groupData.data?.links[i]?.title} />
+								<input
+									type="text"
+									name={"title"}
+									id={i.toString()}
+									placeholder="Título do link"
+									onChange={Handle.onChange}
+									value={inputController[i]?.title}
+								/>
 							</div>
 							<div style={{ flexBasis: "100%" }}>
-								<input type="url" name={"url"} placeholder="URL do link" value={groupData.data?.links[i]?.url} />
+								<input
+									type="url"
+									name={"url"}
+									id={i.toString()}
+									placeholder="URL do link"
+									onChange={Handle.onChange}
+									value={inputController[i]?.url}
+								/>
 							</div>
 							{i == count - 1 && (
 								<div className="btn bg success" onClick={Handle.incrementLink}>
@@ -132,7 +191,7 @@ const SetLinks = () => {
 						<div className="btn bg success" onClick={Handle.incrementLink}>
 							<MdAdd title="Adicionar links" />
 						</div>
-						{count >= 1 && (
+						{count >= 2 && (
 							<div className="btn bg danger" onClick={Handle.decrementLink}>
 								<FiTrash title="Deletar linha" />
 							</div>

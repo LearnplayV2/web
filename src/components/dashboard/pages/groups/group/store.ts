@@ -13,7 +13,7 @@ export interface IGroup {
   links: ILinks[],
   members: IMember[],
   staff: IMember[],
-  description: string;
+  description: string | null;
   visibility: string;
   createdAt: string;
   updatedAt: string;
@@ -54,12 +54,14 @@ const group = createSlice({
     setStatus(state, action: PayloadAction<FetchStatus>) {
       state.status = action.payload;
     },
-    setGroupLinks(state, action: PayloadAction<{groupId: string, links: ILinks[]}>) {
+    setGroupLinks(state, action: PayloadAction<{links: ILinks[]}>) {
       if(state.data == null) return;
-      const index = state.data?.uuid === action.payload.groupId ? 0 : -1;
-      if(index >= 0) {
         state.data.links = action.payload.links;
-      }
+    },
+    setGroupConfig(state, action:PayloadAction<{title: string, description: string | null}>) {
+      if(state.data == null) return;
+      state.data.title = action.payload.title;
+      state.data.description = action.payload.description;
     }
   }
 });

@@ -47,6 +47,10 @@ class Groups {
 		return service.post(this.path("/new"), props, { headers });
 	}
 
+	static config(groupId: string, props: {title: string, description?: string}) {
+		return service.put(this.path("/updateConfig"), props, { params: {id: groupId}, headers });
+	}
+
 	static addOrUpdateLinks(groupId: string, links: IGroupLinks[]) {
 		return service.post(this.path("/set/links"), links, { params: {id: groupId}, headers });
 	}
