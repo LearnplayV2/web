@@ -92,7 +92,7 @@ const SetLinks = () => {
 		if (ref.current) {
 			ref.current!.scrollTop = ref.current!.scrollHeight;
 		}
-	}, [count, isActive]);
+	}, [inputController, isActive]);
 	// ----------------------------- autoscroll
 
 	useEffect(() => {
@@ -101,6 +101,11 @@ const SetLinks = () => {
 			setBtnText("Salvar");
 		}
 	}, [timeout]);
+
+	// get initial data
+	useEffect(() => {
+		setInputController(groupData.data?.links ?? []);
+	}, [groupData]);
 
 	class Handle {
 		static incrementLink() {
