@@ -92,7 +92,7 @@ const SetLinks = () => {
 		if (ref.current) {
 			ref.current!.scrollTop = ref.current!.scrollHeight;
 		}
-	}, [inputController, isActive]);
+	}, [count, isActive]);
 	// ----------------------------- autoscroll
 
 	useEffect(() => {
