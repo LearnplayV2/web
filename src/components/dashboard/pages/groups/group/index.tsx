@@ -14,6 +14,8 @@ import { Skeleton } from "@/components/ui/Loading";
 import { css } from "@emotion/react";
 import { useTimeout } from "@/hooks/useTimeout";
 import { Groups } from "@/service/groups";
+import Participation from "@/class/participation";
+import { MdExitToApp } from "react-icons/md";
 
 const GroupId = () => {
 	const params = useParams();
@@ -106,6 +108,15 @@ const MainGroup = () => {
 			static config = () => {
 				dispatch(setModal({ element: <ConfigGroup />, fx: true }));
 			};
+
+			static async exit() {
+				try {
+					await Groups.joinOrExit(data.uuid);
+					navigate(0);
+				} catch (err) {
+					console.log(err);
+				}
+			}
 		}
 
 		return (
@@ -113,26 +124,34 @@ const MainGroup = () => {
 				<div css={Styles.cover}>
 					<div className="title">
 						<span>{data.title}</span>
-						{data.description.length > 0 && (
+						{data.description && (
 							<div className="description">
 								<span>{data.description}</span>
 							</div>
 						)}
-						{data.participation == "staff" && (
+						{data.participation == Participation.staff 
+						? (
 							<div className="config" title="configurar" onClick={Handle.config}>
 								<BsGear size={24} />
 							</div>
+						) 
+						: typeof data.participation != 'undefined' && (
+							<div className="config" title="Sair do grupo" onClick={Handle.exit}>
+								<MdExitToApp size={24} />
+							</div>
 						)}
 					</div>
-					<div className="links">
-						{data.links.map((link, i) => (
-							<li key={i}>
-								<a href={link.url} target="_blank">
-									{link.title}
-								</a>
-							</li>
-						))}
-					</div>
+					{(data.participation == Participation.staff || data.participation == Participation.member) && (
+						<div className="links">
+							{data.links.map((link, i) => (
+								<li key={i}>
+									<a href={link.url} target="_blank">
+										{link.title}
+									</a>
+								</li>
+							))}
+						</div>
+					)}
 				</div>
 			</>
 		);
@@ -140,7 +159,7 @@ const MainGroup = () => {
 
 	class Handle {
 		static async joinOrExitGroup() {
-			if (data.participation == "staff") {
+			if (data.participation == Participation.staff) {
 				const element = (
 					<>
 						<h1>Tem certeza que deseja apagar o grupo?</h1>
@@ -154,7 +173,7 @@ const MainGroup = () => {
 						<li>Staffs</li>
 						<li>Postagens</li>
 						<div style={{ float: "right", margin: "2rem 0 0 0" }}>
-							<button type="button" onClick={Handle.delete} className="bg warning">
+							<button type="button" onClick={Handle.exitOrJoin} className="bg warning">
 								Confirmo minha decisão
 							</button>
 							&nbsp;&nbsp;
@@ -167,10 +186,10 @@ const MainGroup = () => {
 				);
 				return dispatch(setModal({ element }));
 			}
-			Handle.delete();
+			Handle.exitOrJoin();
 		}
 
-		static async delete() {
+		static async exitOrJoin() {
 			try {
 				await Groups.joinOrExit(data.uuid);
 				navigate(0);
@@ -180,17 +199,17 @@ const MainGroup = () => {
 		}
 	}
 
-	console.log("participation", data.participation);
-
 	return (
 		<>
 			<Cover />
 			{typeof data?.participation != "undefined" ? (
 				<>
 					<div css={Styles.notMember}>
-						<button className={`bg ${data.participation == 'staff' && 'danger text-white'}`} type="button" onClick={Handle.joinOrExitGroup}>
-							{data.participation == "staff" ? "Deletar grupo" : "Sair do grupo"}
-						</button>
+						{data.participation == Participation.staff && (
+							<button className={`bg ${data.participation == Participation.staff && 'danger text-white'}`} type="button" onClick={Handle.joinOrExitGroup}>
+								Deletar grupo
+							</button>
+						)}
 					</div>
 				</>
 			) : (

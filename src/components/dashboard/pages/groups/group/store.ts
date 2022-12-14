@@ -1,4 +1,5 @@
 import { FetchStatus } from "@/class/fetchStatus";
+import Participation from "@/class/participation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IGroupState {
@@ -9,7 +10,7 @@ export interface IGroupState {
 export interface IGroup {
   uuid: string;
   title: string;
-  participation?: string;
+  participation?: Participation;
   links: ILinks[],
   members: IMember[],
   staff: IMember[],
