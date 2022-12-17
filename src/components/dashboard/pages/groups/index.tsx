@@ -18,7 +18,7 @@ const Group = () => {
 	const params = useGroupsQuery();
 
 	useEffect(() => {
-		dispatch(Data.get({ ...params }));
+			dispatch(Data.get({ ...params }));
 	}, []);
 
 	return (

@@ -40,7 +40,10 @@ class Groups {
 	static path = (page?: string) => "/group".concat(page ?? "");
 
 	static fetch(query: GroupQuery | null = null) {
-		return service.get(this.path(), { params: query, headers });
+		const token = Session.token();
+		return service.get(this.path(), { params: query, headers: {
+			Authorization: `Bearer ${token}`
+		} });
 	}
 
 	static add(props: ICreateGroup) {

@@ -39,7 +39,7 @@ const ProfilePage = () => {
 
 	class Handle {
 		static logout = () => {
-			Session.Logout(() => navigate("/"));
+			Session.Logout();
 			dispatch(resetProfilePicture());
 		};
 	}

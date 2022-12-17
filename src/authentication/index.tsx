@@ -49,12 +49,10 @@ const Session = (props : Props) => {
 
 }
 
-const Logout = (callback: Function) => {
+const Logout = () => {
     if(isAuthenticated()) {
         HandleCookie.removeAuth();
-        setTimeout(() => {
-            callback();
-        }, 200);
+        window.location.href = '/';
     }
 };
 
