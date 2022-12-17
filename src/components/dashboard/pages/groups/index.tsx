@@ -18,7 +18,7 @@ const Group = () => {
 	const params = useGroupsQuery();
 
 	useEffect(() => {
-			dispatch(Data.get({ ...params }));
+		dispatch(Data.get({ ...params }));
 	}, []);
 
 	return (
@@ -39,7 +39,7 @@ const ListGroups = () => {
 	const timeout = useTimeout();
 	const [loading, setLoading] = useState(true);
 
-	console.log(status)
+	console.log(status);
 
 	if (data?.totalItems == 0) {
 		return <h3>Nenhum grupo foi encontrado.</h3>;
@@ -60,7 +60,7 @@ const ListGroups = () => {
 
 	switch (status) {
 		case FetchStatus.ERROR:
-			return <h3>{data?.toString() ?? 'Erro ao carregar grupos.'}</h3>;
+			return <h3>{data?.toString() ?? "Erro ao carregar grupos."}</h3>;
 		default:
 			return loading ? (
 				<Loading />
@@ -68,16 +68,17 @@ const ListGroups = () => {
 				<>
 					<SearchMsg />
 					<div style={{ marginTop: "2rem" }}>
-						{data?.groups.map((group, index) => (
-							<div key={index} style={{ marginBottom: "3rem" }}>
-								<h2>
-									<Link to={{ pathname: `../group/${group.uuid}/${EncodeURI(group.title)}` }} className="nounderline">
-										{group.title}
-									</Link>
-								</h2>
-								<p>{!isEmpty(group?.description) ? group.description : "Sem descrição"}</p>
-							</div>
-						))}
+						{typeof data?.groups != "undefined" &&
+							data?.groups?.map((group, index) => (
+								<div key={index} style={{ marginBottom: "3rem" }}>
+									<h2>
+										<Link to={{ pathname: `../group/${group.uuid}/${EncodeURI(group.title)}` }} className="nounderline">
+											{group.title}
+										</Link>
+									</h2>
+									<p>{!isEmpty(group?.description) ? group.description : "Sem descrição"}</p>
+								</div>
+							))}
 						<Pagination />
 					</div>
 				</>
@@ -111,7 +112,7 @@ const SearchMsg = () => {
 	return (
 		<>
 			<p>
-				{hasQuery(data.query.title) ? (
+				{hasQuery(data?.query?.title) ? (
 					`Mostrando resultados para "${data.query.title}". ${data.totalItems} grupo(s) encontrado(s).`
 				) : (
 					<>Atualmente há {data.totalItems} grupos públicos que você pode ingressar</>

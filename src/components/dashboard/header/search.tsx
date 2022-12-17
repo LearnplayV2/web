@@ -28,7 +28,7 @@ const Search = () => {
             if(e.key == 'Enter') {
                 if(Handle.isPage(['groups', 'group'])) {
                     navigate({pathname: '/dashboard/groups/', search: createSearchParams({...groupParams, page: '1', title: (e.target as HTMLInputElement).value}).toString() })
-                    dispatch(GroupData.get({}));
+                    dispatch(GroupData.get({page: '1', title: (e.target as HTMLInputElement)?.value}));
                 }
             }
         }
