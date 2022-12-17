@@ -1,5 +1,5 @@
 import { GroupQuery } from "@/components/dashboard/pages/groups/data";
-import { headers, service } from ".";
+import { service } from ".";
 import { Session } from "../authentication";
 
 export interface FetchGroups {
@@ -41,29 +41,63 @@ class Groups {
 
 	static fetch(query: GroupQuery | null = null) {
 		const token = Session.token();
-		return service.get(this.path(), { params: query, headers: {
-			Authorization: `Bearer ${token}`
-		} });
+		return service.get(this.path(), {
+			params: query,
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	}
 
 	static add(props: ICreateGroup) {
-		return service.post(this.path("/new"), props, { headers });
+		const token = Session.token();
+		return service.post(this.path("/new"), props, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	}
 
-	static config(groupId: string, props: {title: string, description?: string}) {
-		return service.put(this.path("/updateConfig"), props, { params: {id: groupId}, headers });
+	static config(groupId: string, props: { title: string; description?: string }) {
+		const token = Session.token();
+		return service.put(this.path("/updateConfig"), props, {
+			params: { id: groupId },
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	}
 
 	static addOrUpdateLinks(groupId: string, links: IGroupLinks[]) {
-		return service.post(this.path("/set/links"), links, { params: {id: groupId}, headers });
+		const token = Session.token();
+		return service.post(this.path("/set/links"), links, {
+			params: { id: groupId },
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	}
 
 	static fetchOne(uuid: string) {
-		return service.get(this.path("/").concat(uuid), { headers });
+		const token = Session.token();
+		return service.get(this.path("/").concat(uuid), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	}
 
 	static joinOrExit(groupId: string) {
-		return service.post(this.path("/joinOrExit"), { id: groupId }, { headers });
+		const token = Session.token();
+		return service.post(
+			this.path("/joinOrExit"),
+			{ id: groupId },
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 	}
 }
 
