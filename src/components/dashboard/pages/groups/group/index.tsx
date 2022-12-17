@@ -16,6 +16,7 @@ import { useTimeout } from "@/hooks/useTimeout";
 import { Groups } from "@/service/groups";
 import Participation from "@/class/participation";
 import { MdExitToApp } from "react-icons/md";
+import member_type from "@/class/participation";
 
 const GroupId = () => {
 	const params = useParams();
@@ -97,6 +98,7 @@ const Loading = () => {
 	);
 };
 
+
 const MainGroup = () => {
 	const group = useSelector((state: RootState) => state.group) as IGroupState;
 	const data = group.data!;
@@ -129,7 +131,7 @@ const MainGroup = () => {
 								<span>{data.description}</span>
 							</div>
 						)}
-						{data.participation == Participation.staff 
+						{data.participation == member_type.STAFF 
 						? (
 							<div className="config" title="configurar" onClick={Handle.config}>
 								<BsGear size={24} />
@@ -141,7 +143,7 @@ const MainGroup = () => {
 							</div>
 						)}
 					</div>
-					{(data.participation == Participation.staff || data.participation == Participation.member) && (
+					{(data.participation == member_type.STAFF || data.participation == member_type.MEMBER) && (
 						<div className="links">
 							{data.links.map((link, i) => (
 								<li key={i}>
@@ -159,7 +161,7 @@ const MainGroup = () => {
 
 	class Handle {
 		static async joinOrExitGroup() {
-			if (data.participation == Participation.staff) {
+			if (data.participation == member_type.STAFF) {
 				const element = (
 					<>
 						<h1>Tem certeza que deseja apagar o grupo?</h1>
@@ -205,8 +207,8 @@ const MainGroup = () => {
 			{typeof data?.participation != "undefined" ? (
 				<>
 					<div css={Styles.notMember}>
-						{data.participation == Participation.staff && (
-							<button className={`bg ${data.participation == Participation.staff && 'danger text-white'}`} type="button" onClick={Handle.joinOrExitGroup}>
+						{data.participation == member_type.STAFF && (
+							<button className={`bg ${data.participation == member_type.STAFF && 'danger text-white'}`} type="button" onClick={Handle.joinOrExitGroup}>
 								Deletar grupo
 							</button>
 						)}
@@ -221,6 +223,7 @@ const MainGroup = () => {
 					</div>
 				</>
 			)}
+			to do posts
 		</>
 	);
 };

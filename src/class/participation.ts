@@ -1,6 +1,6 @@
-class Participation {
-  static staff = 'staff';
-  static member = 'member';
+class member_type {
+  static STAFF = 'STAFF';
+  static MEMBER = 'MEMBER';
 }
 
-export default Participation;
+export default member_type;
