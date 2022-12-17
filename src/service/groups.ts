@@ -80,7 +80,7 @@ class Groups {
 
 	static fetchOne(uuid: string) {
 		const token = Session.token();
-		return service.get(this.path("/").concat(uuid), {
+		return service.get(this.path("/id/").concat(uuid), {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
