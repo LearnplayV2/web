@@ -2,7 +2,7 @@ import groupReducer, { IGroupState, ILinks } from "@/components/dashboard/pages/
 import ToggleMenu from "@/components/ui/toggleMenu";
 import { ToggleMenuState } from "@/components/ui/toggleMenu/store";
 import { useTimeout } from "@/hooks/useTimeout";
-import { Groups, IGroupLinks } from "@/service/groups";
+import { Groups, IGroupLinks } from "@/service/groups/groups";
 import { RootState } from "@/store/storeConfig";
 import { css } from "@emotion/react";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";

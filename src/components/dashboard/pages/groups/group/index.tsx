@@ -13,10 +13,11 @@ import { ConfigGroup } from "@/components/modal/group/ConfigGroup";
 import { Skeleton } from "@/components/ui/Loading";
 import { css } from "@emotion/react";
 import { useTimeout } from "@/hooks/useTimeout";
-import { Groups } from "@/service/groups";
+import { Groups } from "@/service/groups/groups";
 import Participation from "@/class/participation";
 import { MdExitToApp } from "react-icons/md";
 import member_type from "@/class/participation";
+import Posts from "./components/posts";
 
 const GroupId = () => {
 	const params = useParams();
@@ -42,7 +43,7 @@ const GroupId = () => {
 
 	return (
 		<Dashboard hasLeftMenu={true}>
-			<div className="container" style={{ marginTop: "4rem" }}>
+			<div className="container" style={{ marginTop: "4rem", height: 'auto' }}>
 				{loading ? (
 					<Loading />
 				) : (
@@ -223,7 +224,12 @@ const MainGroup = () => {
 					</div>
 				</>
 			)}
-			to do posts
+			<main css={Styles.main}>
+				<Posts />
+				<aside>
+					to do aside
+				</aside>
+			</main>
 		</>
 	);
 };

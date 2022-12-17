@@ -1,5 +1,5 @@
 import { FetchStatus } from "@class/fetchStatus";
-import { FetchGroups } from "@service/groups";
+import { FetchGroups } from "@/service/groups/groups";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupQuery } from "./data";
 

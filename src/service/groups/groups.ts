@@ -1,6 +1,6 @@
 import { GroupQuery } from "@/components/dashboard/pages/groups/data";
-import { service } from ".";
-import { Session } from "../authentication";
+import { service } from "..";
+import { Session } from "../../authentication";
 
 export interface FetchGroups {
 	page: number;

@@ -1,6 +1,32 @@
 import { css } from "@emotion/react";
 
 class Styles {
+	static main = css`
+		display: flex;
+		flex-direction: column-reverse;
+		align-items: flex-start;
+
+		section {
+			flex-grow: 1;
+		}
+		
+		@media screen and (min-width: 1000px) {
+			flex-direction: row;
+			
+			section {
+				margin-right: 4rem;
+				flex-basis: 66%;
+				overflow-y: auto;
+				scroll-behavior: smooth;
+				max-height: 50vh;
+			}
+
+			aside {
+				width: 20%;
+			}
+		}
+	`;
+	
 	static notMember = css`
 		margin-top: 10px;
 		text-align: right;

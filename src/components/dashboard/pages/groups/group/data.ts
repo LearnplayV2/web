@@ -1,5 +1,5 @@
 import { FetchStatus } from "@/class/fetchStatus";
-import { Groups } from "@/service/groups";
+import { Groups } from "@/service/groups/groups";
 import { Dispatch } from "redux";
 import group from "./store";
 
