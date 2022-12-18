@@ -7,6 +7,7 @@ class Styles {
 		align-items: flex-start;
 
 		section {
+			width: -webkit-fill-available;
 			flex-grow: 1;
 		}
 		

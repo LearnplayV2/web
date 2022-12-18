@@ -1,54 +1,95 @@
+import RichTextEditor, { RichTextEditorContext } from "@/components/ui/RichTextEditor";
+import GroupPosts from "@/service/groups/groupPosts";
 import { css } from "@emotion/react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+interface Posts {
+
+}
+
 const Posts = () => {
+  const {value: richTextValue} = useContext(RichTextEditorContext);
   const {id: groupId} = useParams();
 
-  console.log(groupId)
+  
+  class Handle {
+    static async submit(e: FormEvent) {
+      e.preventDefault();
+      console.log('richTextValue', richTextValue)
+    }
+  }
 
   return(
     <>
       <section css={Styles.section}>
-        <article>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-          </p>
-        </article>
-        <article>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-          </p>
-        </article>
-        <article>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-          </p>
-        </article>
+        <div css={Styles.postWrapper}>
+          <form onSubmit={Handle.submit}>
+            <RichTextEditor />
+            <br />
+            <button type="submit" className="bg warning">Enviar</button>
+            <div style={{clear: 'both'}}></div>
+          </form>
+        </div>
+        <PostsContent />
       </section>
     </>
   );
 }
 
+const PostsContent = () => {
+  const {id: groupId} = useParams();
+  const [posts, setPosts] = useState<Posts[]>([]);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    Handle.get();
+  }, []);
+
+  class Handle {
+    static async get() {
+      if(typeof groupId != 'undefined') {
+        try {
+          const res = await GroupPosts.index(groupId);
+          setPosts(res.data);
+  
+        } catch(err: any) {
+          console.log(err)
+          setMessage(err?.response?.data?.message ?? 'Erro ao carregar posts.');
+        }
+      }
+    }
+  }
+
+  return (
+    <>
+      {message && <p>{message}</p>}
+        {posts.map((post, index) => (
+          <article key={index}>
+            <p>
+              {index}
+            </p>
+          </article>
+        ))}
+    </>
+  );
+};
+
 class Styles {
+  static postWrapper = css`
+    background:#787878;
+    padding:1rem;
+
+    button {
+      float: right;
+    }
+  `;
+
   static section = css`
     font-size: 15px;
     line-height: 1.6em;
     word-spacing: 3px;
     text-align: justify;
-
-    ::-webkit-scrollbar {
-        height: 8px;
-        width: 5px;
-      }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: #494949;
-      border-radius:4px;
-      
-      &:hover {
-        background-color: #7c7c7c;
-      }
-    }
 
     article  {
       margin: 0;

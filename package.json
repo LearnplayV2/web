@@ -2,7 +2,6 @@
   "name": "learnplay",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -25,6 +24,7 @@
     "react-google-recaptcha": "^2.1.0",
     "react-icons": "^4.4.0",
     "react-loader-spinner": "^5.3.4",
+    "react-quill": "^2.0.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.0.2",
     "reactn": "^2.2.7",
