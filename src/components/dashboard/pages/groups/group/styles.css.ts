@@ -23,7 +23,7 @@ class Styles {
 			}
 
 			aside {
-				width: 20%;
+				width: 40%;
 			}
 		}
 	`;

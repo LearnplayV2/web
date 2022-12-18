@@ -2,6 +2,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/segoe-ui-4');
 
 @font-face {
     font-family: 'Roboto Local';
@@ -73,13 +74,14 @@
 button {
     background-color: #16A34A;
     cursor: pointer;
-    padding: 1rem;
-    border-radius: 6px;
+    padding: 14px 27px;
+    border-radius: 5px;
+    font-family: "Segoe UI", sans-serif;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
     box-sizing: border-box;
-    transition: .2s filter;
-    color:#000;
+    transition: 0.2s filter;
+    color:#fff;
 
     &:disabled {
         background-color: #3f3f3f!important;
@@ -164,6 +166,7 @@ input, textarea, select {
     }
     &.warning {
         background-color: #ffc107;
+        color: #000;
     }
     &.info {
         background-color: #17a2b8;
