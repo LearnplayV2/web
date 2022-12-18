@@ -16,7 +16,7 @@ class Styles {
 			
 			section {
 				margin-right: 4rem;
-				flex-basis: 66%;
+				flex-basis: 81%;
 				overflow-y: auto;
 				scroll-behavior: smooth;
 				max-height: 50vh;

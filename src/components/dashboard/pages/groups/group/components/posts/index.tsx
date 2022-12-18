@@ -25,51 +25,50 @@ const Posts = () => {
 };
 
 const PostForm = () => {
-  const dispatch = useDispatch();
-  const imageInputRef = useRef<HTMLInputElement>(null);
+	const dispatch = useDispatch();
+	const imageInputRef = useRef<HTMLInputElement>(null);
 	const { value, setValue } = useContext(RichTextEditorContext);
 
-  const [imageList, setImageList] = useState<string[]>([]);
-  const { sendFile, base64File, fileUrl } = useFileUpload();
+	const [imageList, setImageList] = useState<string[]>([]);
+	const { sendFile, base64File, fileUrl } = useFileUpload();
 
-  useEffect(() => {
-    if(base64File && fileUrl && imageList.length <= 5) {
-      setImageList(prevState => {
-        const copyOfPrevState = [...prevState];
-        copyOfPrevState.unshift(fileUrl);
-        return copyOfPrevState;
-      });
-    }
-  }, [base64File, fileUrl]);
+	useEffect(() => {
+		if (base64File && fileUrl && imageList.length <= 5) {
+			setImageList((prevState) => {
+				const copyOfPrevState = [...prevState];
+				copyOfPrevState.unshift(fileUrl);
+				return copyOfPrevState;
+			});
+		}
+	}, [base64File, fileUrl]);
 
 	class Handle {
 		static async submit(e: FormEvent) {
 			e.preventDefault();
-      console.log(value)
+			console.log(value);
 		}
 
-    static selectImages() {
-      if(imageInputRef.current) {
-        imageInputRef.current.click();
-      }
-    }
+		static selectImages() {
+			if (imageInputRef.current) {
+				imageInputRef.current.click();
+			}
+		}
 
-    static previewImage(url: string) {
-      const PreviewImg = () => (
-        <div style={{textAlign: 'center'}}>
-          <img src={url} height="300px" />
-        </div>
-      )
-      dispatch(setModal({element: <PreviewImg />}));
-    }
+		static previewImage(url: string) {
+			const PreviewImg = () => (
+				<div style={{ textAlign: "center" }}>
+					<img src={url} height="300px" />
+				</div>
+			);
+			dispatch(setModal({ element: <PreviewImg /> }));
+		}
 
-    static removeLastImg() {
-      setImageList(prevState => {
-        const copyOfPrevState = [...prevState];
-        copyOfPrevState.pop();
-        return copyOfPrevState;
-      });
-    }
+		static removeImg(index: number) {
+			setImageList((prevState) => {
+				const copyOfPrevState = [...prevState.filter((_, i) => i !== index)];
+				return copyOfPrevState;
+			});
+		}
 	}
 
 	return (
@@ -77,34 +76,36 @@ const PostForm = () => {
 			<form onSubmit={Handle.submit}>
 				<RichTextEditor />
 
-        <input onChange={sendFile} ref={imageInputRef} type="file" id="images" name="images" accept="image/*" hidden/>
+				<input onChange={sendFile} ref={imageInputRef} type="file" id="images" name="images" accept="image/*" hidden />
 
-        <div className="buttons">
-            {imageList.length > 0 ? (
-              <div className="imageList">
-                {imageList.length} {imageList.length == 1 ? 'imagem anexada' : 'imagens anexadas'}:
-                &nbsp;
-                {imageList.map((image, index) => (
-                  <li key={index}>
-                    <img title="visualizar imagem" onClick={() => Handle.previewImage(image)} src={image} alt="imagem" />
-                  </li>
-                ))}
-              </div>
-            ): <div></div>}
-          
-          <div className="button-group">
-            {imageList.length <= 5 && (
-              <button onClick={Handle.selectImages} className="btn ico-btn bg warning" type="button" title="inserir imagens">
-                <RiImageAddLine />
-              </button>
-            )}
-            
-            <button type="submit" className="bg info">
-              Postar
-            </button>
-          </div>
+				<div className="buttons">
+					{imageList.length > 0 ? (
+						<div css={Styles.imageList}>
+							{imageList.map((image, index) => (
+								<li key={index}>
+									<div className="removeBtn" onClick={() => Handle.removeImg(index)}>
+										<AiOutlineClose size={20} />
+									</div>
+									<img src={image} alt="imagem" />
+								</li>
+							))}
+						</div>
+					) : (
+						<div></div>
+					)}
 
-        </div>
+					<div className="button-group">
+						{imageList.length <= 5 && (
+							<button onClick={Handle.selectImages} className="btn ico-btn bg warning" type="button" title="inserir imagens">
+								<RiImageAddLine />
+							</button>
+						)}
+
+						<button type="submit" className="bg info">
+							Postar
+						</button>
+					</div>
+				</div>
 			</form>
 		</div>
 	);
@@ -148,58 +149,114 @@ const PostsContent = () => {
 class Styles {
 	static postWrapper = css`
 		padding: 1rem 0;
-    padding-bottom: 2rem;
-    border-bottom: 1px dotted #575656;
+		padding-bottom: 2rem;
+		border-bottom: 1px dotted #575656;
 
-    .imageList {
-      font-weight: bold;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      
+		.buttons {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 50px;
+			margin-top: 12px;
+			justify-content: space-between;
+
+			.button-group {
+				display: flex;
+				flex-direction: row;
+				box-sizing: border-box;
+				height: inherit;
+
+				button {
+					padding: 8px 1rem;
+					height: inherit;
+
+					&.ico-btn {
+						font-size: 24px;
+						margin-right: 10px;
+						svg {
+							position: relative;
+							top: 2px;
+						}
+					}
+				}
+			}
+		}
+	`;
+
+	static imageList = css`
+		font-weight: bold;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-top: 4px;
+
+		li {
+			display: inline;
+			list-style: none;
+			margin-right: 10px;
+			position: relative;
+
+			:hover {
+				img {
+					opacity: 0.4;
+					filter: brightness(150%);
+				}
+			}
+
+			.removeBtn {
+				display: inline-flex;
+				position: absolute;
+				right: 0;
+				z-index: 2;
+				cursor: pointer;
+				width: 100%;
+				height: 90%;
+				background: transparent;
+				color: transparent;
+        font-weight: bold;
+
+				& > svg {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					text-shadow: 1px 0px 0px #fff;
+				}
+
+				&:hover {
+					color: #f9f9f9;
+				}
+			}
+
+			img {
+				border-radius: 5px;
+				object-fit: cover;
+				cursor: pointer;
+				width: 58px;
+				height: 58px;
+				transition: filter 0.2s, opacity 0.2s;
+			}
+		}
+    
+    @media screen and (max-width: 800px) {
       li {
-        display: inline;
-        list-style: none;
-        margin-right: 10px;
-        
         img {
-          border-radius: 5px;
-          object-fit: cover;
-          cursor: pointer;
-          width: 58px;
-          height: 58px;
+          zoom: .6;
         }
       }
     }
 
-		.buttons {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: 50px;
-      margin-top: 12px;
-      justify-content: space-between;
-      
-      .button-group {
-        display: flex;
-        flex-direction: row;
-        box-sizing: border-box;
-        height: inherit;
-        
-        button {
-          height: inherit;
-          &.ico-btn {
-            font-size: 24px;
-            margin-right: 10px;
-            svg {
-              position: relative;
-              top: -4px;
-            }
+    @media screen and (max-width: 1000px) {
+      li {
+        .removeBtn {
+          color: #fff;
         }
-
+        img {
+          opacity: 0.4;
+          filter: brightness(150%);
         }
       }
-		}
+    }
 	`;
 
 	static section = css`
