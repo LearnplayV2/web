@@ -19,7 +19,6 @@ class Styles {
 				flex-basis: 81%;
 				overflow-y: auto;
 				scroll-behavior: smooth;
-				max-height: 50vh;
 			}
 
 			aside {

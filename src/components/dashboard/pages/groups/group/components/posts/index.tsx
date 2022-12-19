@@ -7,9 +7,8 @@ import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-
-interface Posts {}
+import { useParams } from "react-router-dom";
+import IPosts from "./types";
 
 const Posts = () => {
 	return (
@@ -27,6 +26,7 @@ const Posts = () => {
 const PostForm = () => {
 	const dispatch = useDispatch();
 	const imageInputRef = useRef<HTMLInputElement>(null);
+	const { id: groupId } = useParams();
 	const { value, setValue } = useContext(RichTextEditorContext);
 
 	const [imageList, setImageList] = useState<string[]>([]);
@@ -45,7 +45,17 @@ const PostForm = () => {
 	class Handle {
 		static async submit(e: FormEvent) {
 			e.preventDefault();
-			console.log(value);
+      const valueWithoutHtmlTag = value.replace(/(<([^>]+)>)/gi, "");
+      
+      if(groupId && valueWithoutHtmlTag.length != 0) {
+        try {
+          await GroupPosts.create(groupId, {content: value});
+          setValue("");
+        } catch(err: any) {
+          console.log(err);
+          dispatch(setModal({ element: <div>{err?.response?.data?.message ?? "Não foi possível criar a postagem, ocorreu um erro inesperado."}</div> }));
+        }
+      }
 		}
 
 		static selectImages() {
@@ -113,7 +123,7 @@ const PostForm = () => {
 
 const PostsContent = () => {
 	const { id: groupId } = useParams();
-	const [posts, setPosts] = useState<Posts[]>([]);
+	const [posts, setPosts] = useState<IPosts | undefined>(undefined);
 	const [message, setMessage] = useState(null);
 
 	useEffect(() => {
@@ -134,12 +144,14 @@ const PostsContent = () => {
 		}
 	}
 
+	console.log(posts);
+
 	return (
 		<>
 			{message && <p>{message}</p>}
-			{posts.map((post, index) => (
+			{posts?.data.map((post, index) => (
 				<article key={index}>
-					<p>{index}</p>
+					<p>{post.content}</p>
 				</article>
 			))}
 		</>
@@ -213,7 +225,7 @@ class Styles {
 				height: 90%;
 				background: transparent;
 				color: transparent;
-        font-weight: bold;
+				font-weight: bold;
 
 				& > svg {
 					position: absolute;
@@ -237,26 +249,26 @@ class Styles {
 				transition: filter 0.2s, opacity 0.2s;
 			}
 		}
-    
-    @media screen and (max-width: 800px) {
-      li {
-        img {
-          zoom: .6;
-        }
-      }
-    }
 
-    @media screen and (max-width: 1000px) {
-      li {
-        .removeBtn {
-          color: #fff;
-        }
-        img {
-          opacity: 0.4;
-          filter: brightness(150%);
-        }
-      }
-    }
+		@media screen and (max-width: 800px) {
+			li {
+				img {
+					zoom: 0.6;
+				}
+			}
+		}
+
+		@media screen and (max-width: 1000px) {
+			li {
+				.removeBtn {
+					color: #fff;
+				}
+				img {
+					opacity: 0.4;
+					filter: brightness(150%);
+				}
+			}
+		}
 	`;
 
 	static section = css`
