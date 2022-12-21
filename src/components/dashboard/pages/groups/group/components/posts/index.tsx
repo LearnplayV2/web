@@ -1,13 +1,15 @@
 import RichTextEditor, { RichTextEditorContext, RichTextWrapper } from "@/components/ui/RichTextEditor";
+import GroupAttachments from "@/service/groups/groupAttachments";
 import GroupPosts from "@/service/groups/groupPosts";
 import { setModal } from "@/store/alert";
+import Media from "@/utils/media";
 import { css } from "@emotion/react";
-import { useFileUpload } from "js-media-package";
-import { FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { useFileUpload, useLocation } from "js-media-package";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import IPosts from "./types";
 
 const Posts = () => {
@@ -23,33 +25,38 @@ const Posts = () => {
 	);
 };
 
+interface IimageUpload {
+	url: string;
+	error: boolean;
+}
+
 const PostForm = () => {
 	const dispatch = useDispatch();
-	const imageInputRef = useRef<HTMLInputElement>(null);
+	const attachmentsInputRef = useRef<HTMLInputElement>(null);
 	const { id: groupId } = useParams();
 	const { value, setValue } = useContext(RichTextEditorContext);
+	const navigate = useNavigate();
 
-	const [imageList, setImageList] = useState<string[]>([]);
-	const { sendFile, base64File, fileUrl } = useFileUpload();
-
-	useEffect(() => {
-		if (base64File && fileUrl && imageList.length <= 5) {
-			setImageList((prevState) => {
-				const copyOfPrevState = [...prevState];
-				copyOfPrevState.unshift(fileUrl);
-				return copyOfPrevState;
-			});
-		}
-	}, [base64File, fileUrl]);
-
+	const [imageList, setImageList] = useState<IimageUpload[]>([]);
 	class Handle {
 		static async submit(e: FormEvent) {
 			e.preventDefault();
       const valueWithoutHtmlTag = value.replace(/(<([^>]+)>)/gi, "");
-      
+
+			const formData = new FormData(e.target as HTMLFormElement);
+			const fileInput = (e.target as HTMLFormElement).querySelector('input[name=attachments]') as HTMLInputElement;
+			const hasAttachments = fileInput.files && fileInput.files.length > 0;
+			console.log(hasAttachments)
+
       if(groupId && valueWithoutHtmlTag.length != 0) {
         try {
-          await GroupPosts.create(groupId, {content: value});
+					// create post and send files
+					const post = await GroupPosts.create(groupId, {content: value});
+					if(hasAttachments) {
+						formData.append('postId', post.data.id);
+						await GroupAttachments.create(groupId, formData);
+					}
+					navigate(0);
           setValue("");
         } catch(err: any) {
           console.log(err);
@@ -59,8 +66,8 @@ const PostForm = () => {
 		}
 
 		static selectImages() {
-			if (imageInputRef.current) {
-				imageInputRef.current.click();
+			if (attachmentsInputRef.current) {
+				attachmentsInputRef.current.click();
 			}
 		}
 
@@ -71,6 +78,22 @@ const PostForm = () => {
 				</div>
 			);
 			dispatch(setModal({ element: <PreviewImg /> }));
+		}
+
+		static async addImg(e: ChangeEvent<HTMLInputElement>) {
+			const files = e.target.files;
+			if(files) {
+				for(let file of files) {
+					const url = await Media.toBase64(file);
+					setImageList((prevState) => {
+						const copyOfPrevState = [...prevState];
+						if(url) {
+							copyOfPrevState.unshift({url: url.toString(), error: false});
+						}
+						return copyOfPrevState;
+					});
+				}
+			}
 		}
 
 		static removeImg(index: number) {
@@ -86,7 +109,7 @@ const PostForm = () => {
 			<form onSubmit={Handle.submit}>
 				<RichTextEditor />
 
-				<input onChange={sendFile} ref={imageInputRef} type="file" id="images" name="images" accept="image/*" hidden />
+				<input onChange={Handle.addImg} ref={attachmentsInputRef} type="file" id="attachments" name="attachments" accept="image/*" multiple hidden />
 
 				<div className="buttons">
 					{imageList.length > 0 ? (
@@ -96,7 +119,7 @@ const PostForm = () => {
 									<div className="removeBtn" onClick={() => Handle.removeImg(index)}>
 										<AiOutlineClose size={20} />
 									</div>
-									<img src={image} alt="imagem" />
+									<img src={image.url} alt="imagem" />
 								</li>
 							))}
 						</div>
@@ -151,7 +174,16 @@ const PostsContent = () => {
 			{message && <p>{message}</p>}
 			{posts?.data.map((post, index) => (
 				<article key={index}>
-					<p>{post.content}</p>
+					<div className="body">
+						<p>{post.content}</p>
+						<hr />
+						to do: attachments <br />
+						{post.attachments.map(attachment => (
+							<>
+
+							</>
+						))}
+					</div>
 				</article>
 			))}
 		</>
@@ -284,12 +316,15 @@ class Styles {
 				margin-bottom: 8rem;
 			}
 
+			.body {
+				color: #b9b9b9;
+				padding: 2rem 1rem;
+				background: #363535;
+			}
+
 			p {
 				margin: 0;
-				color: #b9b9b9;
 				font-weight: 600;
-				background: #363535;
-				padding: 2rem 1rem;
 			}
 		}
 	`;
