@@ -1,10 +1,10 @@
+import Attachments from "@/class/attachments";
 import RichTextEditor, { RichTextEditorContext, RichTextWrapper } from "@/components/ui/RichTextEditor";
 import GroupAttachments from "@/service/groups/groupAttachments";
 import GroupPosts from "@/service/groups/groupPosts";
 import { setModal } from "@/store/alert";
 import Media from "@/utils/media";
 import { css } from "@emotion/react";
-import { useFileUpload, useLocation } from "js-media-package";
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
@@ -43,18 +43,19 @@ const PostForm = () => {
 			e.preventDefault();
       const valueWithoutHtmlTag = value.replace(/(<([^>]+)>)/gi, "");
 
-			const formData = new FormData(e.target as HTMLFormElement);
+			const imagesData = new FormData(e.target as HTMLFormElement);
 			const fileInput = (e.target as HTMLFormElement).querySelector('input[name=attachments]') as HTMLInputElement;
 			const hasAttachments = fileInput.files && fileInput.files.length > 0;
-			console.log(hasAttachments)
 
       if(groupId && valueWithoutHtmlTag.length != 0) {
         try {
 					// create post and send files
 					const post = await GroupPosts.create(groupId, {content: value});
 					if(hasAttachments) {
-						formData.append('postId', post.data.id);
-						await GroupAttachments.create(groupId, formData);
+						imagesData.append('postId', post.data.id);
+						// insert images only
+						imagesData.append('filesType', Attachments.fileType.image);
+						await GroupAttachments.create(groupId, imagesData);
 					}
 					navigate(0);
           setValue("");
@@ -178,11 +179,16 @@ const PostsContent = () => {
 						<p>{post.content}</p>
 						<hr />
 						to do: attachments <br />
-						{post.attachments.map(attachment => (
-							<>
-
-							</>
-						))}
+						{post.attachments.map(attachment => {
+							const url = Attachments.url(attachment.fileName, Attachments.paths.groupPosts);
+							
+							switch(attachment.fileType) {
+								case Attachments.fileType.image:
+									return <img src={url} />
+								default:
+									return <></>;
+							}
+						})}
 					</div>
 				</article>
 			))}

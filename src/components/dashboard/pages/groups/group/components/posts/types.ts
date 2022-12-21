@@ -16,6 +16,10 @@ interface IPostsData {
 export interface IAttachments {
 	id: string;
 	fileName: string;
+	url: string;
+	fileType: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface IGroupAttachments extends IAttachments {
