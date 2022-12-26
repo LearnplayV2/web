@@ -19,24 +19,24 @@ const RightMenu = () => {
     }, []);
 
     const toggle = () => {
-        if(window) {
-            if(window.innerWidth < 1000) {
-                dispatch(toggleLeftMenu(false));
-            }
+        // if(window) {
+        //     if(window.innerWidth < 1000) {
+        //         dispatch(toggleLeftMenu(false));
+        //     }
             
-            window.onresize = (e) => {
-                const {innerWidth} = e.currentTarget as Window;
-                if(innerWidth >= 1000) {
-                    if(!isShowing) {
-                        dispatch(toggleLeftMenu(true));
-                    }
-                } else {
-                    if(isShowing) {
-                        dispatch(toggleLeftMenu(false));
-                    }
-                }
-            }
-        }
+        //     window.onresize = (e) => {
+        //         const {innerWidth} = e.currentTarget as Window;
+        //         if(innerWidth >= 1000) {
+        //             if(!isShowing) {
+        //                 dispatch(toggleLeftMenu(true));
+        //             }
+        //         } else {
+        //             if(isShowing) {
+        //                 dispatch(toggleLeftMenu(false));
+        //             }
+        //         }
+        //     }
+        // }
     };
 
     const toggleMenu = () => {

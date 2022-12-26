@@ -59,8 +59,12 @@ const PostForm = () => {
                         imagesData.append('filesType', Attachments.fileType.image);
                         await GroupAttachments.create(groupId, imagesData);
                     }
-					dispatch(groupPostsStore.actions.addPost(post.data));
-					console.log('novo post', post)
+					const posts = await GroupPosts.index(groupId);
+					dispatch(groupPostsStore.actions.setPosts(posts.data));
+
+					// clear inputs
+					(e.target as HTMLFormElement).reset();
+					Handle.removeAllImgs();
                     setValue('');
                 } catch (err: any) {
                     console.log(err);
@@ -110,6 +114,10 @@ const PostForm = () => {
                 return copyOfPrevState;
             });
         }
+
+		static removeAllImgs() {
+			setImageList([]);
+		}
     }
 
     return (
