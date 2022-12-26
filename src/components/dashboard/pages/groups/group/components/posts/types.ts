@@ -1,3 +1,11 @@
+import { FetchStatus } from "@/class/fetchStatus";
+
+export interface IGroupPostsState {
+	item: IPosts | null;
+	status: FetchStatus;
+	message: null | string;
+}
+
 interface IPosts {
 	totalPages: number;
 	totalItems: number;
@@ -6,7 +14,7 @@ interface IPosts {
 	data: IPostsData[];
 }
 
-interface IPostsData {
+export interface IPostsData {
 	id: string;
 	content: string;
 	member: any;

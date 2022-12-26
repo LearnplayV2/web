@@ -39,8 +39,6 @@ const ListGroups = () => {
 	const timeout = useTimeout();
 	const [loading, setLoading] = useState(true);
 
-	console.log(status);
-
 	if (data?.totalItems == 0) {
 		return <h3>Nenhum grupo foi encontrado.</h3>;
 	}

@@ -8,6 +8,8 @@ import leftMenu, { LeftMenuState } from "./leftMenu";
 import notifications, { INotification} from "./notifications";
 import profilePicture, { ProfilePictureState } from "./profilePicture";
 import toggleMenu, { ToggleMenuState } from "@/components/ui/toggleMenu/store";
+import IPosts, { IGroupPostsState } from "@/components/dashboard/pages/groups/group/components/posts/types";
+import posts from "@/components/dashboard/pages/groups/group/components/posts/store";
 
 export interface RootState {
     alert: AlertState;
@@ -17,6 +19,7 @@ export interface RootState {
     notifications: INotification;
     groups: IGroupsState;
     group: IGroupState;
+    groupPosts: IGroupPostsState;
     toggleMenu: ToggleMenuState[];
 }
 
@@ -28,6 +31,7 @@ const reducers = combineReducers({
     notifications,
     groups: groups.reducer,
     group: group.reducer,
+    groupPosts: posts.reducer,
     toggleMenu: toggleMenu.reducer
 });
 

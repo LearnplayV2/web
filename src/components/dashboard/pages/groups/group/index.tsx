@@ -14,7 +14,6 @@ import { Skeleton } from "@/components/ui/Loading";
 import { css } from "@emotion/react";
 import { useTimeout } from "@/hooks/useTimeout";
 import { Groups } from "@/service/groups/groups";
-import Participation from "@/class/participation";
 import { MdExitToApp } from "react-icons/md";
 import member_type from "@/class/participation";
 import Posts from "./components/posts";
