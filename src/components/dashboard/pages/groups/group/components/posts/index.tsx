@@ -1,6 +1,6 @@
 import Attachments from '@/class/attachments';
+import { FetchStatus } from '@/class/fetchStatus';
 import RichTextEditor, { RichTextEditorContext, RichTextWrapper } from '@/components/ui/RichTextEditor';
-import { useTimeout } from '@/hooks/useTimeout';
 import GroupAttachments from '@/service/groups/groupAttachments';
 import GroupPosts from '@/service/groups/groupPosts';
 import { setModal } from '@/store/alert';
@@ -11,7 +11,7 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiImageAddLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Data from '../../data';
 import groupPostsStore from './store';
 
@@ -38,6 +38,7 @@ const PostForm = () => {
     const attachmentsInputRef = useRef<HTMLInputElement>(null);
     const { id: groupId } = useParams();
     const { value, setValue } = useContext(RichTextEditorContext);
+    const {groupPosts} = useSelector((state: RootState) => state);
 
     const [imageList, setImageList] = useState<IimageUpload[]>([]);
     class Handle {
@@ -52,6 +53,8 @@ const PostForm = () => {
             if (groupId && valueWithoutHtmlTag.length != 0) {
                 try {
                     // create post and send files
+					dispatch(groupPostsStore.actions.setStatus(FetchStatus.LOADING));
+
                     const post = await GroupPosts.create(groupId, { content: value });
                     if (hasAttachments) {
                         imagesData.append('postId', post.data.id);
@@ -61,13 +64,11 @@ const PostForm = () => {
                     }
 					const posts = await GroupPosts.index(groupId);
 					dispatch(groupPostsStore.actions.setPosts(posts.data));
+					dispatch(groupPostsStore.actions.setStatus(FetchStatus.SUCCESS));
 
 					// clear inputs
-					(e.target as HTMLFormElement).reset();
-					Handle.removeAllImgs();
-                    setValue('');
+					Handle.resetForm(e.target as HTMLFormElement);
                 } catch (err: any) {
-                    console.log(err);
                     dispatch(
                         setModal({
                             element: <div>{err?.response?.data?.message ?? 'Não foi possível criar a postagem, ocorreu um erro inesperado.'}</div>,
@@ -75,6 +76,12 @@ const PostForm = () => {
                     );
                 }
             }
+        }
+
+        static resetForm(target: HTMLFormElement) {
+            target.reset();
+            Handle.removeAllImgs();
+            setValue('');
         }
 
         static selectImages() {
@@ -109,10 +116,19 @@ const PostForm = () => {
         }
 
         static removeImg(index: number) {
-            setImageList((prevState) => {
-                const copyOfPrevState = [...prevState.filter((_, i) => i !== index)];
-                return copyOfPrevState;
-            });
+            if(attachmentsInputRef.current) {
+                const fileInput = attachmentsInputRef.current;
+                if(fileInput.files) {
+                    // remove from file input
+                    const fileListArr = Array.from(fileInput.files);
+                    fileListArr.splice(index, 1);
+                    fileInput.files = new DataTransfer().files;
+                }
+                setImageList((prevState) => {
+                    const copyOfPrevState = [...prevState.filter((_, i) => i !== index)];
+                    return copyOfPrevState;
+                });
+            }
         }
 
 		static removeAllImgs() {
@@ -154,12 +170,12 @@ const PostForm = () => {
 
                     <div className="button-group">
                         {imageList.length <= 5 && (
-                            <button onClick={Handle.selectImages} className="btn ico-btn bg warning" type="button" title="inserir imagens">
+                            <button onClick={Handle.selectImages} disabled={groupPosts.status == FetchStatus.LOADING} className="btn ico-btn bg warning" type="button" title="inserir imagens">
                                 <RiImageAddLine />
                             </button>
                         )}
 
-                        <button type="submit" className="bg info">
+                        <button type="submit" className="bg info" disabled={groupPosts.status == FetchStatus.LOADING}>
                             Postar
                         </button>
                     </div>
@@ -191,7 +207,6 @@ const PostsContent = () => {
                         to do: attachments <br />
                         {post.attachments.map((attachment) => {
                             const url = Attachments.url(attachment.fileName, Attachments.paths.groupPosts);
-
                             switch (attachment.fileType) {
                                 case Attachments.fileType.image:
                                     return <img src={url} />;

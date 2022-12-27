@@ -11,6 +11,7 @@ class Attachments {
   };
 
   static url(file: string, from: string) {
+    file = file.endsWith('jpeg') ? file.replace('jpeg', 'jpg') : file;
     return `${import.meta.env.VITE_SERVER}/api/public/attachments`.concat(from).concat(file);
   }
   

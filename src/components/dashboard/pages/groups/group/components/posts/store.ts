@@ -1,6 +1,6 @@
 import { FetchStatus } from '@/class/fetchStatus';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import IPosts, { IGroupPostsState, IPostsData } from './types';
+import { IGroupPostsState } from './types';
 
 const initialState = {
     item: null,
@@ -12,20 +12,24 @@ const posts = createSlice({
     name: 'group-posts',
     initialState,
     reducers: {
-        setPosts(state: any, action: PayloadAction<IPosts>) {
+        setPosts(state: any, action: PayloadAction<IGroupPostsState>) {
             if(action.payload) {
                 state.item = action.payload;
                 state.status = FetchStatus.SUCCESS;
+                state.message = action.payload?.message ?? null;
             }
         },
-        addPost(state: any, action: PayloadAction<IPostsData>) {
-            if(action.payload) {
-                state.item.data.unshift(action.payload);
-                state.item.totalItems++;
-            }
+        setStatus(state: IGroupPostsState, action: PayloadAction<string>) {
+            state.status = action.payload;
         },
         setMessage(state: any, action: PayloadAction<string>) {
             state.message = action.payload;
+        },
+        setTemporaryMessage(state: IGroupPostsState, action: PayloadAction<string>) {
+            state.message = action.payload;
+            setTimeout(() => {
+                state.message = null;
+            }, 3000);
         }
     }
 });
