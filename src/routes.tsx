@@ -7,7 +7,7 @@ import { HomeMain as HomePage } from "./components/home/index";
 import { Alert } from "@components/ui/alert";
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import { GroupId } from "./components/dashboard/pages/groups/group";
+import { GroupId } from "./components/dashboard/pages/group";
 
 const Router = () => {
 	const sessionComponent = (el: React.ReactNode) => <Session.Provider children={el} />;

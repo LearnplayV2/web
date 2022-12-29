@@ -1,4 +1,4 @@
-import groupReducer, { IGroupState, ILinks } from "@/components/dashboard/pages/groups/group/store";
+import groupReducer, { IGroupState, ILinks } from "@/components/dashboard/pages/group/store";
 import ToggleMenu from "@/components/ui/toggleMenu";
 import { ToggleMenuState } from "@/components/ui/toggleMenu/store";
 import { useTimeout } from "@/hooks/useTimeout";

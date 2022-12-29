@@ -6,7 +6,6 @@ import GroupAttachments from '@/service/groups/groupAttachments';
 import GroupPosts from '@/service/groups/groupPosts';
 import { setModal } from '@/store/alert';
 import store, { RootState } from '@/store/storeConfig';
-import HTML from '@/utils/htmlParse';
 import Media from '@/utils/media';
 import { css } from '@emotion/react';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
@@ -15,6 +14,7 @@ import { RiImageAddLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Data from '../../data';
+import Gallery from './gallery';
 import groupPostsStore from './store';
 
 const Posts = () => {
@@ -43,6 +43,7 @@ const PostForm = () => {
     const { groupPosts } = useSelector((state: RootState) => state);
 
     const [imageList, setImageList] = useState<IimageUpload[]>([]);
+
     class Handle {
         static async submit(e: FormEvent) {
             e.preventDefault();
@@ -54,9 +55,8 @@ const PostForm = () => {
 
             if (groupId && valueWithoutHtmlTag.length != 0) {
                 try {
-                    // create post and send files
                     dispatch(groupPostsStore.actions.setStatus(FetchStatus.LOADING));
-
+                    // create post and send files
                     const post = await GroupPosts.create(groupId, { content: value });
                     if (hasAttachments) {
                         imagesData.append('postId', post.data.id);
@@ -71,6 +71,7 @@ const PostForm = () => {
                     // clear inputs
                     Handle.resetForm(e.target as HTMLFormElement);
                 } catch (err: any) {
+                    dispatch(groupPostsStore.actions.setStatus(FetchStatus.ERROR));
                     dispatch(
                         setModal({
                             element: <div>{err?.response?.data?.message ?? 'Não foi possível criar a postagem, ocorreu um erro inesperado.'}</div>,
@@ -93,17 +94,25 @@ const PostForm = () => {
         }
 
         static async addImg(e: ChangeEvent<HTMLInputElement>) {
-            const files = e.target.files;
+            let files = e.target.files;
             if (files) {
+                const fileListArr = Array.from(files);
                 for (let file of files) {
-                    const url = await Media.toBase64(file);
-                    setImageList((prevState) => {
-                        const copyOfPrevState = [...prevState];
-                        if (url) {
-                            copyOfPrevState.unshift({ url: url.toString(), error: false });
-                        }
-                        return copyOfPrevState;
-                    });
+                    const index = fileListArr.indexOf(file);
+                    // file limit
+                    if (index <= 5) {
+                        const url = await Media.toBase64(file);
+                        setImageList((prevState) => {
+                            const copyOfPrevState = [...prevState];
+                            if (url) {
+                                copyOfPrevState.unshift({ url: url.toString(), error: false });
+                            }
+                            return copyOfPrevState;
+                        });
+                    } else {
+                        Handle.removeImg(index);
+                        dispatch(setModal({ element: <>O limite de anexos são 6 itens, o restante foi removido.</> }));
+                    }
                 }
             }
         }
@@ -113,9 +122,19 @@ const PostForm = () => {
                 const fileInput = attachmentsInputRef.current;
                 if (fileInput.files) {
                     // remove from file input
-                    const fileListArr = Array.from(fileInput.files);
-                    fileListArr.splice(index, 1);
-                    fileInput.files = new DataTransfer().files;
+                    let fileListArr = Array.from(fileInput.files);
+                    const imgIndex = fileListArr.length - 1 - index;
+                    const dt = new DataTransfer();
+                    // remove from limit
+                    if(typeof fileListArr[imgIndex] != 'undefined') {
+                        fileListArr.splice(imgIndex, 1);
+                    }
+                    fileListArr.filter((arr, i) => {
+                        if (i <= 5) {
+                            dt.items.add(arr);
+                        }
+                    });
+                    fileInput.files = dt.files;
                 }
                 setImageList((prevState) => {
                     const copyOfPrevState = [...prevState.filter((_, i) => i !== index)];
@@ -149,7 +168,7 @@ const PostForm = () => {
                     {imageList.length > 0 ? (
                         <div css={Styles.imageList}>
                             {imageList.map((image, index) => (
-                                <li key={index}>
+                                <li key={index} id={index.toString()}>
                                     <div className="removeBtn" onClick={() => Handle.removeImg(index)}>
                                         <AiOutlineClose size={20} />
                                     </div>
@@ -198,7 +217,9 @@ const PostsContent = () => {
         static previewImage(url: string) {
             const PreviewImg = () => (
                 <div style={{ textAlign: 'center' }}>
+                    After
                     <img src={url} height="300px" />
+                    Last
                 </div>
             );
             dispatch(setModal({ element: <PreviewImg /> }));
@@ -213,21 +234,24 @@ const PostsContent = () => {
                     <div className="body">
                         <div className="group__post-content">
                             <Resume text={post.content} />
-                            {/* {HTML.remoteEntities(HTML.remove(post.content)).length >= 596 && (
-                                <span className="group__post-content--more">
-                                    Continue lendo
-                                </span>
-                            )} */}
                         </div>
                         {post.attachments.length > 0 && (
                             <>
-                                <hr />
-                                <div className="group__post-images">
+                                <hr style={{ border: 'none', height: '1px', background: '#5c5c5c' }} />
+                                <Gallery>
                                     {post.attachments.map((attachment, aindex) => {
                                         const url = Attachments.url(attachment.fileName, Attachments.paths.groupPosts);
-                                        return <img key={aindex} src={url} onClick={() => Handle.previewImage(url)} />;
+                                        return (
+                                            <img
+                                                title="Clique para expandir"
+                                                id={`img_${aindex}`}
+                                                key={aindex}
+                                                src={url}
+                                                onClick={() => Handle.previewImage(url)}
+                                            />
+                                        );
                                     })}
-                                </div>
+                                </Gallery>
                             </>
                         )}
                     </div>
@@ -358,18 +382,6 @@ class Styles {
 
         article {
             margin: 0;
-
-            .group__post-images {
-                display: grid;
-                grid-template-columns: repeat(8, 1fr);
-                grid-template-rows: repeat(8, 5vw);
-                grid-gap: 15px;
-
-                img {
-                    cursor: pointer;
-                    width: 100%;
-                }
-            }
 
             &:not(:last-child) {
                 margin-bottom: 8rem;

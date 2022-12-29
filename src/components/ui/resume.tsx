@@ -21,14 +21,17 @@ const Resume = (props: IProps) => {
         <div className="resume" css={Styles.resume}>
             <div ref={textRef} css={Styles.resumeText}>{HTML.parse(props.text)}</div>
             {!hasOpened && (
-                <a onClick={learnMore} css={Styles.btn}>{HTML.remoteEntities(HTML.remove(props.text)).length >= 596 && <>Continue lendo...</>}</a>
+                <div onClick={learnMore} css={Styles.btn}>{HTML.remoteEntities(HTML.remove(props.text)).length >= 596 && <>Continue lendo...</>}</div>
             )}
         </div>
     );
 };
 
 class Styles {
-    static resume = css``;
+    static resume = css`
+        display: flex;
+        flex-direction: column;
+    `;
 
     static resumeText = css`
         display: -webkit-box;
@@ -37,7 +40,13 @@ class Styles {
         overflow: hidden;
     `;
 
-    static btn = css``;
+    static btn = css`
+        color: grey;
+        margin-top: 1rem;
+        align-self: center;
+        cursor: pointer;
+        user-select: none;
+    `;
 }
 
 export default Resume;
