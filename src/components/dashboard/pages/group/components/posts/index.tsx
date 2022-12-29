@@ -6,6 +6,7 @@ import GroupAttachments from '@/service/groups/groupAttachments';
 import GroupPosts from '@/service/groups/groupPosts';
 import { setModal } from '@/store/alert';
 import store, { RootState } from '@/store/storeConfig';
+import Media from '@/utils/media';
 import { css } from '@emotion/react';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -45,6 +46,7 @@ const PostForm = () => {
 
     useEffect(() => {
         // define img list
+        console.log('changed')
         if(attachmentsInputRef.current && attachmentsInputRef.current.files) {
             if(attachmentsInputRef.current.files.length > 0) {
                 const fileListArr = Array.from(attachmentsInputRef.current.files);
@@ -107,14 +109,23 @@ const PostForm = () => {
             }
         }
 
-        static async addImg(e: ChangeEvent<HTMLInputElement>) {
+        static addImg(e: ChangeEvent<HTMLInputElement>) {
             let files = e.target.files;
             if (files) {
                 const fileListArr = Array.from(files);
                 for (let file of files) {
                     const index = fileListArr.indexOf(file);
                     // file limit
-                    if (index >= 6) {
+                    if (index <= 5) {
+                        const url = URL.createObjectURL(file);
+                        setImageList((prevState) => {
+                            const copyOfPrevState = [...prevState];
+                            if (url) {
+                                copyOfPrevState.unshift({ url: url.toString(), error: false });
+                            }
+                            return copyOfPrevState;
+                        });
+                    } else {
                         Handle.removeImg(index);
                         dispatch(setModal({ element: <>O limite de anexos são 6 itens, o restante foi removido.</> }));
                     }
