@@ -1,10 +1,12 @@
 import Attachments from '@/class/attachments';
 import { FetchStatus } from '@/class/fetchStatus';
+import Resume from '@/components/ui/resume';
 import RichTextEditor, { RichTextEditorContext, RichTextWrapper } from '@/components/ui/RichTextEditor';
 import GroupAttachments from '@/service/groups/groupAttachments';
 import GroupPosts from '@/service/groups/groupPosts';
 import { setModal } from '@/store/alert';
 import store, { RootState } from '@/store/storeConfig';
+import HTML from '@/utils/htmlParse';
 import Media from '@/utils/media';
 import { css } from '@emotion/react';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
@@ -38,7 +40,7 @@ const PostForm = () => {
     const attachmentsInputRef = useRef<HTMLInputElement>(null);
     const { id: groupId } = useParams();
     const { value, setValue } = useContext(RichTextEditorContext);
-    const {groupPosts} = useSelector((state: RootState) => state);
+    const { groupPosts } = useSelector((state: RootState) => state);
 
     const [imageList, setImageList] = useState<IimageUpload[]>([]);
     class Handle {
@@ -53,7 +55,7 @@ const PostForm = () => {
             if (groupId && valueWithoutHtmlTag.length != 0) {
                 try {
                     // create post and send files
-					dispatch(groupPostsStore.actions.setStatus(FetchStatus.LOADING));
+                    dispatch(groupPostsStore.actions.setStatus(FetchStatus.LOADING));
 
                     const post = await GroupPosts.create(groupId, { content: value });
                     if (hasAttachments) {
@@ -62,12 +64,12 @@ const PostForm = () => {
                         imagesData.append('filesType', Attachments.fileType.image);
                         await GroupAttachments.create(groupId, imagesData);
                     }
-					const posts = await GroupPosts.index(groupId);
-					dispatch(groupPostsStore.actions.setPosts(posts.data));
-					dispatch(groupPostsStore.actions.setStatus(FetchStatus.SUCCESS));
+                    const posts = await GroupPosts.index(groupId);
+                    dispatch(groupPostsStore.actions.setPosts(posts.data));
+                    dispatch(groupPostsStore.actions.setStatus(FetchStatus.SUCCESS));
 
-					// clear inputs
-					Handle.resetForm(e.target as HTMLFormElement);
+                    // clear inputs
+                    Handle.resetForm(e.target as HTMLFormElement);
                 } catch (err: any) {
                     dispatch(
                         setModal({
@@ -90,15 +92,6 @@ const PostForm = () => {
             }
         }
 
-        static previewImage(url: string) {
-            const PreviewImg = () => (
-                <div style={{ textAlign: 'center' }}>
-                    <img src={url} height="300px" />
-                </div>
-            );
-            dispatch(setModal({ element: <PreviewImg /> }));
-        }
-
         static async addImg(e: ChangeEvent<HTMLInputElement>) {
             const files = e.target.files;
             if (files) {
@@ -116,9 +109,9 @@ const PostForm = () => {
         }
 
         static removeImg(index: number) {
-            if(attachmentsInputRef.current) {
+            if (attachmentsInputRef.current) {
                 const fileInput = attachmentsInputRef.current;
-                if(fileInput.files) {
+                if (fileInput.files) {
                     // remove from file input
                     const fileListArr = Array.from(fileInput.files);
                     fileListArr.splice(index, 1);
@@ -131,9 +124,9 @@ const PostForm = () => {
             }
         }
 
-		static removeAllImgs() {
-			setImageList([]);
-		}
+        static removeAllImgs() {
+            setImageList([]);
+        }
     }
 
     return (
@@ -170,7 +163,12 @@ const PostForm = () => {
 
                     <div className="button-group">
                         {imageList.length <= 5 && (
-                            <button onClick={Handle.selectImages} disabled={groupPosts.status == FetchStatus.LOADING} className="btn ico-btn bg warning" type="button" title="inserir imagens">
+                            <button
+                                onClick={Handle.selectImages}
+                                disabled={groupPosts.status == FetchStatus.LOADING}
+                                className="btn ico-btn bg warning"
+                                type="button"
+                                title="inserir imagens">
                                 <RiImageAddLine />
                             </button>
                         )}
@@ -196,24 +194,42 @@ const PostsContent = () => {
         }
     }, []);
 
+    class Handle {
+        static previewImage(url: string) {
+            const PreviewImg = () => (
+                <div style={{ textAlign: 'center' }}>
+                    <img src={url} height="300px" />
+                </div>
+            );
+            dispatch(setModal({ element: <PreviewImg /> }));
+        }
+    }
+
     return (
         <>
             {posts.message && <p>{posts.message}</p>}
             {posts?.item?.data.map((post, index) => (
                 <article key={index}>
                     <div className="body">
-                        <p>{post.content}</p>
-                        <hr />
-                        to do: attachments <br />
-                        {post.attachments.map((attachment) => {
-                            const url = Attachments.url(attachment.fileName, Attachments.paths.groupPosts);
-                            switch (attachment.fileType) {
-                                case Attachments.fileType.image:
-                                    return <img src={url} />;
-                                default:
-                                    return null;
-                            }
-                        })}
+                        <div className="group__post-content">
+                            <Resume text={post.content} />
+                            {/* {HTML.remoteEntities(HTML.remove(post.content)).length >= 596 && (
+                                <span className="group__post-content--more">
+                                    Continue lendo
+                                </span>
+                            )} */}
+                        </div>
+                        {post.attachments.length > 0 && (
+                            <>
+                                <hr />
+                                <div className="group__post-images">
+                                    {post.attachments.map((attachment, aindex) => {
+                                        const url = Attachments.url(attachment.fileName, Attachments.paths.groupPosts);
+                                        return <img key={aindex} src={url} onClick={() => Handle.previewImage(url)} />;
+                                    })}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </article>
             ))}
@@ -342,6 +358,18 @@ class Styles {
 
         article {
             margin: 0;
+
+            .group__post-images {
+                display: grid;
+                grid-template-columns: repeat(8, 1fr);
+                grid-template-rows: repeat(8, 5vw);
+                grid-gap: 15px;
+
+                img {
+                    cursor: pointer;
+                    width: 100%;
+                }
+            }
 
             &:not(:last-child) {
                 margin-bottom: 8rem;
