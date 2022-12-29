@@ -6,7 +6,6 @@ import GroupAttachments from '@/service/groups/groupAttachments';
 import GroupPosts from '@/service/groups/groupPosts';
 import { setModal } from '@/store/alert';
 import store, { RootState } from '@/store/storeConfig';
-import Media from '@/utils/media';
 import { css } from '@emotion/react';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -43,6 +42,21 @@ const PostForm = () => {
     const { groupPosts } = useSelector((state: RootState) => state);
 
     const [imageList, setImageList] = useState<IimageUpload[]>([]);
+
+    useEffect(() => {
+        // define img list
+        if(attachmentsInputRef.current && attachmentsInputRef.current.files) {
+            if(attachmentsInputRef.current.files.length > 0) {
+                const fileListArr = Array.from(attachmentsInputRef.current.files);
+                let fileUrls: IimageUpload[] = [];
+                fileListArr.forEach(file => {
+                    const url = URL.createObjectURL(file);
+                    fileUrls.unshift({url, error: false});
+                });
+                setImageList(fileUrls);
+            }
+        }
+    }, [attachmentsInputRef.current?.files]);
 
     class Handle {
         static async submit(e: FormEvent) {
@@ -100,16 +114,7 @@ const PostForm = () => {
                 for (let file of files) {
                     const index = fileListArr.indexOf(file);
                     // file limit
-                    if (index <= 5) {
-                        const url = await Media.toBase64(file);
-                        setImageList((prevState) => {
-                            const copyOfPrevState = [...prevState];
-                            if (url) {
-                                copyOfPrevState.unshift({ url: url.toString(), error: false });
-                            }
-                            return copyOfPrevState;
-                        });
-                    } else {
+                    if (index >= 6) {
                         Handle.removeImg(index);
                         dispatch(setModal({ element: <>O limite de anexos são 6 itens, o restante foi removido.</> }));
                     }
@@ -118,6 +123,7 @@ const PostForm = () => {
         }
 
         static removeImg(index: number) {
+            console.log('remove file')
             if (attachmentsInputRef.current) {
                 const fileInput = attachmentsInputRef.current;
                 if (fileInput.files) {
@@ -126,7 +132,7 @@ const PostForm = () => {
                     const imgIndex = fileListArr.length - 1 - index;
                     const dt = new DataTransfer();
                     // remove from limit
-                    if(typeof fileListArr[imgIndex] != 'undefined') {
+                    if (typeof fileListArr[imgIndex] != 'undefined') {
                         fileListArr.splice(imgIndex, 1);
                     }
                     fileListArr.filter((arr, i) => {
@@ -135,11 +141,11 @@ const PostForm = () => {
                         }
                     });
                     fileInput.files = dt.files;
+                    setImageList((prevState) => {
+                        const copyOfPrevState = [...prevState.filter((_, i) => i !== index)];
+                        return copyOfPrevState;
+                    });
                 }
-                setImageList((prevState) => {
-                    const copyOfPrevState = [...prevState.filter((_, i) => i !== index)];
-                    return copyOfPrevState;
-                });
             }
         }
 
@@ -217,9 +223,7 @@ const PostsContent = () => {
         static previewImage(url: string) {
             const PreviewImg = () => (
                 <div style={{ textAlign: 'center' }}>
-                    After
                     <img src={url} height="300px" />
-                    Last
                 </div>
             );
             dispatch(setModal({ element: <PreviewImg /> }));
