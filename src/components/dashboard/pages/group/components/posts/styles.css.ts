@@ -13,16 +13,20 @@ class GroupStyles {
                 flex-grow: 1;
                 align-items: center;
 
-                .picture img {
-                    width: 50px;
-                    height: 50px;
-                    object-fit: cover;
-                    clip-path: circle();
-                    cursor: pointer;
-                    transition: filter 0.2s ease-in-out;
-
-                    &:hover {
-                        filter: brightness(120%);
+                .picture {
+                    position: relative;
+                    
+                    img {
+                        width: 50px;
+                        height: 50px;
+                        object-fit: cover;
+                        clip-path: circle();
+                        cursor: pointer;
+                        transition: filter 0.2s ease-in-out;
+    
+                        &:hover {
+                            filter: brightness(120%);
+                        }
                     }
                 }
 

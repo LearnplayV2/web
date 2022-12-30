@@ -1,5 +1,6 @@
 import Attachments from '@/class/attachments';
 import { FetchStatus } from '@/class/fetchStatus';
+import member_type from '@/class/participation';
 import Resume from '@/components/ui/resume';
 import RichTextEditor, { RichTextEditorContext, RichTextWrapper } from '@/components/ui/RichTextEditor';
 import GroupAttachments from '@/service/groups/groupAttachments';
@@ -12,6 +13,7 @@ import { css } from '@emotion/react';
 import moment from 'moment';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import { FaCrown } from 'react-icons/fa';
 import { RiImageAddLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -255,6 +257,9 @@ const PostsContent = () => {
                             <div className="group__post-details">
                                 <div className="author">
                                     <div className="picture">
+                                        {post.member.type == member_type.STAFF && (
+                                            <FaCrown title='Este usuário é um staff do grupo' size={20} color="yellow" style={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '-1.2rem'}} />
+                                        )}
                                         <img src={UserService.showProfile(post.member.user.uuid)} />
                                     </div>
                                     <div className='name'>
@@ -424,7 +429,7 @@ class Styles {
 
             .body {
                 color: #b9b9b9;
-                padding: 1rem 1rem;
+                padding: 2rem 1rem;
                 background: #363535;
             }
 
