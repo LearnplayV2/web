@@ -2,7 +2,7 @@ import { service } from ".";
 import { Session } from "../authentication";
 
 class UserService {
-    static path = (path: string) => '/user/'.concat(path);
+    static path = (path?: string) => '/user'.concat(path ? `/${path}` : '');
 
     static login(data: any) {
         return service.post(this.path('login'), data);
@@ -31,6 +31,10 @@ class UserService {
                 Authorization: `Bearer ${token}`,
             }
         });
+    }
+
+    static showProfile(userId: string) {
+        return import.meta.env.VITE_SERVER.concat(this.path('picture')).concat('?userId=').concat(userId);
     }
 }
 

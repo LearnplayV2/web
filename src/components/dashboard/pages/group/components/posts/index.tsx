@@ -4,10 +4,12 @@ import Resume from '@/components/ui/resume';
 import RichTextEditor, { RichTextEditorContext, RichTextWrapper } from '@/components/ui/RichTextEditor';
 import GroupAttachments from '@/service/groups/groupAttachments';
 import GroupPosts from '@/service/groups/groupPosts';
+import { UserService } from '@/service/user';
 import { setModal } from '@/store/alert';
 import store, { RootState } from '@/store/storeConfig';
-import Media from '@/utils/media';
+import Time from '@/utils/timeHandle';
 import { css } from '@emotion/react';
+import moment from 'moment';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiImageAddLine } from 'react-icons/ri';
@@ -16,6 +18,7 @@ import { useParams } from 'react-router-dom';
 import Data from '../../data';
 import Gallery from './gallery';
 import groupPostsStore from './store';
+import GroupStyles from './styles.css';
 
 const Posts = () => {
     return (
@@ -46,13 +49,13 @@ const PostForm = () => {
 
     useEffect(() => {
         // define img list
-        if(attachmentsInputRef.current && attachmentsInputRef.current.files) {
-            if(attachmentsInputRef.current.files.length > 0) {
+        if (attachmentsInputRef.current && attachmentsInputRef.current.files) {
+            if (attachmentsInputRef.current.files.length > 0) {
                 const fileListArr = Array.from(attachmentsInputRef.current.files);
                 let fileUrls: IimageUpload[] = [];
-                fileListArr.forEach(file => {
+                fileListArr.forEach((file) => {
                     const url = URL.createObjectURL(file);
-                    fileUrls.unshift({url, error: false});
+                    fileUrls.unshift({ url, error: false });
                 });
                 setImageList(fileUrls);
             }
@@ -133,7 +136,7 @@ const PostForm = () => {
         }
 
         static removeImg(index: number) {
-            console.log('remove file')
+            console.log('remove file');
             if (attachmentsInputRef.current) {
                 const fileInput = attachmentsInputRef.current;
                 if (fileInput.files) {
@@ -240,13 +243,31 @@ const PostsContent = () => {
         }
     }
 
+    console.log(posts);
+
     return (
         <>
             {posts.message && <p>{posts.message}</p>}
             {posts?.item?.data.map((post, index) => (
                 <article key={index}>
                     <div className="body">
-                        <div className="group__post-content">
+                        <div className="group__post-content" css={GroupStyles.content}>
+                            <div className="group__post-details">
+                                <div className="author">
+                                    <div className="picture">
+                                        <img src={UserService.showProfile(post.member.user.uuid)} />
+                                    </div>
+                                    <div className='name'>
+                                        <a href="#">
+                                            {post.member.user.name}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div style={{ userSelect: 'none', cursor: 'pointer' }} title={moment(post.updatedAt).format('DD/MM/YYYY, h:mm:ss a')}>
+                                    {Time.timeAgo(post.updatedAt)}
+                                </div>
+                            </div>
+                            <div style={{ clear: 'both' }}></div>
                             <Resume text={post.content} />
                         </div>
                         {post.attachments.length > 0 && (
@@ -403,7 +424,7 @@ class Styles {
 
             .body {
                 color: #b9b9b9;
-                padding: 2rem 1rem;
+                padding: 1rem 1rem;
                 background: #363535;
             }
 

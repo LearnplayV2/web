@@ -11,7 +11,7 @@ interface Data {
 	photo: string;
 }
 
-const useProfilePicture = () => {
+export const useProfilePicture = () => {
 	return useQuery({
 		queryKey: ["profile-picture"],
 		queryFn: async () => {

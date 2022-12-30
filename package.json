@@ -19,6 +19,7 @@
     "immer": "^9.0.16",
     "js-media-package": "^3.0.1",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.4",
     "npm": "^9.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

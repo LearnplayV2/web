@@ -1,4 +1,5 @@
 import { FetchStatus } from "@/class/fetchStatus";
+import member_type from "@/class/participation";
 
 export interface IGroupPostsState {
 	item: IPosts | null;
@@ -17,8 +18,23 @@ interface IPosts {
 export interface IPostsData {
 	id: string;
 	content: string;
-	member: any;
+	member: IMember;
 	attachments: IGroupAttachments[];
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface IMember {
+	id: string;
+	type: member_type;	
+	createdAt: string;
+	updatedAt: string;
+	user: IUser;
+}
+
+export interface IUser {
+	name: string;
+	uuid: string;
 }
 
 export interface IAttachments {
@@ -26,8 +42,6 @@ export interface IAttachments {
 	fileName: string;
 	url: string;
 	fileType: string;
-	createdAt: string;
-	updatedAt: string;
 }
 
 interface IGroupAttachments extends IAttachments {
