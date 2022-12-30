@@ -14,7 +14,7 @@ export interface IGroup {
   participation?: member_type;
   links: ILinks[],
   members: IMember[],
-  staff: IMember[],
+  staffs: IMember[],
   description: string | null;
   visibility: string;
   createdAt: string;

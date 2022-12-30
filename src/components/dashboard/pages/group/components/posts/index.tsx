@@ -46,7 +46,6 @@ const PostForm = () => {
 
     useEffect(() => {
         // define img list
-        console.log('changed')
         if(attachmentsInputRef.current && attachmentsInputRef.current.files) {
             if(attachmentsInputRef.current.files.length > 0) {
                 const fileListArr = Array.from(attachmentsInputRef.current.files);
