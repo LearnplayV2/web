@@ -45,9 +45,20 @@ const PostForm = () => {
     const attachmentsInputRef = useRef<HTMLInputElement>(null);
     const { id: groupId } = useParams();
     const { value, setValue } = useContext(RichTextEditorContext);
+    const valueWithoutHtmlTag = value.replace(/(<([^>]+)>)/gi, '');
+
     const { groupPosts } = useSelector((state: RootState) => state);
 
     const [imageList, setImageList] = useState<IimageUpload[]>([]);
+    const [ableToPost, setAbleToPost] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(groupPosts.status == FetchStatus.LOADING || valueWithoutHtmlTag.length == 0) {
+            setAbleToPost(false);
+        } else {
+            setAbleToPost(true);
+        }
+    }, [groupPosts.status, value]);
 
     useEffect(() => {
         // define img list
@@ -67,7 +78,6 @@ const PostForm = () => {
     class Handle {
         static async submit(e: FormEvent) {
             e.preventDefault();
-            const valueWithoutHtmlTag = value.replace(/(<([^>]+)>)/gi, '');
 
             const imagesData = new FormData(e.target as HTMLFormElement);
             const fileInput = (e.target as HTMLFormElement).querySelector('input[name=attachments]') as HTMLInputElement;
@@ -205,7 +215,6 @@ const PostForm = () => {
                         {imageList.length <= 5 && (
                             <button
                                 onClick={Handle.selectImages}
-                                disabled={groupPosts.status == FetchStatus.LOADING}
                                 className="btn ico-btn bg warning"
                                 type="button"
                                 title="inserir imagens">
@@ -213,8 +222,8 @@ const PostForm = () => {
                             </button>
                         )}
 
-                        <button type="submit" className="bg info" disabled={groupPosts.status == FetchStatus.LOADING}>
-                            Postar
+                        <button title={!ableToPost ? 'Você precisa primeiro digitar um texto para criar uma publicação' : ''} type="submit" className="bg info" disabled={!ableToPost}>
+                            Criar publicação
                         </button>
                     </div>
                 </div>
@@ -258,14 +267,27 @@ const PostsContent = () => {
                                 <div className="author">
                                     <div className="picture">
                                         {post.member.type == member_type.STAFF && (
-                                            <FaCrown title='Este usuário é um staff do grupo' size={20} color="yellow" style={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '-1.2rem'}} />
+                                            <FaCrown
+                                                title="Este usuário é um administrador do grupo"
+                                                size={20}
+                                                color="#ffd400"
+                                                css={{
+                                                    position: 'absolute',
+                                                    left: '94%',
+                                                    transform: 'translateX(-50%)',
+                                                    top: '-.6rem',
+                                                    rotate: '31deg',
+                                                    transition: 'rotate .2s',
+                                                    ":hover": {
+                                                        rotate: '90deg'
+                                                    }
+                                                }}
+                                            />
                                         )}
                                         <img src={UserService.showProfile(post.member.user.uuid)} />
                                     </div>
-                                    <div className='name'>
-                                        <a href="#">
-                                            {post.member.user.name}
-                                        </a>
+                                    <div className="name">
+                                        <a href="#">{post.member.user.name}</a>
                                     </div>
                                 </div>
                                 <div style={{ userSelect: 'none', cursor: 'pointer' }} title={moment(post.updatedAt).format('DD/MM/YYYY, h:mm:ss a')}>
