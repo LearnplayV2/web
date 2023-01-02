@@ -6,7 +6,7 @@ class GroupStyles {
             display: flex;
             flex-direction: row;
             align-items: center;
-            
+
             .author {
                 display: flex;
                 flex-direction: row;
@@ -15,7 +15,7 @@ class GroupStyles {
 
                 .picture {
                     position: relative;
-                    
+
                     img {
                         width: 50px;
                         height: 50px;
@@ -23,7 +23,7 @@ class GroupStyles {
                         clip-path: circle();
                         cursor: pointer;
                         transition: filter 0.2s ease-in-out;
-    
+
                         &:hover {
                             filter: brightness(120%);
                         }
@@ -32,13 +32,29 @@ class GroupStyles {
 
                 .name {
                     margin-left: 1rem;
-                    font-size: 18px;
+                    align-self: flex-start;
+                    font-size: 14px;
+                    display: flex;
+                    flex-direction: column;
 
-                    & a{
+                    & a {
+                        text-decoration: none;
                         color: white;
                     }
                 }
             }
+        }
+    `;
+    static pagination = css`
+        margin: 2rem 0;
+
+        li {
+            cursor: pointer;
+            user-select: none;
+            list-style: none;
+            display: inline;
+            padding: 1rem;
+            background-color: red;
         }
     `;
 }

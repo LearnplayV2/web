@@ -13,14 +13,14 @@ import { css } from '@emotion/react';
 import moment from 'moment';
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-import { FaCrown } from 'react-icons/fa';
-import { RiImageAddLine } from 'react-icons/ri';
+import { RiImageAddLine, RiMedal2Fill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Data from '../../data';
 import Gallery from './gallery';
 import groupPostsStore from './store';
 import GroupStyles from './styles.css';
+import { Pagination as Paginate } from '@/components/ui/pagination';
 
 const Posts = () => {
     return (
@@ -30,6 +30,7 @@ const Posts = () => {
                     <PostForm />
                 </RichTextWrapper>
                 <PostsContent />
+                <Pagination />
             </section>
         </>
     );
@@ -53,7 +54,7 @@ const PostForm = () => {
     const [ableToPost, setAbleToPost] = useState<boolean>(false);
 
     useEffect(() => {
-        if(groupPosts.status == FetchStatus.LOADING || valueWithoutHtmlTag.length == 0) {
+        if (groupPosts.status == FetchStatus.LOADING || valueWithoutHtmlTag.length == 0) {
             setAbleToPost(false);
         } else {
             setAbleToPost(true);
@@ -213,16 +214,16 @@ const PostForm = () => {
 
                     <div className="button-group">
                         {imageList.length <= 5 && (
-                            <button
-                                onClick={Handle.selectImages}
-                                className="btn ico-btn bg warning"
-                                type="button"
-                                title="inserir imagens">
+                            <button onClick={Handle.selectImages} className="btn ico-btn bg warning" type="button" title="inserir imagens">
                                 <RiImageAddLine />
                             </button>
                         )}
 
-                        <button title={!ableToPost ? 'Você precisa primeiro digitar um texto para criar uma publicação' : ''} type="submit" className="bg info" disabled={!ableToPost}>
+                        <button
+                            title={!ableToPost ? 'Você precisa primeiro digitar um texto para criar uma publicação' : ''}
+                            type="submit"
+                            className="bg info"
+                            disabled={!ableToPost}>
                             Criar publicação
                         </button>
                     </div>
@@ -259,39 +260,40 @@ const PostsContent = () => {
     return (
         <>
             {posts.message && <p>{posts.message}</p>}
-            {posts?.item?.data.map((post, index) => (
-                <article key={index}>
+            {posts?.item && posts?.item?.data.map((post, index) => (
+                <article key={index} className={`${index == posts.item!.data.length - 1 ? 'last' : ''}`}>
                     <div className="body">
                         <div className="group__post-content" css={GroupStyles.content}>
                             <div className="group__post-details">
                                 <div className="author">
                                     <div className="picture">
-                                        {post.member.type == member_type.STAFF && (
-                                            <FaCrown
-                                                title="Este usuário é um administrador do grupo"
-                                                size={20}
-                                                color="#ffd400"
-                                                css={{
-                                                    position: 'absolute',
-                                                    left: '94%',
-                                                    transform: 'translateX(-50%)',
-                                                    top: '-.6rem',
-                                                    rotate: '31deg',
-                                                    transition: 'rotate .2s',
-                                                    ":hover": {
-                                                        rotate: '90deg'
-                                                    }
-                                                }}
-                                            />
-                                        )}
                                         <img src={UserService.showProfile(post.member.user.uuid)} />
                                     </div>
                                     <div className="name">
-                                        <a href="#">{post.member.user.name}</a>
+                                        <a
+                                            href="#"
+                                            css={css`
+                                                ${post.member.type == member_type.STAFF &&
+                                                `
+                                                color: #ffd400!important;
+                                            `}
+                                            `}>
+                                            {post.member.user.name}
+                                            {post.member.type == member_type.STAFF && (
+                                                <>
+                                                    &nbsp;
+                                                    <span
+                                                        title={'Este usuário é administrador do grupo'}
+                                                        style={{ position: 'relative', top: '3px' }}>
+                                                        <RiMedal2Fill />
+                                                    </span>
+                                                </>
+                                            )}
+                                        </a>
+                                        <span title={moment(post.updatedAt).format('DD/MM/YYYY, h:mm:ss a')}>
+                                            {Time.timeAgo(post.updatedAt).concat(' atrás')}
+                                        </span>
                                     </div>
-                                </div>
-                                <div style={{ userSelect: 'none', cursor: 'pointer' }} title={moment(post.updatedAt).format('DD/MM/YYYY, h:mm:ss a')}>
-                                    {Time.timeAgo(post.updatedAt)}
                                 </div>
                             </div>
                             <div style={{ clear: 'both' }}></div>
@@ -319,6 +321,24 @@ const PostsContent = () => {
                     </div>
                 </article>
             ))}
+        </>
+    );
+};
+
+const Pagination = () => {
+    const navigate = useNavigate();
+    const { item: posts } = useSelector((state: RootState) => state).groupPosts;
+    const { dispatch } = store;
+
+    return (
+        <>
+            <div css={GroupStyles.pagination}>
+                {posts && posts.totalPages > 1 && (
+                    <>
+                        {Array(posts.totalPages).fill(0).map((_, page) => <li key={page}>{page + 1}</li>)}
+                    </>
+                )}
+            </div>
         </>
     );
 };
@@ -445,7 +465,7 @@ class Styles {
         article {
             margin: 0;
 
-            &:not(:last-child) {
+            &:not(&.last) {
                 margin-bottom: 8rem;
             }
 
